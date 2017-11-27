@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration status="OFF">
+    <properties>
+        <Property name="PROJECT_NAME">laboa</Property>
+        <property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level] %C.%M(%F:%L)%n%m%n</property>
+    </properties>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+    </appenders>
+    <loggers>
+        <root level="warn">
+            <appender-ref ref="Console"/>
+        </root>
+
+        <logger name="team.oha" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+    </loggers>
+</configuration>
