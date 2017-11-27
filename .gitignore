@@ -1,0 +1,9 @@
+.gradle
+build/
+out/
+*.iml
+.idea/
+src/main/resources/rebel.xml
+src/main/webapp/logs/*
+src/main/ui/node_modules/
+src/main/webapp/
