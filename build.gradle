@@ -66,7 +66,7 @@ compileTestJava {
 }
 
 task cnpmInstall(type: NpmTask) {
-    file =  new File("src/main/ui")
+    def file =  new File("src/main/ui")
     if(file.exists()){
         workingDir file
     }
@@ -74,7 +74,7 @@ task cnpmInstall(type: NpmTask) {
     args = ["install", "--registry=https://registry.npm.taobao.org"]
 }
 task uiBuild(type: NpmTask, dependsOn: cnpmInstall) {
-    file =  new File("src/main/ui")
+    def file =  new File("src/main/ui")
     if(file.exists()){
         workingDir file
     }
@@ -83,7 +83,7 @@ task uiBuild(type: NpmTask, dependsOn: cnpmInstall) {
 }
 
 task uiDev(type: NpmTask, dependsOn: cnpmInstall) {
-    file =  new File("src/main/ui")
+    def file =  new File("src/main/ui")
     if(file.exists()){
         workingDir file
     }
