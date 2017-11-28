@@ -71,7 +71,7 @@ task cnpmInstall(type: NpmTask) {
         workingDir file
     }
     group = "node"
-    args = ["install", "--registry=https://registry.npmjs.org/"]
+    args = ["install", "--registry=https://registry.npm.taobao.org/"]
 }
 task uiBuild(type: NpmTask, dependsOn: cnpmInstall) {
     def file =  new File("src/main/ui")
