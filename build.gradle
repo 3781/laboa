@@ -71,7 +71,7 @@ task cnpmInstall(type: NpmTask) {
         workingDir file
     }
     group = "node"
-    args = ["install", "--registry=https://registry.npm.taobao.org"]
+    args = ["install", "--registry=https://registry.npmjs.org/"]
 }
 task uiBuild(type: NpmTask, dependsOn: cnpmInstall) {
     def file =  new File("src/main/ui")
@@ -99,8 +99,9 @@ buildscript {
     }
 }
 
-dependencies {
-    compile group: "org.springframework", name: "spring-webmvc", version: "$springVersion"
+node {
+    version = '8.9.0'
+    npmVersion = '5.5.1'
 }
 
 tomcat {
