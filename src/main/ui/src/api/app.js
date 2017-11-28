@@ -1,4 +1,4 @@
-import httpUtil from '../util/http'
+import httpUtil from '../util/http';
 
 export function login(username, password) {
   return httpUtil.post('/login', {

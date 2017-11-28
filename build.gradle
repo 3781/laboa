@@ -84,7 +84,7 @@ task uiBuild(type: NpmTask, dependsOn: cnpmInstall) {
 
 task uiDev(type: NpmTask, dependsOn: cnpmInstall) {
     def file =  new File("src/main/ui")
-    if(file.exists()){
+    if(file.exists()){ 
         workingDir file
     }
     group = "node"

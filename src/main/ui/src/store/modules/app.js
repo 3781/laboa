@@ -1,4 +1,4 @@
-import {login, logout} from '../../api/app'
+import { login, logout } from '../../api/app';
 
 /**
  * author: loser
@@ -7,48 +7,54 @@ import {login, logout} from '../../api/app'
 const state = {
   username: '',
   lastLoginTime: '',
-  permissions:[],
+  permissions: [],
 };
 
 const getters = {
-  getLastLoginTime(){
+  getLastLoginTime() {
     return state.lastLoginTime;
   },
-  getUsername(){
+  getUsername() {
     return state.username;
   },
-  listPermissions(){
+  listPermissions() {
 
-  }
+  },
 };
 
 const mutations = {
-  SET_LOGIN(username, lastLoginTime){
+  SET_LOGIN(username, lastLoginTime) {
     state.username = username;
     state.lastLoginTime = lastLoginTime;
   },
-  SET_LOGOUT(){
+  SET_LOGOUT() {
     state.username = '';
     state.lastLoginTime = '';
     state.permissions = [];
-  }
+  },
 };
 
 const actions = {
-  login({commit}, {username, password}){
-    return login(username.trim(), password).then(response => {
+  login({ commit }, { username, password, successCallback, failCallback }) {
+    return login(username.trim(), password).then((response) => {
       const res = response.data;
-      if(res.success){
+      if (res.success) {
         const info = res.info;
-        commit("SET_LOGIN", info.username, info.lastLoginTime);
+        commit('SET_LOGIN', info.username, info.lastLoginTime);
+      }
+      console.debug(successCallback);
+      if (res.success) {
+        successCallback(res.info);
+      } else {
+        failCallback(res.info);
       }
     });
   },
-  logout({commit}){
+  logout({ commit }) {
     return logout().then(() => {
-      commit("SET_LOGOUT");
+      commit('SET_LOGOUT');
     });
-  }
+  },
 };
 
 export default {

@@ -1,49 +1,48 @@
-import axios from 'axios'
-import { MessageBox } from 'element-ui'
-import { Message } from 'element-ui'
-import store from '../store'
+import axios from 'axios';
+import Vue from 'vue';
+import store from '../store';
 
 const httpUtil = axios.create({
-  baseURL:"/api",
+  baseURL: '/api',
   timeout: 4000,
 });
 
-httpUtil.interceptors.response.use(response => {
-  return response ;
-},response =>{
-  switch (response.data.code){
+httpUtil.interceptors.response.use(response => response, (response) => {
+  switch (response.data.code) {
     case 400:
-      Message({
+      Vue.$message({
         message: '请求不存在，请联系管理员',
         type: 'error',
       });
       break;
     case 401:
-      MessageBox.confirm('您已登出，请重新登录', '重新登录', {
+      Vue.$confirm('您已登出，请重新登录', '重新登录', {
         confirmButtonText: '重新登录',
         cancelButtonText: '留在该页面',
-        type: 'info'
+        type: 'info',
       }).then(() => {
         store.dispatch('logout');
       });
       break;
     case 403:
-      Message({
+      Vue.$message({
         message: '没有权限访问，请联系管理员',
         type: 'error',
       });
       break;
     case 500:
-      Message({
+      Vue.$message({
         message: '服务器出错，请联系管理员',
         type: 'error',
       });
       break;
     default:
-      Message({
+      Vue.$message({
         message: '未知错误，请联系管理员',
         type: 'error',
       });
       break;
   }
 });
+
+export default httpUtil;

@@ -6,10 +6,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.vo.LoginVO;
@@ -41,7 +38,7 @@ public class LoginController {
      * @modified
      */
     @PostMapping("/login")
-    public ApiDto login(LoginVO loginVO){
+    public ApiDto login(@RequestBody LoginVO loginVO){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(loginVO.getUsername(), loginVO.getPassword());
         subject.login(token);

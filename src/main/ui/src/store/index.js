@@ -8,6 +8,7 @@ import agenda from './modules/agenda';
 import cooperation from './modules/cooperation';
 import file from './modules/file';
 import user from './modules/user';
+import app from './modules/app';
 
 Vue.use(Vuex);
 
@@ -17,5 +18,6 @@ export default new Vuex.Store({
     file,
     cooperation,
     user,
+    app,
   },
 });

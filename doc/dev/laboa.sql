@@ -24,7 +24,7 @@ drop table if exists cooperation_record;
 
 drop table if exists file;
 
-drop table if exists userDo;
+drop table if exists user;
 
 drop table if exists userinfo;
 
@@ -167,9 +167,9 @@ create table file
 );
 
 /*==============================================================*/
-/* Table: userDo                                                  */
+/* Table: user                                                  */
 /*==============================================================*/
-create table userDo
+create table user
 (
    user_id              int(10) unsigned not null auto_increment,
    username             varchar(255),
@@ -198,7 +198,7 @@ create table userinfo
 );
 
 alter table agenda add constraint FK_Reference_14 foreign key (owner_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 
 alter table agenda_item add constraint FK_Reference_11 foreign key (agenda_id)
       references agenda (agenda_id) on delete restrict on update restrict;
@@ -207,7 +207,7 @@ alter table agenda_item_summary add constraint FK_Reference_12 foreign key (item
       references agenda_item (item_id) on delete restrict on update restrict;
 
 alter table agenda_item_summary add constraint FK_Reference_13 foreign key (summarizer_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 
 alter table cooperation add constraint FK_Reference_17 foreign key (parent_id)
       references cooperation (cooperation_id) on delete restrict on update restrict;
@@ -228,23 +228,23 @@ alter table cooperation_apply add constraint FK_Reference_10 foreign key (cooper
       references cooperation (cooperation_id) on delete restrict on update restrict;
 
 alter table cooperation_apply add constraint FK_Reference_9 foreign key (applicant_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 
 alter table cooperation_member add constraint FK_Reference_7 foreign key (cooperation_id)
       references cooperation (cooperation_id) on delete restrict on update restrict;
 
 alter table cooperation_member add constraint FK_Reference_8 foreign key (user_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 
 alter table cooperation_record add constraint FK_Reference_5 foreign key (operator_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 
 alter table cooperation_record add constraint FK_Reference_6 foreign key (cooperation_id)
       references cooperation (cooperation_id) on delete restrict on update restrict;
 
 alter table file add constraint FK_Reference_2 foreign key (user_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 
 alter table userinfo add constraint FK_Reference_1 foreign key (user_id)
-      references userDo (user_id) on delete restrict on update restrict;
+      references user (user_id) on delete restrict on update restrict;
 

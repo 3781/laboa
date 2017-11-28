@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @modified
  */
 public class LoginVO implements Serializable{
-    String username;
-    String password;
+    private String username;
+    private String password;
 
     public String getUsername() {
         return username;
