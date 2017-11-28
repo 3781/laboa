@@ -7,3 +7,4 @@ src/main/resources/rebel.xml
 src/main/webapp/logs/*
 src/main/ui/node_modules/
 src/main/webapp/
+package-lock.json
