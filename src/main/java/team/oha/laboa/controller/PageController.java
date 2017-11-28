@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import team.oha.laboa.vo.ApiVo;
+import team.oha.laboa.dto.ApiDto;
 
 @Controller
 @RequestMapping
@@ -23,10 +23,10 @@ public class PageController {
 
     @ResponseBody
     @RequestMapping("/api/**")
-    public ApiVo noFindApi(){
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("访问出错");
-        return apiVo;
+    public ApiDto noFindApi(){
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("访问出错");
+        return apiDto;
     }
 }

@@ -5,10 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.dao.UserDao;
+import team.oha.laboa.dao.UserinfoDao;
+import team.oha.laboa.dto.LoginDto;
 import team.oha.laboa.model.UserDo;
+import team.oha.laboa.model.UserinfoDo;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.shiro.model.UserAuthenticationInfo;
 import team.oha.laboa.util.MD5Util;
+import team.oha.laboa.vo.RegisterVo;
 
 import java.time.LocalDateTime;
 
@@ -25,12 +29,37 @@ import java.time.LocalDateTime;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private UserinfoDao userinfoDao;
 
     @Override
-    public void saveUser(UserDo userDo) {
+    public void register(RegisterVo registerVo) {
+        UserDo userDo = new UserDo();
+        userDo.setUsername(registerVo.getUsername());
         userDo.setSalt(MD5Util.generateSalt().toHex());
-        userDo.setPassword(MD5Util.encryptPassword(userDo.getPassword(), userDo.getSalt()));
+        userDo.setPassword(MD5Util.encryptPassword(registerVo.getPassword(), userDo.getSalt()));
+        userDo.setRegisterTime(LocalDateTime.now());
+        userDo.setRole(UserDo.Role.enduser);
+        userDo.setStatus(UserDo.Status.locked);
         userDao.save(userDo);
+
+        UserinfoDo userinfoDo = new UserinfoDo();
+        userinfoDo.setUserId(userDo.getUserId());
+        userinfoDo.setQq(registerVo.getQq());
+        userinfoDo.setPhone(registerVo.getPhone());
+        userinfoDo.setName(registerVo.getName());
+        userinfoDo.setEmployeeNumber(registerVo.getEmployeeNumber());
+        userinfoDo.setEmail(registerVo.getEmail());
+        userinfoDao.save(userinfoDo);
+    }
+
+
+    @Override
+    public LoginDto getLoginSuccessInfo(String username) {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setUsername(username);
+        loginDto.setLastLoginTime(userDao.getByUsername(username).getLoginTime());
+        return loginDto;
     }
 
     @Override

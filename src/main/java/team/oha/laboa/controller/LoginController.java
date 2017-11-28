@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.service.UserService;
-import team.oha.laboa.vo.ApiVo;
 import team.oha.laboa.vo.LoginVO;
 
 
@@ -41,18 +41,18 @@ public class LoginController {
      * @modified
      */
     @PostMapping("/login")
-    public ApiVo login(LoginVO loginVO){
+    public ApiDto login(LoginVO loginVO){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(loginVO.getUsername(), loginVO.getPassword());
         subject.login(token);
 
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(userService.getLoginSuccessInfo(token.getUsername()));
+
         userService.updateLoginTime(token.getUsername());
 
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(true);
-        apiVo.setMessage("登录成功....");
-
-        return apiVo;
+        return apiDto;
     }
 
     /**
@@ -77,11 +77,11 @@ public class LoginController {
      * @modified
      */
     @ExceptionHandler(UnknownAccountException.class)
-    public ApiVo unknownAccountExceptionHandler() {
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("帐号不存在");
-        return apiVo;
+    public ApiDto unknownAccountExceptionHandler() {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("帐号不存在");
+        return apiDto;
     }
 
     /**
@@ -93,11 +93,11 @@ public class LoginController {
      * @modified
      */
     @ExceptionHandler(IncorrectCredentialsException.class)
-    public ApiVo incorrectCredentialsExceptionHandler() {
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("密码错误");
-        return apiVo;
+    public ApiDto incorrectCredentialsExceptionHandler() {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("密码错误");
+        return apiDto;
     }
 
     /**
@@ -109,11 +109,11 @@ public class LoginController {
      * @modified
      */
     @ExceptionHandler(LockedAccountException.class)
-    public ApiVo lockedAccountExceptionHandler() {
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("帐号申请未通过，请联系管理员");
-        return apiVo;
+    public ApiDto lockedAccountExceptionHandler() {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("帐号申请未通过，请联系管理员");
+        return apiDto;
     }
 
     /**
@@ -125,11 +125,11 @@ public class LoginController {
      * @modified
      */
     @ExceptionHandler(DisabledAccountException.class)
-    public ApiVo disabledAccountExceptionHandler() {
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("帐号被禁用，请联系管理员");
-        return apiVo;
+    public ApiDto disabledAccountExceptionHandler() {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("帐号被禁用，请联系管理员");
+        return apiDto;
     }
 
     /**
@@ -141,12 +141,12 @@ public class LoginController {
      * @modified
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ApiVo authenticationExceptionHandler(AuthenticationException ae) {
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("未知的登录错误，请联系管理员");
+    public ApiDto authenticationExceptionHandler(AuthenticationException ae) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("未知的登录错误，请联系管理员");
         logger.warn("登录过程中出现未知的登录异常", ae);
-        return apiVo;
+        return apiDto;
     }
 
     /**
@@ -158,11 +158,11 @@ public class LoginController {
      * @modified
      */
     @ExceptionHandler(Exception.class)
-    public ApiVo exceptionHandler(Exception e) {
-        ApiVo apiVo = new ApiVo();
-        apiVo.setSuccess(false);
-        apiVo.setMessage("未知错误，请联系管理员");
+    public ApiDto exceptionHandler(Exception e) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("未知错误，请联系管理员");
         logger.warn("登录控制中出现未知异常", e);
-        return apiVo;
+        return apiDto;
     }
 }

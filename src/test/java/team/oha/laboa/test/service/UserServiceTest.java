@@ -9,10 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.config.AppConfig;
-import team.oha.laboa.model.UserDo;
 import team.oha.laboa.service.UserService;
-
-import java.time.LocalDateTime;
+import team.oha.laboa.vo.RegisterVo;
 
 /**
  * <p>用户服务测试</p>
@@ -32,14 +30,14 @@ public class UserServiceTest {
 
     @Test
     public void saveTest(){
-        UserDo userDo = new UserDo();
-        userDo.setUsername("username");
-        userDo.setPassword("password");
-        userDo.setRole(UserDo.Role.enduser);
-        userDo.setStatus(UserDo.Status.normal);
-        userDo.setLoginTime(LocalDateTime.now());
-        userDo.setRegisterTime(LocalDateTime.now());
-        userService.saveUser(userDo);
+        RegisterVo registerVo = new RegisterVo();
+        registerVo.setUsername("username");
+        registerVo.setPassword("password");
+        registerVo.setEmail("email@qq.com");
+        registerVo.setName("王大锤");
+        registerVo.setEmployeeNumber("S123023454");
+        registerVo.setQq("3213465465");
+        userService.register(registerVo);
     }
 
     @Test

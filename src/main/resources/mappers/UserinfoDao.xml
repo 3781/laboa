@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.oha.laboa.dao.UserinfoDao">
+    <sql id="tableName">userinfo</sql>
+
+    <insert id="save" parameterType="team.oha.laboa.model.UserinfoDo" useGeneratedKeys="true" keyProperty="userinfoId">
+        INSERT INTO  <include refid="tableName"/> (user_id, name, employee_number, qq, email,phone)
+        VALUE (#{userId},#{name},#{employeeNumber},#{qq},#{email},#{phone})
+    </insert>
+    <update id="update" parameterType="team.oha.laboa.model.UserinfoDo">
+        UPDATE <include refid="tableName"/>
+        <set>
+            <if test="password != null">name=#{name},</if>
+            <if test="salt != null">employee_number=#{employeeNumber},</if>
+            <if test="role != null">qq=#{qq},</if>
+            <if test="status != null">email=#{email},</if>
+            <if test="loginTime != null">phone=#{phone},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+    <select id="getByUserId" parameterType="java.lang.Integer" resultType="team.oha.laboa.model.UserinfoDo">
+        SELECT * FROM <include refid="tableName"/> WHERE user_id = #{userId}
+    </select>
+</mapper>

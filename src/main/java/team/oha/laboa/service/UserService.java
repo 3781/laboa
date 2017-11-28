@@ -1,6 +1,7 @@
 package team.oha.laboa.service;
 
-import team.oha.laboa.model.UserDo;
+import team.oha.laboa.dto.LoginDto;
+import team.oha.laboa.vo.RegisterVo;
 
 /**
  * <p></p>
@@ -11,6 +12,7 @@ import team.oha.laboa.model.UserDo;
  * @modified
  */
 public interface UserService extends team.oha.laboa.shiro.service.UserService{
-    void saveUser(UserDo userDo);
+    void register(RegisterVo registerVo);
+    LoginDto getLoginSuccessInfo(String username);
     void updateLoginTime(String username);
 }

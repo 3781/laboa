@@ -1,5 +1,7 @@
 package team.oha.laboa.vo;
 
+import java.io.Serializable;
+
 /**
  * <p></p>
  *
@@ -8,7 +10,7 @@ package team.oha.laboa.vo;
  * @data 2017/11/27
  * @modified
  */
-public class LoginVO {
+public class LoginVO implements Serializable{
     String username;
     String password;
 
