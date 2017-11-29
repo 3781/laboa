@@ -42,7 +42,7 @@ const actions = {
         const info = res.info;
         commit('SET_LOGIN', info.username, info.lastLoginTime);
       }
-      console.debug(successCallback);
+
       if (res.success) {
         successCallback(res.info);
       } else {
