@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Vue from 'vue';
+import { Message, MessageBox } from 'element-ui';
 import store from '../store';
 
 const httpUtil = axios.create({
@@ -8,36 +8,36 @@ const httpUtil = axios.create({
 });
 
 httpUtil.interceptors.response.use(response => response, (response) => {
-  switch (response.data.code) {
+  switch (response.status) {
     case 400:
-      Vue.$message({
+      Message({
         message: '请求不存在，请联系管理员',
         type: 'error',
       });
       break;
     case 401:
-      Vue.$confirm('您已登出，请重新登录', '重新登录', {
+      MessageBox.confirm('您已登出，请重新登录', '重新登录', {
         confirmButtonText: '重新登录',
         cancelButtonText: '留在该页面',
         type: 'info',
       }).then(() => {
-        store.dispatch('logout');
+        store.dispatch('logoutLocal');
       });
       break;
     case 403:
-      Vue.$message({
+      Message({
         message: '没有权限访问，请联系管理员',
         type: 'error',
       });
       break;
     case 500:
-      Vue.$message({
+      Message({
         message: '服务器出错，请联系管理员',
         type: 'error',
       });
       break;
     default:
-      Vue.$message({
+      Message({
         message: '未知错误，请联系管理员',
         type: 'error',
       });

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.vo.LoginVO;
+import team.oha.laboa.vo.RegisterVo;
 
 
 /**
@@ -22,12 +23,25 @@ import team.oha.laboa.vo.LoginVO;
  */
 @RestController
 @RequestMapping("/api")
-public class LoginController {
+public class UnauthenticatedController {
 
     @Autowired
     private UserService userService;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    /**
+     * <p>注册</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @PostMapping("/register")
+    public ApiDto register(@RequestBody RegisterVo registerVo){
+        return userService.register(registerVo);
+    }
 
     /**
      * <p>登录</p>
@@ -42,14 +56,7 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(loginVO.getUsername(), loginVO.getPassword());
         subject.login(token);
-
-        ApiDto apiDto = new ApiDto();
-        apiDto.setSuccess(true);
-        apiDto.setInfo(userService.getLoginSuccessInfo(token.getUsername()));
-
-        userService.updateLoginTime(token.getUsername());
-
-        return apiDto;
+        return userService.login(loginVO.getUsername());
     }
 
     /**

@@ -1,5 +1,6 @@
 package team.oha.laboa.service;
 
+import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.dto.LoginDto;
 import team.oha.laboa.vo.RegisterVo;
 
@@ -12,7 +13,6 @@ import team.oha.laboa.vo.RegisterVo;
  * @modified
  */
 public interface UserService extends team.oha.laboa.shiro.service.UserService{
-    void register(RegisterVo registerVo);
-    LoginDto getLoginSuccessInfo(String username);
-    void updateLoginTime(String username);
+    ApiDto register(RegisterVo registerVo);
+    ApiDto login(String username);
 }

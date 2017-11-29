@@ -1,10 +1,11 @@
 import httpUtil from '../util/http';
 
-export function login(username, password) {
-  return httpUtil.post('/login', {
-    username,
-    password,
-  });
+export function register(registerForm) {
+  return httpUtil.post('/register', registerForm);
+}
+
+export function login(loginForm) {
+  return httpUtil.post('/login', loginForm);
 }
 
 export function logout() {

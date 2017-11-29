@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.dao.UserDao;
 import team.oha.laboa.dao.UserinfoDao;
+import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.dto.LoginDto;
 import team.oha.laboa.model.UserDo;
 import team.oha.laboa.model.UserinfoDo;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private UserinfoDao userinfoDao;
 
     @Override
-    public void register(RegisterVo registerVo) {
+    public ApiDto register(RegisterVo registerVo) {
         UserDo userDo = new UserDo();
         userDo.setUsername(registerVo.getUsername());
         userDo.setSalt(MD5Util.generateSalt().toHex());
@@ -51,23 +52,28 @@ public class UserServiceImpl implements UserService {
         userinfoDo.setEmployeeNumber(registerVo.getEmployeeNumber());
         userinfoDo.setEmail(registerVo.getEmail());
         userinfoDao.save(userinfoDo);
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        return apiDto;
     }
 
-
     @Override
-    public LoginDto getLoginSuccessInfo(String username) {
+    public ApiDto login(String username) {
         LoginDto loginDto = new LoginDto();
         loginDto.setUsername(username);
         loginDto.setLastLoginTime(userDao.getByUsername(username).getLoginTime());
-        return loginDto;
-    }
 
-    @Override
-    public void updateLoginTime(String username) {
         UserDo userDo = new UserDo();
         userDo.setUsername(username);
         userDo.setLoginTime(LocalDateTime.now());
         userDao.update(userDo);
+
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(loginDto);
+        return apiDto;
     }
 
     @Transactional(readOnly = true)
