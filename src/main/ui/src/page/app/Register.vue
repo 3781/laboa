@@ -1,5 +1,5 @@
 <template>
-  <unauthenticated-layout :title="header.title" :hyperlink="header.loginLink">
+  <unauthenticated-layout :title="header.title" :hyperlink="header.loginLink" marginTop="60px">
     <el-form :model="registerForm" ref="registerForm" label-width="80px" size="small" style="padding-right:20px">
       <el-form-item
         label="用户名" prop="username"
