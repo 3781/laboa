@@ -1,5 +1,7 @@
 package team.oha.laboa.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 /**
@@ -22,6 +24,7 @@ public class LoginDto {
         this.username = username;
     }
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime getLastLoginTime() {
         return lastLoginTime;
     }

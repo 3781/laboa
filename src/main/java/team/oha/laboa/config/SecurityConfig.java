@@ -5,7 +5,6 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.config.ShiroBeanConfiguration;
-import org.apache.shiro.spring.config.ShiroConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +27,7 @@ import java.util.List;
 @Configuration
 @Import({
         ShiroBeanConfiguration.class,
-        ShiroConfiguration.class
+        MyShiroConfig.class
 })
 public class SecurityConfig {
 
@@ -58,19 +57,4 @@ public class SecurityConfig {
         methodInvokingFactoryBean.setArguments(securityManager);
         return methodInvokingFactoryBean;
     }
-
-//    @Bean
-//    public Filter shiroFilter(SecurityManager securityManager) throws Exception{
-//        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-//        shiroFilterFactoryBean.setSecurityManager(securityManager);
-//        shiroFilterFactoryBean.setFilters(new HashMap<String, Filter>(){{put("user", userFilter());}});
-//        shiroFilterFactoryBean.setFilterChainDefinitions("/** = user");
-//        shiroFilterFactoryBean.setLoginUrl("/login");
-//        return (Filter) shiroFilterFactoryBean.getObject();
-//    }
-
-//    @Bean
-//    public Filter userFilter(){
-//        return new UserFilter();
-//    }
 }

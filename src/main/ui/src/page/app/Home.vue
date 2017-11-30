@@ -1,9 +1,21 @@
 <template>
-  <div>
-    <router-link :to="{name: 'login'}">登录</router-link>
-  </div>
+  <authenticated-layout>
+    welcome to system! {{ this.getUsername }}
+    last login at {{ this.getLastLoginTime }}
+  </authenticated-layout>
 </template>
 
-<srcipt>
+<script>
+  import { mapGetters } from 'vuex';
+  import AuthenticatedLayout from './AuthenticatedLayout';
 
-</srcipt>
+  export default {
+    name: 'home',
+    components: {
+      AuthenticatedLayout,
+    },
+    computed: {
+      ...mapGetters(['getUsername', 'getLastLoginTime']),
+    },
+  };
+</script>

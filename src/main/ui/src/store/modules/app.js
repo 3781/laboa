@@ -23,12 +23,13 @@ const getters = {
 };
 
 const mutations = {
-  SET_LOGIN(username, lastLoginTime) {
-    state.username = username;
-    state.lastLoginTime = lastLoginTime;
+  SET_LOGIN(thisState, loginInfo) {
+    console.info(loginInfo);
+    state.username = loginInfo.username;
+    state.lastLoginTime = loginInfo.lastLoginTime;
 
-    sessionStorage.username = username;
-    sessionStorage.lastLoginTime = lastLoginTime;
+    sessionStorage.username = loginInfo.username;
+    sessionStorage.lastLoginTime = loginInfo.lastLoginTime;
   },
   SET_LOGOUT() {
     state.username = '';
@@ -61,8 +62,7 @@ const actions = {
         if (response) {
           const res = response.data;
           if (res.success) {
-            const info = res.info;
-            commit('SET_LOGIN', info.username, info.lastLoginTime);
+            commit('SET_LOGIN', res.info);
           }
 
           if (res.success) {

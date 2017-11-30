@@ -37,8 +37,8 @@
           },
         },
         loginForm: {
-          username: '',
-          password: '',
+          username: 'wumoetwrccv',
+          password: 'password',
         },
         loading: false,
       };
@@ -51,6 +51,7 @@
             this.$store.dispatch('login', this.loginForm).then(() => {
               this.$router.push('/');
             }).catch((errorMessage) => {
+              console.debug(errorMessage);
               this.$message.error(errorMessage);
             });
           } else {
