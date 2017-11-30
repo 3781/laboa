@@ -24,7 +24,6 @@ const getters = {
 
 const mutations = {
   SET_LOGIN(thisState, loginInfo) {
-    console.info(loginInfo);
     state.username = loginInfo.username;
     state.lastLoginTime = loginInfo.lastLoginTime;
 
