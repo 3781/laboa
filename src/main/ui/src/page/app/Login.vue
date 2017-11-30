@@ -33,7 +33,7 @@
           registerLink: {
             name: '注册',
             tip: '没有帐号？',
-            routerName: 'register',
+            path: '/register',
           },
         },
         loginForm: {
@@ -48,8 +48,9 @@
         this.loading = true;
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            this.$store.dispatch('login', this.loginForm).then(() => {
+            this.$store.dispatch('login', this.loginForm).then((lastLoginTime) => {
               this.$router.push('/');
+              this.$notify({ message: `上次登陆于${lastLoginTime}`, position: 'bottom-right' });
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
             });

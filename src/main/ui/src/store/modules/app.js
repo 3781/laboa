@@ -6,14 +6,10 @@ import { register, login, logout } from '../../api/app';
  */
 const state = {
   username: sessionStorage.username || '',
-  lastLoginTime: sessionStorage.lastLoginTime || '',
   permissions: [],
 };
 
 const getters = {
-  getLastLoginTime() {
-    return state.lastLoginTime;
-  },
   getUsername() {
     return state.username;
   },
@@ -23,20 +19,15 @@ const getters = {
 };
 
 const mutations = {
-  SET_LOGIN(thisState, loginInfo) {
-    state.username = loginInfo.username;
-    state.lastLoginTime = loginInfo.lastLoginTime;
-
-    sessionStorage.username = loginInfo.username;
-    sessionStorage.lastLoginTime = loginInfo.lastLoginTime;
+  SET_LOGIN(thisState, username) {
+    state.username = username;
+    sessionStorage.username = username;
   },
   SET_LOGOUT() {
     state.username = '';
-    state.lastLoginTime = '';
     state.permissions = [];
 
     delete sessionStorage.username;
-    delete sessionStorage.lastLoginTime;
   },
 };
 
@@ -61,11 +52,11 @@ const actions = {
         if (response) {
           const res = response.data;
           if (res.success) {
-            commit('SET_LOGIN', res.info);
+            commit('SET_LOGIN', res.info.username);
           }
 
           if (res.success) {
-            resolve(res.info);
+            resolve(res.info.lastLoginTime);
           } else {
             reject(res.info);
           }
@@ -74,8 +65,15 @@ const actions = {
     });
   },
   logout({ commit }) {
-    commit('SET_LOGOUT');
-    logout();
+    return new Promise((resolve, reject) => {
+      logout().then(() => {
+        commit('SET_LOGOUT');
+        resolve();
+      }).catch(() => {
+        commit('SET_LOGOUT');
+        reject();
+      });
+    });
   },
   logoutLocal({ commit }) {
     commit('SET_LOGOUT');

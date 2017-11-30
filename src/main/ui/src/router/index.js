@@ -1,9 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import state from '../store/index';
-import Login from '../page/app/Login';
-import Register from '../page/app/Register';
-import Home from '../page/app/Home';
 
 Vue.use(VueRouter);
 const vueRouter = new VueRouter({
@@ -11,31 +8,60 @@ const vueRouter = new VueRouter({
   routes: [
     {
       path: '/register',
-      name: 'register',
-      component: Register,
+      component: () => import('../page/app/Register'),
     },
     {
       path: '/login',
-      name: 'login',
-      component: Login,
+      component: () => import('../page/app/Login'),
+    },
+    {
+      path: '/logout',
+      beforeEnter(to, from, next) {
+        state.dispatch('logout').then(() => {
+          console.debug('a');
+          next('/login');
+        }).catch(() => {
+          console.debug('b');
+          next('/login');
+        });
+        console.debug('c');
+      },
     },
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      component: () => import('../page/app/AuthenticatedLayout'),
+      children: [
+        { path: '/password' },
+        { path: '/information' },
+        { path: '/agenda/create' },
+        { path: '/agenda/todo' },
+        { path: '/agenda/own' },
+        { path: '/agenda/cooperation' },
+        { path: '/cooperation/create' },
+        { path: '/cooperation/own' },
+        { path: '/cooperation/manage' },
+        { path: '/cooperation/join' },
+        { path: '/cooperation/create' },
+        { path: '/cooperation/own' },
+        { path: '/cooperation/all' },
+        { path: '/file/create' },
+        { path: '/file/own' },
+        { path: '/file/all' },
+        { path: '/user/all' },
+      ],
     },
   ],
 });
 
 vueRouter.beforeEach((to, from, next) => {
-  if ((to.name === 'login' || to.name === 'register')) {
+  if ((to.path === '/login' || to.path === '/register')) {
     if (state.getters.getUsername !== '') {
-      next({ name: 'home' });
+      next('/');
     } else {
       next();
     }
   } else if (state.getters.getUsername === '') {
-    next({ name: 'login' });
+    next('/login');
   } else {
     next();
   }

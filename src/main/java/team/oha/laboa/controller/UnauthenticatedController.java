@@ -2,6 +2,7 @@ package team.oha.laboa.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,11 @@ public class UnauthenticatedController {
      */
     @RequestMapping("/logout")
     public void logout(){
-        SecurityUtils.getSubject().logout();
+        try{
+            SecurityUtils.getSubject().logout();
+        }catch (UnknownAccountException uae){
+
+        }
     }
 
     /**

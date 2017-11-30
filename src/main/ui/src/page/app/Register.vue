@@ -55,7 +55,7 @@
           loginLink: {
             name: '登录',
             tip: '已有帐号？',
-            routerName: 'login',
+            path: '/login',
           },
         },
         registerForm: {

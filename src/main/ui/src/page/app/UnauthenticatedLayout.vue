@@ -5,7 +5,7 @@
         <span>{{ this.title }}</span>
         <small v-if="this.hyperlink" style="float: right">
           <span>{{ this.hyperlink.tip }}</span>
-          <router-link :to="{name: this.hyperlink.routerName}">{{ this.hyperlink.name }}</router-link>
+          <router-link :to="this.hyperlink.path">{{ this.hyperlink.name }}</router-link>
         </small>
       </div>
       <slot></slot>
