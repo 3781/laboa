@@ -2,11 +2,11 @@ package team.oha.laboa.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.service.UserService;
@@ -39,6 +39,7 @@ public class UnauthenticatedController {
      * @data 2017/11/27
      * @modified
      */
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     public ApiDto register(@RequestBody RegisterVo registerVo){
         return userService.register(registerVo);
@@ -52,7 +53,8 @@ public class UnauthenticatedController {
      * @data 2017/11/27
      * @modified
      */
-    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PatchMapping("/login")
     public ApiDto login(@RequestBody LoginVO loginVO){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(loginVO.getUsername(), loginVO.getPassword());
@@ -68,7 +70,8 @@ public class UnauthenticatedController {
      * @data 2017/11/27
      * @modified
      */
-    @RequestMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/logout")
     public void logout(){
         try{
             SecurityUtils.getSubject().logout();

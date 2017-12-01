@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @modified
  */
 public class ApiDto implements Serializable{
-    boolean success;
-    Object info;
+    private boolean success;
+    private Object info;
 
     public boolean isSuccess() {
         return success;

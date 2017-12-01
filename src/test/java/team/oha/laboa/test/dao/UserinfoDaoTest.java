@@ -67,4 +67,9 @@ public class UserinfoDaoTest {
         Assert.assertNotNull(userinfoDo.getUserId());
         logger.debug("[{}]", userinfoDo);
     }
+
+    @Test
+    public void getUserinfo(){
+        logger.debug("[{}]", userinfoDao.getByUserId(51));
+    }
 }

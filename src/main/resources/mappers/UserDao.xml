@@ -12,8 +12,6 @@
     <update id="update" parameterType="team.oha.laboa.model.UserDo">
         UPDATE <include refid="tableName"/>
         <set>
-            <if test="password != null">password=#{password},</if>
-            <if test="salt != null">salt=#{salt},</if>
             <if test="role != null">role=#{role},</if>
             <if test="status != null">status=#{status},</if>
             <if test="loginTime != null">login_time=#{loginTime},</if>
@@ -27,7 +25,22 @@
                 username = #{username}
             </otherwise>
         </choose>
-
+    </update>
+    <update id="updatePassword" parameterType="team.oha.laboa.model.UserDo">
+        UPDATE <include refid="tableName"/>
+        <set>
+            <if test="password != null">password=#{password},</if>
+            <if test="salt != null">salt=#{salt},</if>
+        </set>
+        WHERE
+        <choose>
+            <when test="userId != null">
+                user_id = #{userId}
+            </when>
+            <otherwise>
+                username = #{username}
+            </otherwise>
+        </choose>
     </update>
     <select id="getByUsername" parameterType="java.lang.String" resultType="team.oha.laboa.model.UserDo">
         SELECT * FROM <include refid="tableName"/> WHERE username = #{username}

@@ -50,7 +50,12 @@
           if (valid) {
             this.$store.dispatch('login', this.loginForm).then((lastLoginTime) => {
               this.$router.push('/');
-              this.$notify({ message: `上次登陆于${lastLoginTime}`, position: 'bottom-right' });
+              this.$notify({
+                message: `上次登陆于${lastLoginTime}`,
+                type: 'info',
+                position: 'bottom-right',
+                offset: 40,
+              });
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
             });

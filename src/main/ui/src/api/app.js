@@ -5,9 +5,9 @@ export function register(registerForm) {
 }
 
 export function login(loginForm) {
-  return httpUtil.post('/login', loginForm);
+  return httpUtil.patch('/login', loginForm);
 }
 
 export function logout() {
-  return httpUtil.post('/logout');
+  return httpUtil.delete('/logout');
 }

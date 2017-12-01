@@ -1,4 +1,5 @@
 import { register, login, logout } from '../../api/app';
+import vueRouter from '../../router/index';
 
 /**
  * author: loser
@@ -28,6 +29,7 @@ const mutations = {
     state.permissions = [];
 
     delete sessionStorage.username;
+    vueRouter.push('/login');
   },
 };
 
@@ -65,14 +67,10 @@ const actions = {
     });
   },
   logout({ commit }) {
-    return new Promise((resolve, reject) => {
-      logout().then(() => {
-        commit('SET_LOGOUT');
-        resolve();
-      }).catch(() => {
-        commit('SET_LOGOUT');
-        reject();
-      });
+    logout().then(() => {
+      commit('SET_LOGOUT');
+    }).catch(() => {
+      commit('SET_LOGOUT');
     });
   },
   logoutLocal({ commit }) {

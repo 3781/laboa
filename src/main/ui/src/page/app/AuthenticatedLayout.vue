@@ -45,10 +45,10 @@
           username: this.getUsername,
           subMenus: [{
             label: '个人信息',
-            router: '/information',
+            router: '/user/info',
           }, {
             label: '修改密码',
-            router: '/password',
+            router: '/user/password',
           }, {
             label: '退出登录',
             router: '/logout',

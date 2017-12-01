@@ -15,7 +15,8 @@ import team.oha.laboa.model.UserDo;
 @Repository
 @Mapper
 public interface UserDao {
-    UserDo getByUsername(final String username);
-    Integer update(final UserDo user);
+    UserDo getByUsername(String username);
+    Integer update(UserDo user);
+    Integer updatePassword(UserDo user);
     Integer save(UserDo userDo);
 }

@@ -2,13 +2,15 @@ import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
 import store from '../store';
 
+axios.defaults.withCredentials = true;
 const httpUtil = axios.create({
   baseURL: '/api',
   timeout: 4000,
+  withCredentials: true,
 });
 
-httpUtil.interceptors.response.use(response => response, (response) => {
-  switch (response.status) {
+httpUtil.interceptors.response.use(response => response, (error) => {
+  switch (error.response.status) {
     case 400:
       Message({
         message: '请求不存在，请联系管理员',
@@ -22,6 +24,7 @@ httpUtil.interceptors.response.use(response => response, (response) => {
         type: 'info',
       }).then(() => {
         store.dispatch('logoutLocal');
+      }).catch(() => {
       });
       break;
     case 403:

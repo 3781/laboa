@@ -16,20 +16,14 @@ const vueRouter = new VueRouter({
     },
     {
       path: '/logout',
-      beforeEnter(to, from, next) {
-        state.dispatch('logout').then(() => {
-          next('/login');
-        }).catch(() => {
-          next('/login');
-        });
+      beforeEnter() {
+        state.dispatch('logout');
       },
     },
     {
       path: '/',
       component: () => import('../page/app/AuthenticatedLayout'),
       children: [
-        { path: '/password' },
-        { path: '/information' },
         { path: '/agenda/create' },
         { path: '/agenda/todo' },
         { path: '/agenda/own' },
@@ -45,6 +39,8 @@ const vueRouter = new VueRouter({
         { path: '/file/own' },
         { path: '/file/all' },
         { path: '/user/all' },
+        { path: '/user/password' },
+        { path: '/user/info', component: () => import('../page/user/info') },
       ],
     },
   ],
