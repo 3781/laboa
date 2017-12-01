@@ -18,13 +18,10 @@ const vueRouter = new VueRouter({
       path: '/logout',
       beforeEnter(to, from, next) {
         state.dispatch('logout').then(() => {
-          console.debug('a');
           next('/login');
         }).catch(() => {
-          console.debug('b');
           next('/login');
         });
-        console.debug('c');
       },
     },
     {
