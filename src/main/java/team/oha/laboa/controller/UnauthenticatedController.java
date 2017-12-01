@@ -2,6 +2,7 @@ package team.oha.laboa.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class UnauthenticatedController {
      * @data 2017/11/27
      * @modified
      */
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/login")
     public ApiDto login(@RequestBody LoginVO loginVO){
         Subject subject = SecurityUtils.getSubject();

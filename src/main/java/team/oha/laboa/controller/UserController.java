@@ -1,7 +1,6 @@
 package team.oha.laboa.controller;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import team.oha.laboa.service.UserService;
 import team.oha.laboa.vo.PasswordChangeVo;
 import team.oha.laboa.vo.UserinfoVo;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p></p>
@@ -35,8 +36,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/info")
     public ApiDto getInfo(){
-        Subject subject = SecurityUtils.getSubject();
-        logger.debug("[{}]", subject.isRemembered() || subject.isAuthenticated());
         return userService.getInfo((String)SecurityUtils.getSubject().getPrincipal());
     }
 

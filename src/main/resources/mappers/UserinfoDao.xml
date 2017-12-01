@@ -12,11 +12,11 @@
     <update id="update" parameterType="team.oha.laboa.model.UserinfoDo">
         UPDATE <include refid="tableName"/>
         <set>
-            <if test="password != null">name=#{name},</if>
-            <if test="salt != null">employee_number=#{employeeNumber},</if>
-            <if test="role != null">qq=#{qq},</if>
-            <if test="status != null">email=#{email},</if>
-            <if test="loginTime != null">phone=#{phone},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="employeeNumber != null">employee_number=#{employeeNumber},</if>
+            <if test="qq != null">qq=#{qq},</if>
+            <if test="email != null">email=#{email},</if>
+            <if test="phone != null">phone=#{phone},</if>
         </set>
         WHERE user_id = #{userId}
     </update>

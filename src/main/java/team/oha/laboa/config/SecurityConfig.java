@@ -5,6 +5,7 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.config.ShiroBeanConfiguration;
+import org.apache.shiro.spring.web.config.ShiroWebFilterConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -27,15 +28,20 @@ import java.util.List;
 @Configuration
 @Import({
         ShiroBeanConfiguration.class,
-        MyShiroConfig.class
+        ShiroWebConfiguration.class,
+        ShiroWebFilterConfiguration.class,
 })
 public class SecurityConfig {
 
+    @Value("${hashAlgorithmName}")
+    String hashAlgorithmName;
+    @Value("${hashIterations}")
+    Integer hashIterations;
+    @Value("${storedCredentialsHexEncoded}")
+    Boolean storedCredentialsHexEncoded;
+
     @Bean
-    public CredentialsMatcher credentialsMatcher(
-            @Value("${hashAlgorithmName}") String hashAlgorithmName,
-            @Value("${hashIterations}") Integer hashIterations,
-            @Value("${storedCredentialsHexEncoded}") Boolean storedCredentialsHexEncoded){
+    public CredentialsMatcher credentialsMatcher(){
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
         credentialsMatcher.setHashAlgorithmName(hashAlgorithmName);
         credentialsMatcher.setHashIterations(hashIterations);
@@ -44,9 +50,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public List<Realm> realms(CredentialsMatcher credentialsMatcher, UserService simpleAccountService){
+    public List<Realm> realms(UserService simpleAccountService){
         return new ArrayList<Realm>(){{
-            add(new UserRealm(credentialsMatcher, simpleAccountService));
+            add(new UserRealm(credentialsMatcher(), simpleAccountService));
         }};
     }
 

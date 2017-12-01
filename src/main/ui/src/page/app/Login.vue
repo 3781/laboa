@@ -37,7 +37,7 @@
           },
         },
         loginForm: {
-          username: 'wumoetwrccv',
+          username: 'username',
           password: 'password',
         },
         loading: false,

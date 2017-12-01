@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class UserServiceTest {
     private UserService userService;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Rollback(false)
     @Test
     public void saveTest(){
         RegisterVo registerVo = new RegisterVo();
@@ -37,6 +39,7 @@ public class UserServiceTest {
         registerVo.setName("王大锤");
         registerVo.setEmployeeNumber("S123023454");
         registerVo.setQq("3213465465");
+        registerVo.setPassword("18654056454");
         userService.register(registerVo);
     }
 

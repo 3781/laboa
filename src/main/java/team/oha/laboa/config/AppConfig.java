@@ -1,6 +1,7 @@
 package team.oha.laboa.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -23,4 +24,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 })
 @PropertySource(value = "classpath:app.properties", encoding = "UTF-8")
 public class AppConfig {
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 }

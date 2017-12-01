@@ -2,12 +2,11 @@ package team.oha.laboa.config;
 
 import org.springframework.lang.Nullable;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 
 /**
  * <p>web配置</p>
@@ -26,16 +25,22 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return characterEncodingFilter;
     }
 
+    private Filter delegatingFilterProxy(){
+        DelegatingFilterProxy filter = new DelegatingFilterProxy();
+        filter.setTargetFilterLifecycle(true);
+        filter.setTargetBeanName("shiroFilterFactoryBean");
+        return filter;
+    }
+
     @Nullable
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] {characterEncodingFilter()};
+        return new Filter[] {characterEncodingFilter(), delegatingFilterProxy()};
     }
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         registerIntrospectorCleanupListener(servletContext);
-//        registerShiroFilter(servletContext);
         super.onStartup(servletContext);
     }
 
@@ -60,11 +65,4 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
-
-
-//    public void registerShiroFilter(ServletContext servletContext){
-//        FilterRegistration shiroFilter = servletContext.addFilter("shiroFilter", DelegatingFilterProxy.class);
-//        shiroFilter.setInitParameter("targetFilterLifecycle", "true");
-//        shiroFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/api/*");
-//    }
 }

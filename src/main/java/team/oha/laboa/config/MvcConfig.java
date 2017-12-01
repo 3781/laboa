@@ -4,10 +4,8 @@ import org.apache.shiro.spring.config.ShiroAnnotationProcessorConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.servlet.config.annotation.*;
 
 /**
  * <p>springmvc配置</p>
@@ -20,8 +18,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@Import(ShiroAnnotationProcessorConfiguration.class)
 @ComponentScan("team.oha.laboa.controller")
+@Import(ShiroAnnotationProcessorConfiguration.class)
 public class MvcConfig implements WebMvcConfigurer {
 
     @Override
@@ -31,6 +29,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("WEB-INF/static/");
+
+        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/");
     }
 }

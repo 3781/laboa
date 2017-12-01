@@ -1,5 +1,7 @@
 package team.oha.laboa.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,12 @@ import team.oha.laboa.dto.ApiDto;
 @RequestMapping
 public class PageController {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Value("WEB-INF/index.html")
     private Resource indexHtml;
 
-    @GetMapping("/**")
+    @GetMapping("/")
     public Object pages(){
         return ResponseEntity.ok().body(indexHtml);
     }
