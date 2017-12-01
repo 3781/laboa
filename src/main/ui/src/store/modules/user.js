@@ -45,7 +45,7 @@ const actions = {
       });
     });
   },
-  changePassword(passwordForm) {
+  changePassword({ commit }, passwordForm) {
     return new Promise((resolve, reject) => {
       userApi.changePassword(passwordForm).then((response) => {
         if (response) {

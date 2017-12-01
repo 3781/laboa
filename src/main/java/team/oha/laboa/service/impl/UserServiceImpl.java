@@ -92,9 +92,8 @@ public class UserServiceImpl implements UserService {
             throw new UnknownUserException(passwordChangeVo.getUsername());
         }
 
-        if(userDo.getPassword().equals(
-                MD5Util.encryptPassword(passwordChangeVo.getOldPassword(), userDo.getSalt())
-        )){
+        if(!userDo.getPassword().equals(
+                MD5Util.encryptPassword(passwordChangeVo.getOldPassword(), userDo.getSalt()))){
             throw new WrongPasswordException(userDo.getUsername(), passwordChangeVo.getOldPassword());
         }
 

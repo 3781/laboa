@@ -39,7 +39,7 @@ const vueRouter = new VueRouter({
         { path: '/file/own' },
         { path: '/file/all' },
         { path: '/user/all' },
-        { path: '/user/password' },
+        { path: '/user/password', component: () => import('../page/user/password') },
         { path: '/user/info', component: () => import('../page/user/info') },
       ],
     },
