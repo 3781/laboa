@@ -37,9 +37,28 @@
       toggleSidebar() {
         this.sidebarOpen = !this.sidebarOpen;
       },
+      isShow(requiredRole) {
+        const getRoleLevel = (role) => {
+          let roleLevel;
+          switch (role) {
+            case 'enduser':
+              roleLevel = 1;
+              break;
+            case 'admin':
+              roleLevel = 2;
+              break;
+            case 'superAdmin':
+              roleLevel = 3;
+              break;
+            default:
+          }
+          return roleLevel;
+        };
+        return getRoleLevel(this.getRole) >= getRoleLevel(requiredRole);
+      },
     },
     computed: {
-      ...mapGetters(['getUsername', 'getMainLoading']),
+      ...mapGetters(['getUsername', 'getMainLoading', 'getRole']),
       userMenu() {
         return {
           username: this.getUsername,
@@ -60,37 +79,41 @@
           name: '日程管理',
           iconName: 'oa-agenda',
           path: '/agenda',
+          show: this.isShow('enduser'),
           subMenus: [
-            { name: '日程创建', path: '/create' },
-            { name: '待办日程', path: '/todo' },
-            { name: '个人日程', path: '/own' },
-            { name: '协作日程', path: '/cooperation' },
+            { name: '日程创建', path: '/create', show: this.isShow('enduser') },
+            { name: '待办日程', path: '/todo', show: this.isShow('enduser') },
+            { name: '个人日程', path: '/own', show: this.isShow('enduser') },
+            { name: '协作日程', path: '/cooperation', show: this.isShow('enduser') },
           ],
         }, {
           name: '协作管理',
           iconName: 'oa-cooperation',
           path: '/cooperation',
+          show: this.isShow('enduser'),
           subMenus: [
-            { name: '协作创建', path: '/create' },
-            { name: '我的协作', path: '/own' },
-            { name: '负责协作', path: '/manage' },
-            { name: '参与协作', path: '/join' },
+            { name: '协作创建', path: '/create', show: this.isShow('enduser') },
+            { name: '我的协作', path: '/own', show: this.isShow('enduser') },
+            { name: '负责协作', path: '/manage', show: this.isShow('enduser') },
+            { name: '参与协作', path: '/join', show: this.isShow('enduser') },
           ],
         }, {
           name: '文件管理',
           iconName: 'oa-file',
           path: '/file',
+          show: this.isShow('enduser'),
           subMenus: [
-            { name: '文件上传', path: '/create' },
-            { name: '我的文件', path: '/own' },
-            { name: '所有文件', path: '/all' },
+            { name: '文件上传', path: '/create', show: this.isShow('enduser') },
+            { name: '我的文件', path: '/own', show: this.isShow('enduser') },
+            { name: '所有文件', path: '/all', show: this.isShow('admin') },
           ],
         }, {
           name: '用户管理',
           iconName: 'oa-admin',
           path: '/user',
+          show: this.isShow('admin'),
           subMenus: [
-            { name: '用户查看', path: '/all' },
+            { name: '用户查看', path: '/all', show: this.isShow('admin') },
           ],
         }];
       },

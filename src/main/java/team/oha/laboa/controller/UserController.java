@@ -1,6 +1,9 @@
 package team.oha.laboa.controller;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresUser;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.exception.UnknownUserException;
 import team.oha.laboa.exception.WrongPasswordException;
 import team.oha.laboa.service.UserService;
+import team.oha.laboa.vo.LoginVO;
 import team.oha.laboa.vo.PasswordChangeVo;
 import team.oha.laboa.vo.UserinfoVo;
 
@@ -24,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  * @data 2017/12/1
  * @modified
  */
+@RequiresUser
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -32,6 +37,20 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * <p>获得登录信息</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/loginInfo")
+    public ApiDto loginInfo() throws Exception{
+        return userService.getLoginInfo((String)SecurityUtils.getSubject().getPrincipal());
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/info")

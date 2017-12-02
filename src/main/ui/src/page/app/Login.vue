@@ -19,6 +19,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import UnauthenticatedLayout from './UnauthenticatedLayout';
 
   export default {
@@ -44,11 +45,12 @@
       };
     },
     methods: {
+      ...mapActions(['login']),
       doLogin() {
         this.loading = true;
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            this.$store.dispatch('login', this.loginForm).then((lastLoginTime) => {
+            this.login(this.loginForm).then((lastLoginTime) => {
               this.$router.push('/');
               this.$notify({
                 message: `上次登陆于${lastLoginTime}`,
@@ -56,8 +58,10 @@
                 position: 'bottom-right',
                 offset: 40,
               });
+              this.loading = false;
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
+              this.loading = false;
             });
           } else {
             this.loading = false;

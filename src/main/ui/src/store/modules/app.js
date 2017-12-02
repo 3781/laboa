@@ -1,4 +1,4 @@
-import { register, login, logout } from '../../api/app';
+import { getLoginInfo, register, login, logout } from '../../api/app';
 import vueRouter from '../../router/index';
 
 /**
@@ -7,7 +7,7 @@ import vueRouter from '../../router/index';
  */
 const state = {
   username: sessionStorage.username || '',
-  permissions: [],
+  role: sessionStorage.role || '',
   sidebarLoading: false,
   mainLoading: false,
 };
@@ -16,8 +16,8 @@ const getters = {
   getUsername() {
     return state.username;
   },
-  listPermissions() {
-
+  getRole() {
+    return state.role;
   },
   getSidebarLoading() {
     return state.sidebarLoading;
@@ -34,20 +34,41 @@ const mutations = {
   SET_MAIN_LOADING(thisState, loading) {
     state.mainLoading = loading;
   },
-  SET_LOGIN(thisState, username) {
+  SET_LOGIN(thisState, { username, role }) {
     state.username = username;
+    state.role = role;
     sessionStorage.username = username;
+    sessionStorage.role = role;
   },
   SET_LOGOUT() {
     state.username = '';
-    state.permissions = [];
+    state.role = '';
 
     delete sessionStorage.username;
+    delete sessionStorage.role;
     vueRouter.push('/login');
   },
 };
 
 const actions = {
+  getLoginInfo({ commit }) {
+    return new Promise((resolve, reject) => {
+      getLoginInfo().then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            commit('SET_LOGIN', res.info);
+          }
+
+          if (res.success) {
+            resolve(res.info.lastLoginTime);
+          } else {
+            reject(res.info);
+          }
+        }
+      });
+    });
+  },
   register({ commit }, registerForm) {
     return new Promise((resolve, reject) => {
       register(registerForm).then((response) => {
@@ -68,7 +89,7 @@ const actions = {
         if (response) {
           const res = response.data;
           if (res.success) {
-            commit('SET_LOGIN', res.info.username);
+            commit('SET_LOGIN', res.info);
           }
 
           if (res.success) {

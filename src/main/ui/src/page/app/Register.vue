@@ -41,6 +41,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import UnauthenticatedLayout from './UnauthenticatedLayout';
 
   export default {
@@ -72,15 +73,18 @@
       };
     },
     methods: {
+      ...mapActions(['register']),
       doRegister() {
         this.loading = true;
         this.$refs.registerForm.validate((valid) => {
           if (valid) {
-            this.$store.dispatch('register', this.registerForm).then(() => {
+            this.register(this.registerForm).then(() => {
               this.$message.success('注册成功');
               this.$router.push('/login');
+              this.loading = false;
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
+              this.loading = false;
             });
           } else {
             this.loading = false;

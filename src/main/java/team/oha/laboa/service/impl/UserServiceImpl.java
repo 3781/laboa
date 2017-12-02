@@ -70,14 +70,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiDto login(String username) {
+        UserDo userDo = userDao.getByUsername(username);
+
         LoginDto loginDto = new LoginDto();
         loginDto.setUsername(username);
-        loginDto.setLastLoginTime(userDao.getByUsername(username).getLoginTime());
+        loginDto.setRole(userDo.getRole());
+        loginDto.setLastLoginTime(userDo.getLoginTime());
 
-        UserDo userDo = new UserDo();
-        userDo.setUsername(username);
-        userDo.setLoginTime(LocalDateTime.now());
-        userDao.update(userDo);
+        UserDo updateUserDo = new UserDo();
+        updateUserDo.setUsername(username);
+        updateUserDo.setLoginTime(LocalDateTime.now());
+        userDao.update(updateUserDo);
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(loginDto);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto getLoginInfo(String username) {
+        UserDo userDo = userDao.getByUsername(username);
+
+        LoginDto loginDto = new LoginDto();
+        loginDto.setUsername(username);
+        loginDto.setRole(userDo.getRole());
+        loginDto.setLastLoginTime(userDo.getLoginTime());
 
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);

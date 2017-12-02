@@ -16,6 +16,7 @@ import team.oha.laboa.vo.UserinfoVo;
 public interface UserService extends team.oha.laboa.shiro.service.UserService{
     ApiDto register(RegisterVo registerVo);
     ApiDto login(String username);
+    ApiDto getLoginInfo(String username);
     ApiDto changePassword(PasswordChangeVo passwordChangeVo);
     ApiDto getInfo(String username);
     ApiDto updateInfo(UserinfoVo userinfoVo);
