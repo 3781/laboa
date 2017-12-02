@@ -12,7 +12,7 @@
         <el-input type="password" v-model.trim="loginForm.password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="doLogin()" style="width:100%">立即登录</el-button>
+        <el-button type="primary" @click="doLogin()" style="width:100%" :loading="loading">立即登录</el-button>
       </el-form-item>
     </el-form>
   </unauthenticated-layout>
