@@ -8,6 +8,8 @@ import vueRouter from '../../router/index';
 const state = {
   username: sessionStorage.username || '',
   permissions: [],
+  sidebarLoading: false,
+  mainLoading: false,
 };
 
 const getters = {
@@ -17,9 +19,21 @@ const getters = {
   listPermissions() {
 
   },
+  getSidebarLoading() {
+    return state.sidebarLoading;
+  },
+  getMainLoading() {
+    return state.mainLoading;
+  },
 };
 
 const mutations = {
+  SET_SIDEBAR_LOADING(thisState, loading) {
+    state.sidebarLoading = loading;
+  },
+  SET_MAIN_LOADING(thisState, loading) {
+    state.mainLoading = loading;
+  },
   SET_LOGIN(thisState, username) {
     state.username = username;
     sessionStorage.username = username;

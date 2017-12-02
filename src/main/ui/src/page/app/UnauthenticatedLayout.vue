@@ -1,5 +1,5 @@
 <template>
-  <div class="main-containner">
+  <div class="main-containner" v-loading.fullscreen.lock="getMainLoading">
     <el-card class="cardbox" :style="{marginTop:marginTop}">
       <div v-if="this.title" slot="header">
         <span>{{ this.title }}</span>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'unAuthenticatedLayout',
     props: {
@@ -27,6 +29,9 @@
       hyperlink: {
         type: Object,
       },
+    },
+    computed: {
+      ...mapGetters(['getMainLoading']),
     },
   };
 </script>

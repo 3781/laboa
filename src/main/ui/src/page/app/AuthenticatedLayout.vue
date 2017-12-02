@@ -8,7 +8,7 @@
         <nav-bar :sidebarOpen="sidebarOpen" :toggleSidebar="toggleSidebar" :userMenu="userMenu"></nav-bar>
       </el-header>
       <el-main>
-        <router-view></router-view>
+        <router-view v-loading.lock="getMainLoading"></router-view>
       </el-main>
       <el-footer height="40px" style="line-height:40px; background-color: #304156; color:white;text-align: center">
         Copyright © 2017-2018 oh!a team. All rights reserved.
@@ -39,7 +39,7 @@
       },
     },
     computed: {
-      ...mapGetters(['getUsername']),
+      ...mapGetters(['getUsername', 'getMainLoading']),
       userMenu() {
         return {
           username: this.getUsername,

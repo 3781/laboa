@@ -47,6 +47,8 @@ const vueRouter = new VueRouter({
 });
 
 vueRouter.beforeEach((to, from, next) => {
+  state.commit('SET_MAIN_LOADING', true);
+
   if ((to.path === '/login' || to.path === '/register')) {
     if (state.getters.getUsername !== '') {
       next('/');
@@ -58,6 +60,10 @@ vueRouter.beforeEach((to, from, next) => {
   } else {
     next();
   }
+});
+
+vueRouter.afterEach(() => {
+  state.commit('SET_MAIN_LOADING', false);
 });
 
 export default vueRouter;
