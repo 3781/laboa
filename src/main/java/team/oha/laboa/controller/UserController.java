@@ -117,7 +117,7 @@ public class UserController {
      * @modified
      */
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/password")
+    @PatchMapping(value = "/password")
     public ApiDto changePassword(@RequestBody PasswordChangeVo passwordChangeVo){
         passwordChangeVo.setUsername((String)SecurityUtils.getSubject().getPrincipal());
         return userService.changePassword(passwordChangeVo);

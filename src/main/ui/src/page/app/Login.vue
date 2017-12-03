@@ -15,7 +15,6 @@
         <el-button type="primary" @click="doLogin()" style="width:100%" :loading="loading">立即登录</el-button>
       </el-form-item>
     </el-form>
-    <el-table-column></el-table-column>
   </unauthenticated-layout>
 </template>
 

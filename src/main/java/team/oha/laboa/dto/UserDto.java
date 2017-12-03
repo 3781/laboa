@@ -1,6 +1,5 @@
 package team.oha.laboa.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import team.oha.laboa.model.UserDo;
 
 import java.io.Serializable;
@@ -11,9 +10,7 @@ public class UserDto implements Serializable {
     private String username;
     private UserDo.Role role;
     private UserDo.Status status;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime loginTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registerTime;
     private String name;
     private String employeeNumber;

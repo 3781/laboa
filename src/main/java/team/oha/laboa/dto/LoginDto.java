@@ -1,9 +1,5 @@
 package team.oha.laboa.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import team.oha.laboa.model.UserDo;
 
 import java.time.LocalDateTime;
@@ -19,7 +15,6 @@ import java.time.LocalDateTime;
 public class LoginDto {
     private String username;
     private UserDo.Role role;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginTime;
 
     public String getUsername() {
