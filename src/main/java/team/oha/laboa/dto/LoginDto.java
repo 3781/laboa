@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class LoginDto {
     private String username;
     private UserDo.Role role;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginTime;
 
     public String getUsername() {
@@ -37,7 +38,6 @@ public class LoginDto {
         this.role = role;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime getLastLoginTime() {
         return lastLoginTime;
     }

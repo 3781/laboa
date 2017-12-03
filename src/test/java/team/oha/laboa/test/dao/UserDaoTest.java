@@ -1,5 +1,6 @@
 package team.oha.laboa.test.dao;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.config.AppConfig;
 import team.oha.laboa.dao.UserDao;
+import team.oha.laboa.dto.UserDto;
 import team.oha.laboa.model.UserDo;
+import team.oha.laboa.query.OrderQuery;
+import team.oha.laboa.query.PageQuery;
+import team.oha.laboa.query.user.UserFilterQuery;
+import team.oha.laboa.query.user.UserOrderQuery;
+import team.oha.laboa.query.user.UserSelectQuery;
 
 import java.time.LocalDateTime;
 
@@ -53,5 +60,34 @@ public class UserDaoTest {
         UserDo userDoToFind = userDao.getByUsername(username);
         Assert.assertNotNull(userDoToFind);
         logger.debug("[{}]", userDoToFind);
+    }
+
+    @Test
+    public void countTest() {
+        UserFilterQuery filterQuery = new UserFilterQuery();
+        filterQuery.setUsername("ob");
+        logger.debug("[{}]", userDao.count(filterQuery));
+    }
+
+    @Test
+    public void listTest() throws Exception{
+        UserSelectQuery userSelectQuery = new UserSelectQuery();
+        UserFilterQuery filterQuery= new UserFilterQuery();
+        filterQuery.setUsername("b");
+        userSelectQuery.setFilterQuery(filterQuery);
+
+        UserOrderQuery orderQuery = new UserOrderQuery();
+        orderQuery.setOrder(OrderQuery.Order.asc);
+        orderQuery.setField(UserOrderQuery.SortField.email);
+        userSelectQuery.setOrderQuery(orderQuery);
+
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setOffset(0);
+        pageQuery.setRows(10);
+        userSelectQuery.setPageQuery(pageQuery);
+
+        for(UserDto userDto: userDao.list(userSelectQuery)){
+            logger.debug("[{}]", new ObjectMapper().writeValueAsString(userDto));
+        }
     }
 }

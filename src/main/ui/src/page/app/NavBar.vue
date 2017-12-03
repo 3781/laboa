@@ -50,7 +50,7 @@
         this.refreshing = true;
         this.getLoginInfo().then((lastLoginTime) => {
           this.$notify({
-            message: `刷新成功,,登陆于${lastLoginTime}`,
+            message: `刷新成功,登陆于${lastLoginTime}`,
             type: 'info',
             position: 'bottom-right',
             offset: 40,

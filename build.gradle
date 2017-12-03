@@ -16,11 +16,10 @@ ext{
     log4jVersion = "2.9.1"
 
     // util
+    guavaVersion = "23.5-jre"
     jodaTimeVersion = "2.9.9"
     jacksonVersion = "2.9.2"
     druidVersion = "1.1.5"
-    commonsLang3Version = "3.6"
-    commonsCollections4Version = "4.1"
     commonsIOVersion = "2.6"
 
     //framework
@@ -100,7 +99,7 @@ buildscript {
 }
 
 node {
-    version = '8.9.0'
+    version = "8.9.0"
     download = true
 }
 
@@ -128,6 +127,8 @@ repositories {
 }
 
 dependencies {
+    compile group: "com.google.guava", name: "guava", version: "$guavaVersion"
+
     compile group: "org.apache.shiro", name: "shiro-core", version: "$shiroVersion"
     compile group: "org.apache.shiro", name: "shiro-aspectj", version: "$shiroVersion"
     compile group: "org.apache.shiro", name: "shiro-spring", version: "$shiroVersion"

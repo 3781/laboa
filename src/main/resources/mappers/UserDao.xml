@@ -45,4 +45,62 @@
     <select id="getByUsername" parameterType="java.lang.String" resultType="team.oha.laboa.model.UserDo">
         SELECT * FROM <include refid="tableName"/> WHERE username = #{username}
     </select>
+
+    <sql id="conditions">
+        <if test="filterQuery!=null">
+            <where>
+                <if test="filterQuery.userId">AND user.user_id = #{filterQuery.userId}</if>
+                <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
+                <if test="filterQuery.role">AND user.role = #{filterQuery.role}</if>
+                <if test="filterQuery.status">AND user.status = #{filterQuery.status}</if>
+                <if test="filterQuery.loginTimeBegin">AND user.login_time &gt;= #{filterQuery.loginTimeBegin}</if>
+                <if test="filterQuery.loginTimeEnd">AND user.login_time &lt;= #{filterQuery.loginTimeEnd}</if>
+                <if test="filterQuery.registerTimeBegin">AND user.register_time &gt;= #{filterQuery.registerTimeBegin}</if>
+                <if test="filterQuery.registerTimeEnd">AND user.register_time &lt;= #{filterQuery.registerTimeEnd}</if>
+                <if test="filterQuery.name">AND userinfo.name LIKE concat('%', #{filterQuery.name}, '%')</if>
+                <if test="filterQuery.employeeNumber">AND userinfo.employee_number = LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
+                <if test="filterQuery.qq">AND userinfo.qq LIKE concat('%', #{filterQuery.qq}, '%')</if>
+                <if test="filterQuery.email">AND userinfo.email LIKE concat('%', #{filterQuery.email}, '%')</if>
+                <if test="filterQuery.phone">AND userinfo.phone LIKE concat('%', #{filterQuery.phone}, '%')</if>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="page">
+        <if test="pageQuery!=null">
+             LIMIT ${pageQuery.offset},${pageQuery.rows}
+        </if>
+    </sql>
+
+    <sql id="order">
+        <if test="orderQuery!=null">
+            ORDER BY ${@team.oha.laboa.util.CaseFormatUtil@lowerCamelToLowerUnderScore(orderQuery.field.name())} ${orderQuery.order}
+        </if>
+    </sql>
+
+    <select id="list" parameterType="team.oha.laboa.query.user.UserSelectQuery" resultType="team.oha.laboa.dto.UserDto">
+        SELECT
+        user.user_id AS user_id,
+        user.username AS username,
+        user.role AS role,
+        user.status AS status,
+        user.login_time AS login_time,
+        user.register_time AS register_time,
+        userinfo.name AS name,
+        userinfo.employee_number AS employee_number,
+        userinfo.qq AS qq,
+        userinfo.email AS email,
+        userinfo.phone AS phone
+        FROM <include refid="tableName"/> LEFT JOIN userinfo ON user.user_id = userinfo.user_id
+        <include refid="conditions"/>
+        <include refid="order"/>
+        <include refid="page"/>
+    </select>
+
+    <select id="count" parameterType="team.oha.laboa.query.user.UserFilterQuery" resultType="java.lang.Integer">
+        <bind name="filterQuery" value="_parameter"/>
+        SELECT COUNT(*)
+        FROM <include refid="tableName"/> LEFT JOIN userinfo ON user.user_id = userinfo.user_id
+        <include refid="conditions"/>
+    </select>
 </mapper>

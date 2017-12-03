@@ -1,10 +1,7 @@
 package team.oha.laboa.config;
 
 import org.apache.shiro.spring.config.ShiroAnnotationProcessorConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.*;
 
 /**
@@ -29,7 +26,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/");
     }
+
 }

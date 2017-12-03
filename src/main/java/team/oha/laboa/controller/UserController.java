@@ -1,9 +1,9 @@
 package team.oha.laboa.controller;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.exception.UnknownUserException;
 import team.oha.laboa.exception.WrongPasswordException;
+import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.UserService;
-import team.oha.laboa.vo.LoginVO;
 import team.oha.laboa.vo.PasswordChangeVo;
 import team.oha.laboa.vo.UserinfoVo;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p></p>
@@ -39,6 +36,21 @@ public class UserController {
     private UserService userService;
 
     /**
+     * <p>分页用户列表</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresRoles(value = {"admin","superAdmin"}, logical = Logical.OR)
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/list")
+    public ApiDto list(UserSelectQuery userSelectQuery){
+        return userService.listUsers(userSelectQuery);
+    }
+
+    /**
      * <p>获得登录信息</p>
      *
      * @author loser
@@ -48,16 +60,32 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/loginInfo")
-    public ApiDto loginInfo() throws Exception{
+    public ApiDto loginInfo(){
         return userService.getLoginInfo((String)SecurityUtils.getSubject().getPrincipal());
     }
 
+    /**
+     * <p>获得个人信息</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/info")
     public ApiDto getInfo(){
         return userService.getInfo((String)SecurityUtils.getSubject().getPrincipal());
     }
 
+    /**
+     * <p>更新个人信息</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/info")
     public ApiDto updateInfo(@RequestBody UserinfoVo userinfoVo){
@@ -65,6 +93,14 @@ public class UserController {
         return userService.updateInfo(userinfoVo);
     }
 
+    /**
+     * <p>更新用户信息</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/info/{username}")
     public ApiDto updateInfo(@PathVariable String username, @RequestBody UserinfoVo userinfoVo){
@@ -72,6 +108,14 @@ public class UserController {
         return userService.updateInfo(userinfoVo);
     }
 
+    /**
+     * <p>更改密码</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/password")
     public ApiDto changePassword(@RequestBody PasswordChangeVo passwordChangeVo){

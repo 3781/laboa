@@ -1,6 +1,7 @@
 package team.oha.laboa.service.impl;
 
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -9,13 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.dao.UserDao;
 import team.oha.laboa.dao.UserinfoDao;
-import team.oha.laboa.dto.ApiDto;
-import team.oha.laboa.dto.LoginDto;
-import team.oha.laboa.dto.UserinfoDto;
+import team.oha.laboa.dto.*;
 import team.oha.laboa.exception.UnknownUserException;
 import team.oha.laboa.exception.WrongPasswordException;
 import team.oha.laboa.model.UserDo;
 import team.oha.laboa.model.UserinfoDo;
+import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.shiro.model.UserAuthenticationInfo;
 import team.oha.laboa.util.MD5Util;
@@ -173,7 +173,10 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public AuthorizationInfo getAuthorizationInfo(Object principal) {
-        return null;
+        UserDo userDo = userDao.getByUsername((String)principal);
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        authorizationInfo.addRole(userDo.getRole().name());
+        return authorizationInfo;
     }
 
     @Override
@@ -194,4 +197,18 @@ public class UserServiceImpl implements UserService {
         return info;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ApiDto listUsers(UserSelectQuery userSelectQuery) {
+        PageDto<UserDto> pageDto = new PageDto<>();
+        pageDto.setTotalSize(userDao.count(userSelectQuery.getFilterQuery()));
+        if(pageDto.getTotalSize() != 0){
+            pageDto.setData(userDao.list(userSelectQuery));
+        }
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(pageDto);
+        return apiDto;
+    }
 }
