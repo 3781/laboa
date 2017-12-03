@@ -1,5 +1,5 @@
 <template>
-  <div class="main-containner" v-loading.fullscreen.lock="getMainLoading">
+  <div class="main-container" v-loading.fullscreen.lock="getMainLoading">
     <el-card class="cardbox" :style="{marginTop:marginTop}">
       <div v-if="this.title" slot="header">
         <span>{{ this.title }}</span>
@@ -37,7 +37,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  .main-containner
+  .main-container
     background-color #2d3a4b
     height 100%
     .cardbox

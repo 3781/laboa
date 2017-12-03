@@ -13,5 +13,5 @@ export function changePassword(passwordForm) {
 }
 
 export function list(userQueryForm) {
-  return httpUtil.patch('/user/list', userQueryForm);
+  return httpUtil.get('/user/list', { params: userQueryForm });
 }

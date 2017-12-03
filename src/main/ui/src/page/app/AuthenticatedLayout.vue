@@ -1,6 +1,6 @@
 <template>
-  <el-container style="height:100%">
-    <el-aside width="auto">
+  <el-container style="height:100%" >
+    <el-aside width="auto" >
       <sidebar :sidebarOpen="sidebarOpen" :menus="sidebarMenu"></sidebar>
     </el-aside>
     <el-container>

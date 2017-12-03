@@ -1,3 +1,4 @@
+import qs from 'qs';
 import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
 import store from '../store';
@@ -7,6 +8,9 @@ const httpUtil = axios.create({
   baseURL: '/api',
   timeout: 4000,
   withCredentials: true,
+  paramsSerializer(params) {
+    return qs.stringify(params, { allowDots: true, skipNulls: true });
+  },
 });
 
 httpUtil.interceptors.response.use(response => response, (error) => {
