@@ -1,6 +1,7 @@
 package team.oha.laboa.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -12,18 +13,25 @@ import org.apache.shiro.spring.config.ShiroAnnotationProcessorConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import team.oha.laboa.formatter.LocalDateFormatter;
+import team.oha.laboa.formatter.LocalDateTimeFormatter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.fasterxml.jackson.databind.MapperFeature.DEFAULT_VIEW_INCLUSION;
 
 /**
  * <p>springmvc配置</p>
@@ -40,9 +48,18 @@ import java.util.List;
 @Import(ShiroAnnotationProcessorConfiguration.class)
 public class MvcConfig implements WebMvcConfigurer {
 
+    private final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private final String DATE_PATTERN = "yyyy-MM-dd";
+
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new LocalDateFormatter());
+        registry.addFormatter(new LocalDateTimeFormatter());
     }
 
     @Override
@@ -52,20 +69,35 @@ public class MvcConfig implements WebMvcConfigurer {
             HttpMessageConverter httpMessageConverter = iterator.next();
             if( httpMessageConverter instanceof MappingJackson2HttpMessageConverter ){
                 MappingJackson2HttpMessageConverter converter = (MappingJackson2HttpMessageConverter) httpMessageConverter;
-                ObjectMapper objectMapper = converter.getObjectMapper();
+                ObjectMapper objectMapper = new ObjectMapper();
+
                 JavaTimeModule javaTimeModule = new JavaTimeModule();
-                javaTimeModule.addDeserializer(LocalDateTime.class,
-                        new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                javaTimeModule.addSerializer(LocalDateTime.class,
-                        new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                javaTimeModule.addSerializer(LocalDate.class,
-                        new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                javaTimeModule.addDeserializer(LocalDate.class,
-                        new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));
+                javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
+                javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
                 objectMapper.registerModule(javaTimeModule);
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                objectMapper.configure(DEFAULT_VIEW_INCLUSION, false);
+                converter.setSupportedMediaTypes(new ArrayList<MediaType>(){{
+                    add(MediaType.APPLICATION_JSON);
+                    add(MediaType.APPLICATION_JSON_UTF8);
+                    add(MediaType.TEXT_HTML);
+                    add(MediaType.APPLICATION_FORM_URLENCODED);
+                }});
+                converter.setObjectMapper(objectMapper);
                 break;
+            }
+        }
+        iterator = converters.iterator();
+        while(iterator.hasNext()) {
+            HttpMessageConverter httpMessageConverter = iterator.next();
+            if( httpMessageConverter instanceof MappingJackson2HttpMessageConverter ){
+             System.out.println(httpMessageConverter.getSupportedMediaTypes());
             }
         }
     }
