@@ -1,6 +1,7 @@
 package team.oha.laboa.query.user;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
 import team.oha.laboa.model.UserDo;
 
 import java.time.LocalDateTime;
@@ -10,9 +11,13 @@ public class UserFilterQuery {
     private String username;
     private UserDo.Role[] roles;
     private UserDo.Status[] statuses;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime loginTimeBegin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime loginTimeEnd;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registerTimeBegin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registerTimeEnd;
     private String name;
     private String employeeNumber;

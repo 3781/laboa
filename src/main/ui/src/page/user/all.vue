@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <el-form :model="userSelectQuery.filterQuery" ref="filterForm" label-width="80px" inline>
+    <el-form :model="userSelectQuery.filterQuery" ref="filterForm" label-width="80px" size="mini" inline style="margin-bottom: 20px">
       <el-row>
         <el-col :span="6">
           <el-form-item label="用户ID" prop="userId" style="margin-right:0;">
@@ -39,12 +39,35 @@
             <el-input v-model.trim="userSelectQuery.filterQuery.phone" placeholder="请输入联系方式"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item style="margin-left:80px">
-            <el-button style="display:inline-block" icon="el-icon-refresh" type="primary" @click="reset" :loading="loading">重置</el-button>
-            <el-button style="display:inline-block" icon="el-icon-search" type="primary" @click="getUsersData" :loading="loading">查询</el-button>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="登录时间" style="margin-right:0;" prop="loginTime">
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                            v-model = "userSelectQuery.filterQuery.loginTimeBegin" placeholder="请选择起始日期"></el-date-picker>
+            至
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                            v-model = "userSelectQuery.filterQuery.loginTimeEnd" placeholder="请选择终止日期"></el-date-picker>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="注册时间" style="margin-right:0;" prop="registerTime">
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                            v-model = "userSelectQuery.filterQuery.registerTimeBegin" placeholder="请选择起始日期"></el-date-picker>
+            至
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                            v-model = "userSelectQuery.filterQuery.registerTimeEnd" placeholder="请选择终止日期"></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <div style="float:left">
+
+        </div>
+        <div style="float:right">
+          <el-button style="display:inline-block" icon="el-icon-refresh" type="primary" size="mini" @click="reset" :loading="loading">重置</el-button>
+          <el-button style="display:inline-block" icon="el-icon-search" type="primary" size="mini" @click="getUsersData" :loading="loading">查询</el-button>
+        </div>
       </el-row>
     </el-form>
     <el-table :data="users" v-loading="loading" size="small" :stripe="true" :border="true" ref="userTable"
@@ -172,6 +195,11 @@
       },
       reset() {
         this.$refs.filterForm.resetFields();
+        const filterQuery = this.userSelectQuery.filterQuery;
+        filterQuery.loginTimeBegin = null;
+        filterQuery.loginTimeEnd = null;
+        filterQuery.registerTimeBegin = null;
+        filterQuery.registerTimeEnd = null;
         this.$refs.userTable.clearFilter();
         this.handleFilterChange({ roles: [], statuses: [] });
       },

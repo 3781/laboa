@@ -9,7 +9,10 @@ const httpUtil = axios.create({
   timeout: 4000,
   withCredentials: true,
   paramsSerializer(params) {
-    return qs.stringify(params, { allowDots: true, skipNulls: true });
+    return qs.stringify(params, {
+      allowDots: true,
+      skipNulls: true,
+    });
   },
 });
 
