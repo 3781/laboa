@@ -28,6 +28,8 @@ const actions = {
             reject(res.info);
           }
         }
+      }).catch((error) => {
+        reject(error);
       });
     });
   },
@@ -42,6 +44,8 @@ const actions = {
             reject(res.info);
           }
         }
+      }).catch((error) => {
+        reject(error);
       });
     });
   },
@@ -56,6 +60,8 @@ const actions = {
             reject(res.info);
           }
         }
+      }).catch((error) => {
+        reject(error);
       });
     });
   },
@@ -70,6 +76,56 @@ const actions = {
             reject(res.info);
           }
         }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  configureStatus({ commit }, configureStatusForm) {
+    return new Promise((resolve, reject) => {
+      userApi.configureStatus(configureStatusForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  configureRole({ commit }, configureRoleForm) {
+    return new Promise((resolve, reject) => {
+      userApi.configureRole(configureRoleForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  passwordReset({ commit }, passwordResetForm) {
+    return new Promise((resolve, reject) => {
+      userApi.passwordReset(passwordResetForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
       });
     });
   },

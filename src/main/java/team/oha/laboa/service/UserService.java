@@ -2,9 +2,7 @@ package team.oha.laboa.service;
 
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.query.user.UserSelectQuery;
-import team.oha.laboa.vo.PasswordChangeVo;
-import team.oha.laboa.vo.RegisterVo;
-import team.oha.laboa.vo.UserinfoVo;
+import team.oha.laboa.vo.*;
 
 /**
  * <p></p>
@@ -22,4 +20,7 @@ public interface UserService extends team.oha.laboa.shiro.service.UserService{
     ApiDto getInfo(String username);
     ApiDto updateInfo(UserinfoVo userinfoVo);
     ApiDto listUsers(UserSelectQuery userSelectQuery);
+    ApiDto configureStatus(ConfigureStatusVo configureStatusVo);
+    ApiDto configureRole(ConfigureRoleVo configureRoleVo);
+    ApiDto resetPassword(ResetPasswordVo resetPasswordVo);
 }

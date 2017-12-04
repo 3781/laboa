@@ -109,4 +109,25 @@
         FROM <include refid="tableName"/> LEFT JOIN userinfo ON user.user_id = userinfo.user_id
         <include refid="conditions"/>
     </select>
+
+    <update id="configureRole" parameterType="team.oha.laboa.vo.ConfigureRoleVo">
+        UPDATE <include refid="tableName"/> SET role = #{role}
+        WHERE user_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
+    </update>
+
+    <sql id="allowFilter">
+        AND role in <foreach collection="allowRoles" item="allowRole" open="(" close=")" separator=",">#{allowRole}</foreach>
+    </sql>
+
+    <update id="configureStatus" parameterType="team.oha.laboa.vo.ConfigureStatusVo">
+        UPDATE <include refid="tableName"/> SET status = #{status}
+        WHERE user_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
+        <include refid="allowFilter"></include>
+    </update>
+
+    <update id="resetPassword" parameterType="team.oha.laboa.vo.ConfigureStatusVo">
+        UPDATE <include refid="tableName"/> SET salt = #{salt}, password = #{password}
+        WHERE user_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
+        <include refid="allowFilter"></include>
+    </update>
 </mapper>

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.dao.UserDao;
@@ -19,9 +20,7 @@ import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.shiro.model.UserAuthenticationInfo;
 import team.oha.laboa.util.MD5Util;
-import team.oha.laboa.vo.PasswordChangeVo;
-import team.oha.laboa.vo.RegisterVo;
-import team.oha.laboa.vo.UserinfoVo;
+import team.oha.laboa.vo.*;
 
 import java.time.LocalDateTime;
 
@@ -209,6 +208,35 @@ public class UserServiceImpl implements UserService {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(pageDto);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto configureStatus(ConfigureStatusVo configureStatusVo) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(userDao.configureStatus(configureStatusVo));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto configureRole(ConfigureRoleVo configureRoleVo) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(userDao.configureRole(configureRoleVo));
+        return apiDto;
+    }
+
+    @Value("${defaultPassword}")
+    private String DEFAULT_PASSWORD;
+
+    @Override
+    public ApiDto resetPassword(ResetPasswordVo resetPasswordVo) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        resetPasswordVo.setSalt(MD5Util.generateSalt().toHex());
+        resetPasswordVo.setPassword(MD5Util.encryptPassword(DEFAULT_PASSWORD, resetPasswordVo.getSalt()));
+        apiDto.setInfo(userDao.resetPassword(resetPasswordVo));
         return apiDto;
     }
 }

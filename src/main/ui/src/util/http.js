@@ -53,6 +53,7 @@ httpUtil.interceptors.response.use(response => response, (error) => {
       });
       break;
   }
+  return Promise.reject(error);
 });
 
 export default httpUtil;

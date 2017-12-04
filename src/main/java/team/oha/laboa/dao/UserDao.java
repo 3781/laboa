@@ -6,6 +6,9 @@ import team.oha.laboa.dto.UserDto;
 import team.oha.laboa.model.UserDo;
 import team.oha.laboa.query.user.UserFilterQuery;
 import team.oha.laboa.query.user.UserSelectQuery;
+import team.oha.laboa.vo.ConfigureStatusVo;
+import team.oha.laboa.vo.ConfigureRoleVo;
+import team.oha.laboa.vo.ResetPasswordVo;
 
 import java.util.List;
 
@@ -26,4 +29,7 @@ public interface UserDao {
     Integer save(UserDo userDo);
     List<UserDto> list(UserSelectQuery userSelectQuery);
     Integer count(UserFilterQuery  filterQuery);
+    Integer configureStatus(ConfigureStatusVo configureStatusVo);
+    Integer configureRole(ConfigureRoleVo configureRoleVo);
+    Integer resetPassword(ResetPasswordVo resetPasswordVo);
 }

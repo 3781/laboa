@@ -66,6 +66,8 @@ const actions = {
             reject(res.info);
           }
         }
+      }).catch((error) => {
+        reject(error);
       });
     });
   },

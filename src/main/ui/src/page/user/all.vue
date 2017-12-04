@@ -62,7 +62,15 @@
       </el-row>
       <el-row>
         <div style="float:left">
-
+          <el-button-group >
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="primary" @click="handleStatusChange('normal')">启用帐号</el-button>
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="danger" @click="handleStatusChange('disable')">禁用帐号</el-button>
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="warning" @click="handlePasswordReset">密码重置</el-button>
+          </el-button-group>
+          <el-button-group v-if="this.getRole==='superAdmin'">
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="success" @click='handleRoleChange("enduser")'>设为用户</el-button>
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="warning" @click='handleRoleChange("admin")'>设为管理员</el-button>
+          </el-button-group>
         </div>
         <div style="float:right">
           <el-button style="display:inline-block" icon="el-icon-refresh" type="primary" size="mini" @click="reset" :loading="loading">重置</el-button>
@@ -71,7 +79,7 @@
       </el-row>
     </el-form>
     <el-table :data="users" v-loading="loading" size="small" :stripe="true" :border="true" ref="userTable"
-              @sort-change="handleSortChange" @filter-change="handleFilterChange"
+              @sort-change="handleSortChange" @filter-change="handleFilterChange" @selection-change="handleSelectChange"
               :defaultSort="{prop:this.userSelectQuery.orderQuery.field, order: this.userSelectQuery.orderQuery.order+'ending'}">
       <el-table-column type="expand" >
         <template slot-scope="scope">
@@ -136,12 +144,13 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'userAll',
     data() {
       return {
+        selectRows: [],
         users: [],
         loading: false,
         totalSize: 0,
@@ -176,12 +185,16 @@
       this.getUsersData();
     },
     computed: {
+      ...mapGetters(['getRole']),
       currentPage() {
         return this.userSelectQuery.pageQuery.offset / this.userSelectQuery.pageQuery.rows;
       },
+      selectIds() {
+        return this.selectRows.map(item => item.userId);
+      },
     },
     methods: {
-      ...mapActions(['listUsers']),
+      ...mapActions(['listUsers', 'configureStatus', 'configureRole', 'passwordReset']),
       getUsersData() {
         this.loading = true;
         this.listUsers(this.userSelectQuery).then((response) => {
@@ -228,6 +241,63 @@
           this.userSelectQuery.filterQuery[key] = filters[key];
         });
         this.getUsersData();
+      },
+      handleSelectChange(selection) {
+        this.selectRows = selection;
+      },
+      handleRoleChange(role) {
+        this.loading = true;
+        this.configureRole({ ids: this.selectIds, role }).then((updateCount) => {
+          if (updateCount) {
+            this.$notify({
+              message: `成功更新${updateCount}条`,
+              type: 'info',
+              position: 'bottom-right',
+              offset: 40,
+            });
+            this.getUsersData();
+          }
+          this.loading = false;
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+          this.loading = false;
+        });
+      },
+      handlePasswordReset() {
+        this.loading = true;
+        this.passwordReset({ ids: this.selectIds }).then((updateCount) => {
+          if (updateCount) {
+            this.$notify({
+              message: `成功重置${updateCount}位用户的密码`,
+              type: 'info',
+              position: 'bottom-right',
+              offset: 40,
+            });
+            this.getUsersData();
+          }
+          this.loading = false;
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+          this.loading = false;
+        });
+      },
+      handleStatusChange(status) {
+        this.loading = true;
+        this.configureStatus({ ids: this.selectIds, status }).then((updateCount) => {
+          if (updateCount) {
+            this.$notify({
+              message: `成功更新${updateCount}条`,
+              type: 'info',
+              position: 'bottom-right',
+              offset: 40,
+            });
+            this.getUsersData();
+          }
+          this.loading = false;
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+          this.loading = false;
+        });
       },
       statusFormatter(status) {
         let formatterStatus;

@@ -15,3 +15,15 @@ export function changePassword(passwordForm) {
 export function list(userQueryForm) {
   return httpUtil.get('/user/list', { params: userQueryForm });
 }
+
+export function configureStatus(configureStatusForm) {
+  return httpUtil.patch('/user/status', configureStatusForm);
+}
+
+export function configureRole(configureRoleForm) {
+  return httpUtil.patch('/user/role', configureRoleForm);
+}
+
+export function passwordReset(passwordResetForm) {
+  return httpUtil.patch('/user/passwordReset', passwordResetForm);
+}

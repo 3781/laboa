@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.exception.UnknownUserException;
 import team.oha.laboa.exception.WrongPasswordException;
+import team.oha.laboa.model.UserDo;
 import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.UserService;
-import team.oha.laboa.vo.PasswordChangeVo;
-import team.oha.laboa.vo.UserinfoVo;
+import team.oha.laboa.vo.*;
 
 /**
  * <p></p>
@@ -25,7 +25,6 @@ import team.oha.laboa.vo.UserinfoVo;
  * @data 2017/12/1
  * @modified
  */
-@RequiresUser
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -58,6 +57,7 @@ public class UserController {
      * @data 2017/11/27
      * @modified
      */
+    @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/loginInfo")
     public ApiDto loginInfo(){
@@ -72,6 +72,7 @@ public class UserController {
      * @data 2017/11/27
      * @modified
      */
+    @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/info")
     public ApiDto getInfo(){
@@ -86,25 +87,11 @@ public class UserController {
      * @data 2017/11/27
      * @modified
      */
+    @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/info")
     public ApiDto updateInfo(@RequestBody UserinfoVo userinfoVo){
         userinfoVo.setUsername((String)SecurityUtils.getSubject().getPrincipal());
-        return userService.updateInfo(userinfoVo);
-    }
-
-    /**
-     * <p>更新用户信息</p>
-     *
-     * @author loser
-     * @version 1.0
-     * @data 2017/11/27
-     * @modified
-     */
-    @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/info/{username}")
-    public ApiDto updateInfo(@PathVariable String username, @RequestBody UserinfoVo userinfoVo){
-        userinfoVo.setUsername(username);
         return userService.updateInfo(userinfoVo);
     }
 
@@ -116,11 +103,68 @@ public class UserController {
      * @data 2017/11/27
      * @modified
      */
+    @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(value = "/password")
     public ApiDto changePassword(@RequestBody PasswordChangeVo passwordChangeVo){
         passwordChangeVo.setUsername((String)SecurityUtils.getSubject().getPrincipal());
         return userService.changePassword(passwordChangeVo);
+    }
+
+    /**
+     * <p>更改状态</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresRoles(value = {"admin","superAdmin"}, logical = Logical.OR)
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/status")
+    public ApiDto configureStatus(@RequestBody ConfigureStatusVo configureStatusVo){
+        if(SecurityUtils.getSubject().hasRole("superAdmin")){
+            configureStatusVo.setAllowRoles(new UserDo.Role[]{UserDo.Role.enduser, UserDo.Role.admin});
+        }else {
+            configureStatusVo.setAllowRoles(new UserDo.Role[]{UserDo.Role.enduser});
+        }
+
+        return userService.configureStatus(configureStatusVo);
+    }
+
+    /**
+     * <p>更改角色</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresRoles(value = {"superAdmin"})
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/role")
+    public ApiDto configureRole(@RequestBody ConfigureRoleVo configureRoleVo){
+        return userService.configureRole(configureRoleVo);
+    }
+
+    /**
+     * <p>重置密码</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresRoles(value = {"admin","superAdmin"}, logical = Logical.OR)
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/passwordReset")
+    public ApiDto passwordReset(@RequestBody ResetPasswordVo resetPasswordVo){
+        if(SecurityUtils.getSubject().hasRole("superAdmin")){
+            resetPasswordVo.setAllowRoles(new UserDo.Role[]{UserDo.Role.enduser, UserDo.Role.admin});
+        }else {
+            resetPasswordVo.setAllowRoles(new UserDo.Role[]{UserDo.Role.enduser});
+        }
+        return userService.resetPassword(resetPasswordVo);
     }
 
     /**
