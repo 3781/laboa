@@ -1,8 +1,6 @@
 package team.oha.laboa.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -47,34 +45,29 @@ public class MvcConfig implements WebMvcConfigurer {
         configurer.enable();
     }
 
-    public ObjectMapper objectMapper(){
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
-        objectMapper.registerModule(javaTimeModule);
-        return objectMapper;
-    }
-
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         Iterator<HttpMessageConverter<?>> iterator = converters.iterator();
         while(iterator.hasNext()){
             HttpMessageConverter httpMessageConverter = iterator.next();
             if( httpMessageConverter instanceof MappingJackson2HttpMessageConverter ){
-                iterator.remove();
+                MappingJackson2HttpMessageConverter converter = (MappingJackson2HttpMessageConverter) httpMessageConverter;
+                ObjectMapper objectMapper = converter.getObjectMapper();
+                JavaTimeModule javaTimeModule = new JavaTimeModule();
+                javaTimeModule.addDeserializer(LocalDateTime.class,
+                        new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                javaTimeModule.addSerializer(LocalDateTime.class,
+                        new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                javaTimeModule.addSerializer(LocalDate.class,
+                        new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                javaTimeModule.addDeserializer(LocalDate.class,
+                        new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                objectMapper.registerModule(javaTimeModule);
+                objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
                 break;
             }
         }
-        converters.add(new MappingJackson2HttpMessageConverter(objectMapper()));
     }
 
     @Override
