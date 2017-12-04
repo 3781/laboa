@@ -52,12 +52,14 @@
           if (valid) {
             this.login(this.loginForm).then((lastLoginTime) => {
               this.$router.push('/');
-              this.$notify({
-                message: `上次登陆于${lastLoginTime}`,
-                type: 'info',
-                position: 'bottom-right',
-                offset: 40,
-              });
+              if (lastLoginTime) {
+                this.$notify({
+                  message: `上次登陆于${lastLoginTime}`,
+                  type: 'info',
+                  position: 'bottom-right',
+                  offset: 40,
+                });
+              }
               this.loading = false;
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);

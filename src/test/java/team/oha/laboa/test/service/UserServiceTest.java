@@ -39,7 +39,7 @@ public class UserServiceTest {
         registerVo.setName("王大锤");
         registerVo.setEmployeeNumber("S123023454");
         registerVo.setQq("3213465465");
-        registerVo.setPassword("18654056454");
+        registerVo.setPhone("18654056454");
         userService.register(registerVo);
     }
 

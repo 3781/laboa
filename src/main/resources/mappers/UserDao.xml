@@ -51,14 +51,20 @@
             <where>
                 <if test="filterQuery.userId">AND user.user_id = #{filterQuery.userId}</if>
                 <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
-                <if test="filterQuery.role">AND user.role = #{filterQuery.role}</if>
-                <if test="filterQuery.status">AND user.status = #{filterQuery.status}</if>
+
+                <if test="filterQuery.roles">AND user.role in
+                  <foreach collection="filterQuery.roles" open="(" close=")" item="role" separator=",">#{role}</foreach>
+                </if>
+                <if test="filterQuery.statuses">AND user.status in
+                    <foreach collection="filterQuery.statuses" open="(" close=")" item="stauts" separator=",">#{stauts}</foreach>
+                </if>
+
                 <if test="filterQuery.loginTimeBegin">AND user.login_time &gt;= #{filterQuery.loginTimeBegin}</if>
                 <if test="filterQuery.loginTimeEnd">AND user.login_time &lt;= #{filterQuery.loginTimeEnd}</if>
                 <if test="filterQuery.registerTimeBegin">AND user.register_time &gt;= #{filterQuery.registerTimeBegin}</if>
                 <if test="filterQuery.registerTimeEnd">AND user.register_time &lt;= #{filterQuery.registerTimeEnd}</if>
                 <if test="filterQuery.name">AND userinfo.name LIKE concat('%', #{filterQuery.name}, '%')</if>
-                <if test="filterQuery.employeeNumber">AND userinfo.employee_number = LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
+                <if test="filterQuery.employeeNumber">AND userinfo.employee_number LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
                 <if test="filterQuery.qq">AND userinfo.qq LIKE concat('%', #{filterQuery.qq}, '%')</if>
                 <if test="filterQuery.email">AND userinfo.email LIKE concat('%', #{filterQuery.email}, '%')</if>
                 <if test="filterQuery.phone">AND userinfo.phone LIKE concat('%', #{filterQuery.phone}, '%')</if>

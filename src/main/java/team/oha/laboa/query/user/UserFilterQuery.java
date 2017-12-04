@@ -1,7 +1,6 @@
 package team.oha.laboa.query.user;
 
 
-import org.springframework.format.annotation.DateTimeFormat;
 import team.oha.laboa.model.UserDo;
 
 import java.time.LocalDateTime;
@@ -9,15 +8,11 @@ import java.time.LocalDateTime;
 public class UserFilterQuery {
     private Integer userId;
     private String username;
-    private UserDo.Role role;
-    private UserDo.Status status;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private UserDo.Role[] roles;
+    private UserDo.Status[] statuses;
     private LocalDateTime loginTimeBegin;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime loginTimeEnd;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registerTimeBegin;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registerTimeEnd;
     private String name;
     private String employeeNumber;
@@ -42,20 +37,20 @@ public class UserFilterQuery {
         this.username = username;
     }
 
-    public UserDo.Role getRole() {
-        return role;
+    public UserDo.Role[] getRoles() {
+        return roles;
     }
 
-    public void setRole(UserDo.Role role) {
-        this.role = role;
+    public void setRoles(UserDo.Role[] roles) {
+        this.roles = roles;
     }
 
-    public UserDo.Status getStatus() {
-        return status;
+    public UserDo.Status[] getStatuses() {
+        return statuses;
     }
 
-    public void setStatus(UserDo.Status status) {
-        this.status = status;
+    public void setStatuses(UserDo.Status[] statuses) {
+        this.statuses = statuses;
     }
 
     public LocalDateTime getLoginTimeBegin() {
