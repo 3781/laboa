@@ -58,6 +58,9 @@
       </el-table-column>
       <el-table-column align="center" label="文件名" column-key="name" prop="name"
                        sortable="custom" :resizable="true">
+        <template slot-scope="scope">
+          <a :href="'/api/file/'+scope.row.fileId">{{ scope.row.name }}</a>
+        </template>
       </el-table-column>
       <el-table-column align="center" label="备注" column-key="remark" prop="remark"
                        sortable="custom" :resizable="true">

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.oha.laboa.dao.AgendaDao">
+    <sql id="tableName">agenda</sql>
+    <insert id="save" parameterType="team.oha.laboa.model.AgendaDo" useGeneratedKeys="true" keyProperty="agendaId">
+        INSERT INTO  <include refid="tableName"/>
+        (owner_id, title, type, next_time,quantity,unit, remark, open, update_time, create_time)
+        VALUE (#{ownerId},#{title},#{type},#{nextTime},#{quantity},#{unit},#{remark},#{open},#{updateTime},#{createTime})
+    </insert>
+
+</mapper>

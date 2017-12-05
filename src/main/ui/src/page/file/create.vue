@@ -19,7 +19,7 @@
       title="添加文件备注"
       :visible.sync="dialogVisible"
       width="30%">
-      <el-input type="textarea" :rows="4" placeholder="请输入文件备注" v-model="updateFile.remark"></el-input>
+      <el-input type="textarea" :rows="4" placeholder="请输入文件备注" v-model="theFile.remark"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false" >取 消</el-button>
         <el-button type="primary" @click="addFileRemark" >确 定</el-button>
@@ -36,7 +36,7 @@
       return {
         loading: false,
         dialogVisible: false,
-        updateFile: {
+        theFile: {
           fileId: null,
           remark: null,
         },
@@ -76,13 +76,13 @@
       },
       handlePreview(file) {
         if (file.response) {
-          this.updateFile = file.info;
+          this.theFile = file.info;
           this.dialogVisible = true;
         }
       },
       addFileRemark() {
         this.loading = true;
-        this.updateFile(this.updateFile).then(() => {
+        this.updateFile(this.theFile).then(() => {
           this.$notify({
             message: '更新成功',
             type: 'info',
