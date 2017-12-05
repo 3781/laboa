@@ -29,9 +29,8 @@
         inactive-color="#ff4949">
       </el-switch>
     </el-form-item>
-    <el-form-item>
-      <mavon-editor v-model="agendaForm.remark">
-      </mavon-editor>
+    <el-form-item label="说明">
+      <mavon-editor v-model="agendaForm.remark"></mavon-editor>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" size="default" @click="doCreate">提交</el-button>

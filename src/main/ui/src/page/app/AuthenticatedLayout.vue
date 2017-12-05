@@ -122,7 +122,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  .el-aside
-  .el-main
-    overflow visible
+  /*.el-aside*/
+  /*.el-main*/
+    /*overflow visible*/
 </style>
