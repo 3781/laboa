@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class FileFilterQuery {
     private Integer fileId;
+    private Integer userId;
     private String username;
     private String name;
     private String remark;
@@ -12,6 +13,14 @@ public class FileFilterQuery {
     private LocalDateTime updateTimeEnd;
     private LocalDateTime createTimeBegin;
     private LocalDateTime createTimeEnd;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getFileId() {
         return fileId;

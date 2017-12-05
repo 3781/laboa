@@ -17,9 +17,57 @@ const mutations = {
 };
 
 const actions = {
-  update({ commit }, formData) {
+  listFiles({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      fileApi.list(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  listAllFiles({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      fileApi.listAll(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  updateFile({ commit }, formData) {
     return new Promise((resolve, reject) => {
       fileApi.update(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  delFile({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      fileApi.del(formData).then((response) => {
         if (response) {
           const res = response.data;
           if (res.success) {

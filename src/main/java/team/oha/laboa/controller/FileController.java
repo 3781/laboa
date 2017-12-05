@@ -1,6 +1,7 @@
 package team.oha.laboa.controller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import team.oha.laboa.dto.ApiDto;
+import team.oha.laboa.query.file.FileFilterQuery;
+import team.oha.laboa.query.file.FileSelectQuery;
 import team.oha.laboa.service.FileService;
+import team.oha.laboa.vo.DeleteVo;
 import team.oha.laboa.vo.FileVo;
 
 import java.io.File;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/file")
@@ -51,5 +56,57 @@ public class FileController {
         //通知浏览器以attachment（下载方式）打开图片
         headers.setContentDispositionFormData("attachment", downloadFielName);
         return new HttpEntity<>(FileUtils.readFileToByteArray(file), headers);
+    }
+
+    /**
+     * <p>分页文件列表</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public ApiDto list(FileSelectQuery fileSelectQuery){
+        if(fileSelectQuery == null){
+            fileSelectQuery = new FileSelectQuery();
+        }
+        if(fileSelectQuery.getFilterQuery()==null){
+            fileSelectQuery.setFilterQuery(new FileFilterQuery());
+        }
+        fileSelectQuery.getFilterQuery().setUsername((String)SecurityUtils.getSubject().getPrincipal());
+        return fileService.listFiles(fileSelectQuery);
+    }
+
+    /**
+     * <p>分页文件列表</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(params = "all=true")
+    public ApiDto allList(FileSelectQuery fileSelectQuery){
+        return fileService.listFiles(fileSelectQuery);
+    }
+
+    /**
+     * <p>删除文件</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping
+    public ApiDto deleteFile(DeleteVo deleteVo){
+        return fileService.delete(deleteVo);
     }
 }

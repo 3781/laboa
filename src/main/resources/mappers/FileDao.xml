@@ -29,7 +29,7 @@
         <if test="filterQuery!=null">
             <where>
                 <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
-                <if test="filterQuery.fileId">AND file.fileId = #{filterQuery.fileId}</if>
+                <if test="filterQuery.fileId">AND file.file_id = #{filterQuery.fileId}</if>
                 <if test="filterQuery.updateTimeBegin">AND file.update_time &gt;= #{filterQuery.updateTimeBegin}</if>
                 <if test="filterQuery.updateTimeEnd">AND file.update_time &lt;= #{filterQuery.updateTimeEnd}</if>
                 <if test="filterQuery.createTimeBegin">AND file.create_time &gt;= #{filterQuery.createTimeBegin}</if>
@@ -57,8 +57,9 @@
         user.username AS username,
         file.update_time AS update_time,
         file.create_time AS create_time,
+        file.file_id AS file_id,
         file.name AS name,
-        file.remark AS remark,
+        file.remark AS remark
         FROM <include refid="tableName"/> JOIN user ON user.user_id = file.user_id
         <include refid="conditions"/>
         <include refid="order"/>
@@ -71,4 +72,9 @@
         FROM <include refid="tableName"/> JOIN user ON user.user_id = file.user_id
         <include refid="conditions"/>
     </select>
+
+    <delete id="delete" parameterType="team.oha.laboa.vo.DeleteVo">
+        DELETE FROM <include refid="tableName"/> WHERE file_id IN
+        <foreach collection="ids" separator="," open="(" close=")" item="id">#{id}</foreach>
+    </delete>
 </mapper>

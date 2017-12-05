@@ -43,7 +43,7 @@
       };
     },
     methods: {
-      ...mapActions(['update']),
+      ...mapActions(['updateFile']),
       handleSuccessUpload(response, file) {
         if (response.success) {
           const tmp = file;
@@ -82,7 +82,7 @@
       },
       addFileRemark() {
         this.loading = true;
-        this.update(this.updateFile).then(() => {
+        this.updateFile(this.updateFile).then(() => {
           this.$notify({
             message: '更新成功',
             type: 'info',
