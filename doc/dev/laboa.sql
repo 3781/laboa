@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/5 20:52:06                           */
+/* Created on:     2017/12/5 21:49:16                           */
 /*==============================================================*/
 
 
@@ -182,6 +182,9 @@ create table user
    register_time        datetime,
    primary key (user_id)
 );
+
+alter table user
+   add unique AK_uk (username);
 
 /*==============================================================*/
 /* Table: userinfo                                              */
