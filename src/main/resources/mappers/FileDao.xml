@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.oha.laboa.dao.FileDao">
+    <sql id="tableName">file</sql>
+
+    <insert id="save" parameterType="team.oha.laboa.model.FileDo" useGeneratedKeys="true" keyProperty="fileId">
+        INSERT INTO  <include refid="tableName"/>
+        (user_id, name, address<if test="remark!=null">,remark</if>,update_time, create_time)
+        VALUE (#{userId},#{name},#{address}<if test="remark!=null">,#{remark}</if>,#{updateTime},#{createTime})
+    </insert>
+    <update id="update" parameterType="team.oha.laboa.model.FileDo">
+        UPDATE <include refid="tableName"/>
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="address != null">address=#{address},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+        </set>
+        WHERE file_id = #{fileId}
+    </update>
+
+    <select id="get" parameterType="java.lang.Integer" resultType="team.oha.laboa.model.FileDo">
+        SELECT * FROM <include refid="tableName"/> WHERE file_id = #{id}
+    </select>
+
+    <sql id="conditions">
+        <if test="filterQuery!=null">
+            <where>
+                <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
+                <if test="filterQuery.fileId">AND file.fileId = #{filterQuery.fileId}</if>
+                <if test="filterQuery.updateTimeBegin">AND file.update_time &gt;= #{filterQuery.updateTimeBegin}</if>
+                <if test="filterQuery.updateTimeEnd">AND file.update_time &lt;= #{filterQuery.updateTimeEnd}</if>
+                <if test="filterQuery.createTimeBegin">AND file.create_time &gt;= #{filterQuery.createTimeBegin}</if>
+                <if test="filterQuery.createTimeEnd">AND file.create_time &lt;= #{filterQuery.createTimeEnd}</if>
+                <if test="filterQuery.name">AND file.name LIKE concat('%', #{filterQuery.name}, '%')</if>
+                <if test="filterQuery.remark">AND file.remark LIKE concat('%', #{filterQuery.remark}, '%')</if>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="page">
+        <if test="pageQuery!=null">
+             LIMIT ${pageQuery.offset},${pageQuery.rows}
+        </if>
+    </sql>
+
+    <sql id="order">
+        <if test="orderQuery!=null">
+            ORDER BY ${@team.oha.laboa.util.CaseFormatUtil@lowerCamelToLowerUnderScore(orderQuery.field.name())} ${orderQuery.order}
+        </if>
+    </sql>
+
+    <select id="list" parameterType="team.oha.laboa.query.file.FileSelectQuery" resultType="team.oha.laboa.dto.FileDto">
+        SELECT
+        user.username AS username,
+        file.update_time AS update_time,
+        file.create_time AS create_time,
+        file.name AS name,
+        file.remark AS remark,
+        FROM <include refid="tableName"/> JOIN user ON user.user_id = file.user_id
+        <include refid="conditions"/>
+        <include refid="order"/>
+        <include refid="page"/>
+    </select>
+
+    <select id="count" parameterType="team.oha.laboa.query.file.FileFilterQuery" resultType="java.lang.Integer">
+        <bind name="filterQuery" value="_parameter"/>
+        SELECT COUNT(*)
+        FROM <include refid="tableName"/> JOIN user ON user.user_id = file.user_id
+        <include refid="conditions"/>
+    </select>
+</mapper>

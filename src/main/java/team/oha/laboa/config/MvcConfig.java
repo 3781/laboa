@@ -102,13 +102,6 @@ public class MvcConfig implements WebMvcConfigurer {
                 break;
             }
         }
-        iterator = converters.iterator();
-        while(iterator.hasNext()) {
-            HttpMessageConverter httpMessageConverter = iterator.next();
-            if( httpMessageConverter instanceof MappingJackson2HttpMessageConverter ){
-             System.out.println(httpMessageConverter.getSupportedMediaTypes());
-            }
-        }
     }
 
     @Override
