@@ -30,7 +30,7 @@
       </el-switch>
     </el-form-item>
     <el-form-item label="说明">
-      <mavon-editor v-model="agendaForm.remark"></mavon-editor>
+      <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" size="default" @click="doCreate">提交</el-button>

@@ -10,4 +10,85 @@
         VALUE (#{ownerId},#{title},#{type},#{nextTime},#{quantity},#{unit},#{remark},#{open},#{updateTime},#{createTime})
     </insert>
 
+    <update id="update" parameterType="team.oha.laboa.model.AgendaDo">
+        UPDATE <include refid="tableName"/>
+        <set>
+            <if test="nextTime != null">next_time=#{nextTime},</if>
+            <if test="open != null">open=#{open},</if>
+            <if test="quantity != null">quantity=#{quantity},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            <if test="title != null">title=#{title},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+            <if test="unit != null">unit=#{unit},</if>
+        </set>
+        WHERE agenda_id = #{agendaId}
+    </update>
+
+    <sql id="conditions">
+        <if test="filterQuery!=null">
+            <where>
+                <if test="filterQuery.agendaId">AND agenda.agenda_id = #{filterQuery.agendaId}</if>
+                <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
+                <if test="filterQuery.title">AND agenda.title LIKE concat('%', #{filterQuery.title}, '%')</if>
+                <if test="filterQuery.remark">AND agenda.remark LIKE concat('%', #{filterQuery.remark}, '%')</if>
+                <if test="filterQuery.updateTimeBegin">AND agenda.update_time &gt;= #{filterQuery.updateTimeBegin}</if>
+                <if test="filterQuery.updateTimeEnd">AND agenda.update_time &lt;= #{filterQuery.updateTimeEnd}</if>
+                <if test="filterQuery.createTimeBegin">AND agenda.create_time &gt;= #{filterQuery.createTimeBegin}</if>
+                <if test="filterQuery.createTimeEnd">AND agenda.create_time &lt;= #{filterQuery.createTimeEnd}</if>
+                <if test="filterQuery.nextTimeBegin">AND agenda.next_time &gt;= #{filterQuery.nextTimeBegin}</if>
+                <if test="filterQuery.nextTimeEnd">AND agenda.next_time &lt;= #{filterQuery.nextTimeEnd}</if>
+                <if test="filterQuery.type">AND agenda.type = #{filterQuery.type}</if>
+                <if test="filterQuery.units">AND user.status in
+                    <foreach collection="filterQuery.units" open="(" close=")" item="unit" separator=",">#{unit}</foreach>
+                </if>
+                <if test="filterQuery.quantity">AND agenda.quantity = #{filterQuery.quantity}</if>
+                <if test="filterQuery.open">AND agenda.open = #{filterQuery.open}</if>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="page">
+        <if test="pageQuery!=null">
+            LIMIT ${pageQuery.offset},${pageQuery.rows}
+        </if>
+    </sql>
+
+    <sql id="order">
+        <if test="orderQuery!=null">
+            ORDER BY ${@team.oha.laboa.util.CaseFormatUtil@lowerCamelToLowerUnderScore(orderQuery.field.name())} ${orderQuery.order}
+        </if>
+    </sql>
+
+    <select id="list" parameterType="team.oha.laboa.query.agenda.AgendaSelectQuery" resultType="team.oha.laboa.dto.AgendaDto">
+        SELECT
+        user.username AS username,
+        agenda.agenda_id AS agenda_id,
+        agenda.title AS title,
+        agenda.type AS type,
+        agenda.next_time AS next_time,
+        agenda.quantity AS quantity,
+        agenda.unit AS unit,
+        agenda.remark AS remark,
+        agenda.open AS open,
+        agenda.update_time AS update_time,
+        agenda.create_time AS create_time
+        FROM <include refid="tableName"/> JOIN user ON user.user_id = agenda.owner_id
+        <include refid="conditions"/>
+        <include refid="order"/>
+        <include refid="page"/>
+    </select>
+
+    <select id="count" parameterType="team.oha.laboa.query.agenda.AgendaFilterQuery" resultType="java.lang.Integer">
+        <bind name="filterQuery" value="_parameter"/>
+        SELECT COUNT(*)
+        FROM <include refid="tableName"/>  JOIN user ON user.user_id = agenda.owner_id
+        <include refid="conditions"/>
+    </select>
+
+    <update id="close" parameterType="team.oha.laboa.vo.BatchVo">
+        UPDATE <include refid="tableName"/> SET open = 0
+        WHERE agenda_id IN
+        <foreach collection="ids" separator="," open="(" close=")" item="id">#{id}</foreach>
+        AND open != 0
+    </update>
 </mapper>

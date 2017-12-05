@@ -88,7 +88,7 @@ public class FileFilterQuery {
 
     @Override
     public String toString() {
-        return "FileFilterQuery{" +
+        return "AgendaFilterQuery{" +
                 "fileId=" + fileId +
                 ", username=" + username +
                 ", name='" + name + '\'' +

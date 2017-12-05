@@ -33,6 +33,54 @@ const actions = {
       });
     });
   },
+  updateAgenda({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      agendaApi.updateAgenda(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  listAgendas({ commit }, userQueryForm) {
+    return new Promise((resolve, reject) => {
+      agendaApi.list(userQueryForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  closeAgenda({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      agendaApi.close(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
 };
 
 export default {

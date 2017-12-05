@@ -2,7 +2,7 @@ package team.oha.laboa.service;
 
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.query.file.FileSelectQuery;
-import team.oha.laboa.vo.DeleteVo;
+import team.oha.laboa.vo.BatchVo;
 import team.oha.laboa.vo.FileVo;
 
 import java.io.File;
@@ -19,6 +19,6 @@ public interface FileService {
     ApiDto upload(FileVo fileVo);
     File download(Integer fileId);
     ApiDto update(FileVo fileVo);
-    ApiDto delete(DeleteVo deleteVo);
+    ApiDto delete(BatchVo deleteVo);
     ApiDto listFiles(FileSelectQuery fileSelectQuery);
 }

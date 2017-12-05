@@ -8,13 +8,17 @@ import team.oha.laboa.dao.AgendaDao;
 import team.oha.laboa.dao.AgendaItemDao;
 import team.oha.laboa.dao.AgendaSummaryDao;
 import team.oha.laboa.dao.UserDao;
+import team.oha.laboa.dto.AgendaDto;
 import team.oha.laboa.dto.ApiDto;
+import team.oha.laboa.dto.PageDto;
 import team.oha.laboa.model.AgendaDo;
 import team.oha.laboa.model.AgendaItemDo;
 import team.oha.laboa.model.AgendaSummaryDo;
+import team.oha.laboa.query.agenda.AgendaSelectQuery;
 import team.oha.laboa.service.AgendaService;
 import team.oha.laboa.vo.AgendaSummaryVo;
 import team.oha.laboa.vo.AgendaVo;
+import team.oha.laboa.vo.BatchVo;
 
 import java.time.LocalDateTime;
 
@@ -29,13 +33,13 @@ import java.time.LocalDateTime;
 @Service
 public class AgendaServiceImpl implements AgendaService {
     @Autowired
-    private AgendaDao agendaDao;
+    private UserDao userDao;
     @Autowired
     private AgendaItemDao agendaItemDao;
     @Autowired
     private AgendaSummaryDao agendaSummaryDao;
     @Autowired
-    private UserDao userDao;
+    private AgendaDao agendaDao;
 
     @Override
     public ApiDto savePersonalAgenda(AgendaVo agendaVo) {
@@ -70,6 +74,40 @@ public class AgendaServiceImpl implements AgendaService {
 
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery) {
+        PageDto<AgendaDto> pageDto = new PageDto<>();
+        pageDto.setTotalSize(agendaDao.count(agendaSelectQuery.getFilterQuery()));
+        if(pageDto.getTotalSize() != 0){
+            pageDto.setData(agendaDao.list(agendaSelectQuery));
+        }
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(pageDto);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto close(BatchVo batchVo) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(agendaDao.close(batchVo));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto update(AgendaVo agendaVo) {
+        AgendaDo agendaDo = new AgendaDo();
+
+        BeanUtils.copyProperties(agendaVo, agendaDo);
+        agendaDo.setUpdateTime(LocalDateTime.now());
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(agendaDao.update(agendaDo));
         return apiDto;
     }
 }

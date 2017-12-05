@@ -6,7 +6,7 @@ import team.oha.laboa.dto.FileDto;
 import team.oha.laboa.model.FileDo;
 import team.oha.laboa.query.file.FileFilterQuery;
 import team.oha.laboa.query.file.FileSelectQuery;
-import team.oha.laboa.vo.DeleteVo;
+import team.oha.laboa.vo.BatchVo;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public interface FileDao {
     FileDo get(Integer fileId);
     Integer save(FileDo fileDo);
     Integer update(FileDo fieDo);
-    Integer delete(DeleteVo deleteVo);
+    Integer delete(BatchVo deleteVo);
     List<FileDto> list(FileSelectQuery userSelectQuery);
     Integer count(FileFilterQuery filterQuery);
 }

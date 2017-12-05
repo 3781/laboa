@@ -14,12 +14,22 @@ import java.time.LocalDateTime;
  * @modified
  */
 public class AgendaVo implements Serializable {
+    private Integer agendaId;
     private String title;
     private LocalDateTime nextTime;
     private Integer quantity;
     private AgendaDo.AgendaUnit unit;
     private String remark;
     private Boolean open;
+
+
+    public Integer getAgendaId() {
+        return agendaId;
+    }
+
+    public void setAgendaId(Integer agendaId) {
+        this.agendaId = agendaId;
+    }
 
     public String getTitle() {
         return title;
@@ -72,7 +82,8 @@ public class AgendaVo implements Serializable {
     @Override
     public String toString() {
         return "AgendaVo{" +
-                "title='" + title + '\'' +
+                "agendaId=" + agendaId +
+                ", title='" + title + '\'' +
                 ", nextTime=" + nextTime +
                 ", quantity=" + quantity +
                 ", unit=" + unit +

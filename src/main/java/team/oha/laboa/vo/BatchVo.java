@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @data 2017/12/5
  * @modified
  */
-public class DeleteVo {
+public class BatchVo {
     ArrayList<Integer> ids;
 
     public ArrayList<Integer> getIds() {

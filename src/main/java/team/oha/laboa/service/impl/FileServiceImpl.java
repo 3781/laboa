@@ -13,7 +13,7 @@ import team.oha.laboa.model.FileDo;
 import team.oha.laboa.query.file.FileSelectQuery;
 import team.oha.laboa.service.FileService;
 import team.oha.laboa.util.FileUtil;
-import team.oha.laboa.vo.DeleteVo;
+import team.oha.laboa.vo.BatchVo;
 import team.oha.laboa.vo.FileVo;
 
 import java.io.File;
@@ -82,7 +82,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ApiDto delete(DeleteVo deleteVo) {
+    public ApiDto delete(BatchVo deleteVo) {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(fileDao.delete(deleteVo));

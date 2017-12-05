@@ -73,7 +73,7 @@
         <include refid="conditions"/>
     </select>
 
-    <delete id="delete" parameterType="team.oha.laboa.vo.DeleteVo">
+    <delete id="delete" parameterType="team.oha.laboa.vo.BatchVo">
         DELETE FROM <include refid="tableName"/> WHERE file_id IN
         <foreach collection="ids" separator="," open="(" close=")" item="id">#{id}</foreach>
     </delete>

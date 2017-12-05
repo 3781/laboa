@@ -15,11 +15,10 @@ import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.query.file.FileFilterQuery;
 import team.oha.laboa.query.file.FileSelectQuery;
 import team.oha.laboa.service.FileService;
-import team.oha.laboa.vo.DeleteVo;
+import team.oha.laboa.vo.BatchVo;
 import team.oha.laboa.vo.FileVo;
 
 import java.io.File;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/file")
@@ -48,7 +47,7 @@ public class FileController {
     @RequiresUser
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("/{fileId:[1-9][0-9]*}")
-    public HttpEntity<byte[]> update(@PathVariable Integer fileId) throws Exception{
+    public HttpEntity<byte[]> download(@PathVariable Integer fileId) throws Exception{
         File file = fileService.download(fileId);
         HttpHeaders headers = new HttpHeaders();
         //下载显示的文件名，解决中文名称乱码问题
@@ -106,7 +105,7 @@ public class FileController {
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
-    public ApiDto deleteFile(DeleteVo deleteVo){
+    public ApiDto deleteFile(BatchVo deleteVo){
         return fileService.delete(deleteVo);
     }
 }
