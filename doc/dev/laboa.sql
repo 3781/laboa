@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/5 19:16:51                           */
+/* Created on:     2017/12/5 20:52:06                           */
 /*==============================================================*/
 
 
@@ -52,7 +52,7 @@ create table agenda
 /*==============================================================*/
 create table agenda_item
 (
-   item_id              int(10) unsigned not null,
+   item_id              int(10) unsigned not null auto_increment,
    agenda_id            int(10) unsigned,
    summary_time         datetime,
    primary key (item_id)
