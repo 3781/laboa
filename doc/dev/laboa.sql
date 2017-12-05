@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/5 13:48:56                           */
+/* Created on:     2017/12/5 19:16:51                           */
 /*==============================================================*/
 
 
@@ -8,7 +8,7 @@ drop table if exists agenda;
 
 drop table if exists agenda_item;
 
-drop table if exists agenda_item_summary;
+drop table if exists agenda_summary;
 
 drop table if exists cooperation;
 
@@ -59,15 +59,16 @@ create table agenda_item
 );
 
 /*==============================================================*/
-/* Table: agenda_item_summary                                   */
+/* Table: agenda_summary                                        */
 /*==============================================================*/
-create table agenda_item_summary
+create table agenda_summary
 (
    summary_id           int(10) not null auto_increment,
    item_id              int(10) unsigned,
    summarizer_id        int(10) unsigned,
    summary_time         datetime,
    update_time          datetime,
+   content              text,
    primary key (summary_id)
 );
 
@@ -203,10 +204,10 @@ alter table agenda add constraint FK_Reference_14 foreign key (owner_id)
 alter table agenda_item add constraint FK_Reference_11 foreign key (agenda_id)
       references agenda (agenda_id) on delete restrict on update restrict;
 
-alter table agenda_item_summary add constraint FK_Reference_12 foreign key (item_id)
+alter table agenda_summary add constraint FK_Reference_12 foreign key (item_id)
       references agenda_item (item_id) on delete restrict on update restrict;
 
-alter table agenda_item_summary add constraint FK_Reference_13 foreign key (summarizer_id)
+alter table agenda_summary add constraint FK_Reference_13 foreign key (summarizer_id)
       references user (user_id) on delete restrict on update restrict;
 
 alter table cooperation add constraint FK_Reference_17 foreign key (parent_id)
