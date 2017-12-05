@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/11/27 11:01:38                          */
+/* Created on:     2017/12/5 13:48:56                           */
 /*==============================================================*/
 
 
@@ -159,7 +159,7 @@ create table file
    file_id              int(11) unsigned not null auto_increment,
    user_id              int(10) unsigned,
    name                 varchar(255),
-   adress               varchar(255),
+   address              varchar(255),
    remark               varchar(255),
    update_time          datetime,
    create_time          datetime,
