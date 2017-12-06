@@ -9,6 +9,30 @@ package team.oha.laboa.vo;
  * @modified
  */
 public class AgendaSummaryVo {
-    private Integer itemId;
+    private Integer summaryId;
     private String content;
+
+    public Integer getSummaryId() {
+        return summaryId;
+    }
+
+    public void setSummaryId(Integer summaryId) {
+        this.summaryId = summaryId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "AgendaSummaryVo{" +
+                "summaryId=" + summaryId +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

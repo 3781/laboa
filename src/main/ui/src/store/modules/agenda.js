@@ -49,9 +49,25 @@ const actions = {
       });
     });
   },
-  listAgendas({ commit }, userQueryForm) {
+  listToDoAgendas({ commit }, queryForm) {
     return new Promise((resolve, reject) => {
-      agendaApi.list(userQueryForm).then((response) => {
+      agendaApi.listToDo(queryForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  listAgendas({ commit }, queryForm) {
+    return new Promise((resolve, reject) => {
+      agendaApi.list(queryForm).then((response) => {
         if (response) {
           const res = response.data;
           if (res.success) {

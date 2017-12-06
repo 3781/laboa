@@ -2,6 +2,7 @@ package team.oha.laboa.service;
 
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
+import team.oha.laboa.query.agenda.AgendaToDoQuery;
 import team.oha.laboa.vo.AgendaSummaryVo;
 import team.oha.laboa.vo.AgendaVo;
 import team.oha.laboa.vo.BatchVo;
@@ -17,7 +18,9 @@ import team.oha.laboa.vo.BatchVo;
 public interface AgendaService {
     ApiDto savePersonalAgenda(AgendaVo agendaVo);
     ApiDto summaryAgenda(AgendaSummaryVo agendaSummaryVo);
+    ApiDto updateSummary(AgendaSummaryVo agendaSummaryVo);
     ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery);
+    ApiDto listToDo(AgendaToDoQuery agendaToDoQuery);
     ApiDto close(BatchVo deleteVo);
     ApiDto update(AgendaVo agendaVo);
 }

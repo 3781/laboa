@@ -1,11 +1,13 @@
 package team.oha.laboa.controller;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
+import team.oha.laboa.query.agenda.AgendaToDoQuery;
 import team.oha.laboa.service.AgendaService;
 import team.oha.laboa.vo.AgendaSummaryVo;
 import team.oha.laboa.vo.AgendaVo;
@@ -83,5 +85,21 @@ public class AgendaController {
     @PatchMapping
     public ApiDto update(@RequestBody AgendaVo agendaVo) {
         return agendaService.update(agendaVo);
+    }
+
+    /**
+     * <p>待办事项</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/todo")
+    public ApiDto listToDo(AgendaToDoQuery agendaToDoQuery) {
+        agendaToDoQuery.setUsername((String) SecurityUtils.getSubject().getPrincipal());
+        return agendaService.listToDo(agendaToDoQuery);
     }
 }
