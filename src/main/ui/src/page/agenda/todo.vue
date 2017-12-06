@@ -11,7 +11,7 @@
       <el-button type="primary" size="mini" @click="doJump" :disabled="jumpMonth==null">确定</el-button>
     </div>
     <vue-event-calendar title="待办日程" :events="this.toDoList" @month-changed="handleMonthChanged" v-loading.lock="loading">
-      <template scope="props">
+      <template slot-scope="props">
         <div v-for="(event, index) in props.showEvents" class="event-item">
           <div class="wrapper">
             <h3 class="title">{{index+1}}. {{event.title}}</h3>
