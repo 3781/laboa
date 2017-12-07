@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/7 17:10:33                           */
+/* Created on:     2017/12/7 18:58:00                           */
 /*==============================================================*/
 
 
@@ -135,7 +135,7 @@ create table cooperation_member
    member_id            int(10) unsigned not null auto_increment,
    cooperation_id       int(10) unsigned not null,
    user_id              int(10) unsigned not null,
-   role                 tinyint(1),
+   role                 varchar(255),
    join_time            datetime,
    primary key (member_id)
 );
