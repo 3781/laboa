@@ -48,6 +48,14 @@ public class CooperationApplyDo implements Serializable{
         this.cooperationId = cooperationId;
     }
 
+    public ApplyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ApplyStatus status) {
+        this.status = status;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -78,6 +86,7 @@ public class CooperationApplyDo implements Serializable{
                 "applyId=" + applyId +
                 ", applicantId=" + applicantId +
                 ", cooperationId=" + cooperationId +
+                ", status=" + status +
                 ", remark='" + remark + '\'' +
                 ", updateTime=" + updateTime +
                 ", applyTime=" + applyTime +

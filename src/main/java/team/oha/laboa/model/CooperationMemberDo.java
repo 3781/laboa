@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @modified
  */
 public class CooperationMemberDo implements Serializable{
-    private Integer memeberId;
+    private Integer memberId;
     private Integer cooperationId;
     private Integer userId;
     private CooperationRole role;
@@ -22,12 +22,12 @@ public class CooperationMemberDo implements Serializable{
         owner, manager, member
     }
 
-    public Integer getMemeberId() {
-        return memeberId;
+    public Integer getMemberId() {
+        return memberId;
     }
 
-    public void setMemeberId(Integer memeberId) {
-        this.memeberId = memeberId;
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
     }
 
     public Integer getCooperationId() {
@@ -65,7 +65,7 @@ public class CooperationMemberDo implements Serializable{
     @Override
     public String toString() {
         return "CooperationMemberDo{" +
-                "memeberId=" + memeberId +
+                "memberId=" + memberId +
                 ", cooperationId=" + cooperationId +
                 ", userId=" + userId +
                 ", role=" + role +

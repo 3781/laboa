@@ -3,4 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="team.oha.laboa.dao.CooperationAgendaParticipantDao">
+    <sql id="tableName">cooperation_agenda_participant</sql>
+    <insert id="save" parameterType="team.oha.laboa.model.CooperationAgendaParticipantDao" useGeneratedKeys="true" keyProperty="participantId">
+        INSERT INTO  <include refid="tableName"/>
+        (member_id,cooperation_agenda_id)
+        VALUE (#{memberId},#{cooperationAgendaId})
+    </insert>
+    <insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        INSERT INTO  <include refid="tableName"/>
+        (member_id,cooperation_agenda_id)
+        VALUES
+        <foreach collection="collection" item="item" separator=",">
+            (#{item.memberId},#{item.cooperationAgendaId})
+        </foreach>
+    </insert>
 </mapper>

@@ -3,4 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="team.oha.laboa.dao.CooperationRecordDao">
+    <sql id="tableName">cooperation_record</sql>
+    <insert id="save" parameterType="team.oha.laboa.model.CooperationRecordDao" useGeneratedKeys="true" keyProperty="recordId">
+        INSERT INTO  <include refid="tableName"/>
+        (operator_id, cooperation_id, remark, create_time)
+        VALUE (#{operatorId},#{cooperationId},#{remark},#{createTime})
+    </insert>
 </mapper>

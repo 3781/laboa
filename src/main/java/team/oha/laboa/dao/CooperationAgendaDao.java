@@ -1,5 +1,7 @@
 package team.oha.laboa.dao;
 
+import team.oha.laboa.model.CooperationAgendaDo;
+
 /**
  * <p></p>
  *
@@ -9,4 +11,5 @@ package team.oha.laboa.dao;
  * @modified
  */
 public interface CooperationAgendaDao {
+    Integer save(CooperationAgendaDo cooperationAgendaDo);
 }

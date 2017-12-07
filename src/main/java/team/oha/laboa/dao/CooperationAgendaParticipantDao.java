@@ -1,5 +1,9 @@
 package team.oha.laboa.dao;
 
+import team.oha.laboa.model.CooperationAgendaParticipantDo;
+
+import java.util.List;
+
 /**
  * <p></p>
  *
@@ -9,4 +13,6 @@ package team.oha.laboa.dao;
  * @modified
  */
 public interface CooperationAgendaParticipantDao {
+    Integer save(CooperationAgendaParticipantDo cooperationAgendaParticipantDo);
+    Integer saveBatch(List<CooperationAgendaParticipantDo> cooperationAgendaParticipantDos);
 }
