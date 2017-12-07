@@ -1,6 +1,7 @@
 package team.oha.laboa.dto;
 
 import team.oha.laboa.model.AgendaDo;
+import team.oha.laboa.model.AgendaSummaryDo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,16 +15,10 @@ public class AgendaDto implements Serializable {
     private Integer quantity;
     private AgendaDo.AgendaType type;
     private AgendaDo.AgendaUnit unit;
+    private AgendaSummaryDo.SummaryStatus status;
     private Boolean open;
     private LocalDateTime updateTime;
     private LocalDateTime createTime;
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public Integer getAgendaId() {
         return agendaId;
@@ -31,6 +26,14 @@ public class AgendaDto implements Serializable {
 
     public void setAgendaId(Integer agendaId) {
         this.agendaId = agendaId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getTitle() {
@@ -81,6 +84,14 @@ public class AgendaDto implements Serializable {
         this.unit = unit;
     }
 
+    public AgendaSummaryDo.SummaryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AgendaSummaryDo.SummaryStatus status) {
+        this.status = status;
+    }
+
     public Boolean getOpen() {
         return open;
     }
@@ -116,6 +127,7 @@ public class AgendaDto implements Serializable {
                 ", quantity=" + quantity +
                 ", type=" + type +
                 ", unit=" + unit +
+                ", status=" + status +
                 ", open=" + open +
                 ", updateTime=" + updateTime +
                 ", createTime=" + createTime +

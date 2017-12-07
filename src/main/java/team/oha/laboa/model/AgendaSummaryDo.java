@@ -15,9 +15,14 @@ public class AgendaSummaryDo implements Serializable{
     private Integer summaryId;
     private Integer itemId;
     private Integer summarizerId;
+    private SummaryStatus status;
     private String content;
     private LocalDateTime summaryTime;
     private LocalDateTime updateTime;
+
+    public static enum SummaryStatus{
+        todo, finished, unfinished
+    }
 
     public Integer getSummaryId() {
         return summaryId;
@@ -41,6 +46,14 @@ public class AgendaSummaryDo implements Serializable{
 
     public void setSummarizerId(Integer summarizerId) {
         this.summarizerId = summarizerId;
+    }
+
+    public SummaryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SummaryStatus status) {
+        this.status = status;
     }
 
     public String getContent() {
@@ -73,6 +86,7 @@ public class AgendaSummaryDo implements Serializable{
                 "summaryId=" + summaryId +
                 ", itemId=" + itemId +
                 ", summarizerId=" + summarizerId +
+                ", status=" + status +
                 ", content='" + content + '\'' +
                 ", summaryTime=" + summaryTime +
                 ", updateTime=" + updateTime +

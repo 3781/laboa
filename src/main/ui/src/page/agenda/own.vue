@@ -106,7 +106,7 @@
           {{ unitFormatter(scope.row.unit) }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="状态" column-key="statuses" prop="status"
+      <el-table-column align="center" label="状态" column-key="opens" prop="open"
                        sortable="custom" :resizable="true"  width="80px">
         <template slot-scope="scope">
           {{ scope.row.open ? '开启' : '关闭'}}

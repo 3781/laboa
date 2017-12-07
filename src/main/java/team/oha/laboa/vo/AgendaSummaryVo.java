@@ -1,5 +1,7 @@
 package team.oha.laboa.vo;
 
+import team.oha.laboa.model.AgendaSummaryDo;
+
 /**
  * <p></p>
  *
@@ -11,6 +13,7 @@ package team.oha.laboa.vo;
 public class AgendaSummaryVo {
     private Integer summaryId;
     private String content;
+    private AgendaSummaryDo.SummaryStatus status;
 
     public Integer getSummaryId() {
         return summaryId;
@@ -28,11 +31,20 @@ public class AgendaSummaryVo {
         this.content = content;
     }
 
+    public AgendaSummaryDo.SummaryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AgendaSummaryDo.SummaryStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "AgendaSummaryVo{" +
                 "summaryId=" + summaryId +
                 ", content='" + content + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

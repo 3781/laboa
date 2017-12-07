@@ -62,6 +62,7 @@ public class AgendaServiceImpl implements AgendaService {
         AgendaSummaryDo agendaSummaryDo = new AgendaSummaryDo();
         agendaSummaryDo.setItemId(agendaItemDo.getItemId());
         agendaSummaryDo.setSummarizerId(ownerId);
+        agendaSummaryDo.setStatus(AgendaSummaryDo.SummaryStatus.todo);
         agendaSummaryDao.save(agendaSummaryDo);
 
         ApiDto apiDto = new ApiDto();

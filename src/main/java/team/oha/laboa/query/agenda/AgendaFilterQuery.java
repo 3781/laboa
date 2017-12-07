@@ -2,6 +2,7 @@ package team.oha.laboa.query.agenda;
 
 
 import team.oha.laboa.model.AgendaDo;
+import team.oha.laboa.model.AgendaSummaryDo;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ public class AgendaFilterQuery {
     private LocalDateTime nextTimeEnd;
     private AgendaDo.AgendaType type;
     private AgendaDo.AgendaUnit[] units;
+    private AgendaSummaryDo.SummaryStatus[] statuses;
     private LocalDateTime updateTimeBegin;
     private LocalDateTime updateTimeEnd;
     private LocalDateTime createTimeBegin;
@@ -94,6 +96,14 @@ public class AgendaFilterQuery {
         this.units = units;
     }
 
+    public AgendaSummaryDo.SummaryStatus[] getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(AgendaSummaryDo.SummaryStatus[] statuses) {
+        this.statuses = statuses;
+    }
+
     public LocalDateTime getUpdateTimeBegin() {
         return updateTimeBegin;
     }
@@ -146,6 +156,7 @@ public class AgendaFilterQuery {
                 ", nextTimeEnd=" + nextTimeEnd +
                 ", type=" + type +
                 ", units=" + Arrays.toString(units) +
+                ", statuses=" + Arrays.toString(statuses) +
                 ", updateTimeBegin=" + updateTimeBegin +
                 ", updateTimeEnd=" + updateTimeEnd +
                 ", createTimeBegin=" + createTimeBegin +

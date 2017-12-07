@@ -6,8 +6,8 @@
     <sql id="tableName">agenda_summary</sql>
     <insert id="save" parameterType="team.oha.laboa.model.AgendaSummaryDo" useGeneratedKeys="true" keyProperty="summaryId">
         INSERT INTO  <include refid="tableName"/>
-        (item_id, summarizer_id)
-        VALUE (#{itemId},#{summarizerId})
+        (item_id, summarizer_id, status)
+        VALUE (#{itemId},#{summarizerId}, #{status})
     </insert>
 
     <update id="update" parameterType="team.oha.laboa.model.AgendaSummaryDo">
@@ -16,6 +16,7 @@
             <if test="content != null">content=#{content},</if>
             <if test="summaryTime != null">summary_time=#{summaryTime},</if>
             <if test="updateTime != null">update_time=#{updateTime},</if>
+            <if test="status != null">status=#{status},</if>
         </set>
         WHERE summary_id = #{summaryId}
     </update>
@@ -29,7 +30,7 @@
         JOIN agenda_item ON agenda_item.item_id = <include refid="tableName"/>.item_id
         JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id
         JOIN user ON user.user_id = <include refid="tableName"/>.summarizer_id
-        WHERE user.username = #{username} AND agenda.open = 1 AND <include refid="tableName"/>.summary_time IS NULL
+        WHERE user.username = #{username} AND agenda.open = 1 AND <include refid="tableName"/>.status = 'todo'
         AND date_format(agenda_item.summary_time,'%Y-%m')=date_format(#{targetDate},'%Y-%m')
         ORDER BY agenda_item.summary_time asc
     </select>

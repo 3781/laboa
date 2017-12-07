@@ -14,12 +14,8 @@
       <template slot-scope="props">
         <div v-for="(event, index) in props.showEvents" class="event-item">
           <div class="wrapper">
-            <h3 class="title">{{index+1}}. {{event.title}}</h3>
+            <h3 class="title">{{index+1}}. {{event.title}} <el-button type="primary" size="mini" :round="true" plain>详情</el-button></h3>
             <p class="time">{{ event.summaryTime}}</p>
-            <p class="desc">
-              <el-button type="primary" size="mini">详情</el-button>
-              <el-button type="primary" size="mini">结项</el-button>
-            </p>
           </div>
         </div>
       </template>
