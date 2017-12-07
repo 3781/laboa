@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/7 18:58:00                           */
+/* Created on:     2017/12/8 1:54:20                            */
 /*==============================================================*/
 
 
@@ -14,9 +14,13 @@ drop table if exists cooperation;
 
 drop table if exists cooperation_agenda;
 
+drop index uk on cooperation_agenda_participant;
+
 drop table if exists cooperation_agenda_participant;
 
 drop table if exists cooperation_apply;
+
+drop index uk on cooperation_member;
 
 drop table if exists cooperation_member;
 
@@ -113,6 +117,15 @@ create table cooperation_agenda_participant
 );
 
 /*==============================================================*/
+/* Index: uk                                                    */
+/*==============================================================*/
+create unique index uk on cooperation_agenda_participant
+(
+   member_id,
+   cooperation_agenda_id
+);
+
+/*==============================================================*/
 /* Table: cooperation_apply                                     */
 /*==============================================================*/
 create table cooperation_apply
@@ -138,6 +151,15 @@ create table cooperation_member
    role                 varchar(255),
    join_time            datetime,
    primary key (member_id)
+);
+
+/*==============================================================*/
+/* Index: uk                                                    */
+/*==============================================================*/
+create unique index uk on cooperation_member
+(
+   cooperation_id,
+   user_id
 );
 
 /*==============================================================*/
