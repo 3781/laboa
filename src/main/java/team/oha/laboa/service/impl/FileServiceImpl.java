@@ -3,6 +3,7 @@ package team.oha.laboa.service.impl;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.ContextLoader;
 import team.oha.laboa.dao.FileDao;
 import team.oha.laboa.dao.UserDao;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
  * @modified
  */
 @Service
+@Transactional
 public class FileServiceImpl implements FileService {
 
     @Autowired

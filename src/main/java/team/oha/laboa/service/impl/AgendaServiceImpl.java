@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.oha.laboa.dao.AgendaDao;
 import team.oha.laboa.dao.AgendaItemDao;
 import team.oha.laboa.dao.AgendaSummaryDao;
@@ -32,6 +33,7 @@ import java.time.LocalDateTime;
  * @modified
  */
 @Service
+@Transactional
 public class AgendaServiceImpl implements AgendaService {
     @Autowired
     private UserDao userDao;
