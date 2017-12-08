@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/8 1:54:20                            */
+/* Created on:     2017/12/8 10:33:39                           */
 /*==============================================================*/
 
 
@@ -23,8 +23,6 @@ drop table if exists cooperation_apply;
 drop index uk on cooperation_member;
 
 drop table if exists cooperation_member;
-
-drop table if exists cooperation_record;
 
 drop table if exists file;
 
@@ -163,19 +161,6 @@ create unique index uk on cooperation_member
 );
 
 /*==============================================================*/
-/* Table: cooperation_record                                    */
-/*==============================================================*/
-create table cooperation_record
-(
-   record_id            int(10) unsigned not null auto_increment,
-   operator_id          int(10) unsigned,
-   cooperation_id       int(10) unsigned not null,
-   remark               varchar(255),
-   create_time          datetime,
-   primary key (record_id)
-);
-
-/*==============================================================*/
 /* Table: file                                                  */
 /*==============================================================*/
 create table file
@@ -262,12 +247,6 @@ alter table cooperation_member add constraint FK_Reference_7 foreign key (cooper
 
 alter table cooperation_member add constraint FK_Reference_8 foreign key (user_id)
       references user (user_id) on delete cascade on update cascade;
-
-alter table cooperation_record add constraint FK_Reference_5 foreign key (operator_id)
-      references user (user_id) on delete cascade on update cascade;
-
-alter table cooperation_record add constraint FK_Reference_6 foreign key (cooperation_id)
-      references cooperation (cooperation_id) on delete cascade on update cascade;
 
 alter table file add constraint FK_Reference_2 foreign key (user_id)
       references user (user_id) on delete cascade on update cascade;
