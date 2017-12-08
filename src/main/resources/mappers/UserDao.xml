@@ -56,7 +56,7 @@
                   <foreach collection="filterQuery.roles" open="(" close=")" item="role" separator=",">#{role}</foreach>
                 </if>
                 <if test="filterQuery.statuses">AND user.status in
-                    <foreach collection="filterQuery.statuses" open="(" close=")" item="stauts" separator=",">#{stauts}</foreach>
+                    <foreach collection="filterQuery.statuses" open="(" close=")" item="status" separator=",">#{status}</foreach>
                 </if>
 
                 <if test="filterQuery.loginTimeBegin">AND user.login_time &gt;= #{filterQuery.loginTimeBegin}</if>
@@ -130,4 +130,11 @@
         WHERE user_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
         <include refid="allowFilter"></include>
     </update>
+
+    <select id="listCooperationRole" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+        cooperation_member.role + cooperation_member.cooperation_id
+        FROM cooperation_member
+        JOIN <include refid="tableName"/> ON cooperation_member.user_id = user.user_id
+    </select>
 </mapper>

@@ -1,9 +1,10 @@
 package team.oha.laboa.query.file;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class FileFilterQuery {
+public class FileFilterQuery implements Serializable{
     private Integer fileId;
     private Integer userId;
     private String username;

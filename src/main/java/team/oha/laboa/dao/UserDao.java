@@ -6,11 +6,12 @@ import team.oha.laboa.dto.UserDto;
 import team.oha.laboa.model.UserDo;
 import team.oha.laboa.query.user.UserFilterQuery;
 import team.oha.laboa.query.user.UserSelectQuery;
-import team.oha.laboa.vo.ConfigureStatusVo;
 import team.oha.laboa.vo.ConfigureRoleVo;
+import team.oha.laboa.vo.ConfigureStatusVo;
 import team.oha.laboa.vo.ResetPasswordVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p></p>
@@ -32,4 +33,5 @@ public interface UserDao {
     Integer configureStatus(ConfigureStatusVo configureStatusVo);
     Integer configureRole(ConfigureRoleVo configureRoleVo);
     Integer resetPassword(ResetPasswordVo resetPasswordVo);
+    Set<String> listCooperationRole(String username);
 }

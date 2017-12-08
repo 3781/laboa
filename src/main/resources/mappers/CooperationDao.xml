@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.oha.laboa.dao.CooperationDao">
+    <sql id="tableName">cooperation</sql>
+    <insert id="save" parameterType="team.oha.laboa.model.CooperationDo" useGeneratedKeys="true" keyProperty="cooperationId">
+        INSERT INTO  <include refid="tableName"/>
+        (parent_id, name, remark,begin_date,end_date, invite, update_time, create_time)
+        VALUE (#{parentId},#{name},#{remark},#{beginDate},#{endDate},#{invite},#{updateTime},#{createTime})
+    </insert>
+
+    <update id="update" parameterType="team.oha.laboa.model.CooperationDo">
+        UPDATE <include refid="tableName"/>
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            <if test="begin_date != null">begin_date=#{beginDate},</if>
+            <if test="end_date != null">end_date=#{endDate},</if>
+            <if test="invite != null">invite=#{invite},</if>
+            <if test="update_time != null">update_time=#{updateTime},</if>
+        </set>
+        WHERE cooperation_id = #{cooperationId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM <include refid="tableName"/> WHERE cooperation_id = #{cooperationId}
+    </delete>
+
+    <select id="get" parameterType="java.lang.Integer" resultType="team.oha.laboa.dto.CooperationDto">
+        SELECT
+        parent.name AS parentName,
+        user.username AS ownerName,
+        child.cooperation_id AS cooperation_id,
+        child.name AS name,
+        child.remark AS remark,
+        child.begin_date AS begin_date,
+        child.end_date AS end_date,
+        child.invite AS invite,
+        child.update_time AS update_time,
+        child.create_time AS create_time
+        FROM <include refid="tableName"/> AS child
+        JOIN <include refid="tableName"/> AS parent ON child.parent_id = child.cooperation_id
+        JOIN cooperation_member
+        ON cooperation_member.cooperation_id = <include refid="tableName"/>.cooperation_id
+        AND cooperation_member.role = 'owner'
+        JOIN user ON user_id = cooperation_member.user_id
+    </select>
+
+    <resultMap id="treeMap" type="team.oha.laboa.dto.CooperationTreeDto">
+        <id property="cooperationId" column="cooperation_id"/>
+        <result property="label" column="name"/>
+        <collection property="children" select="getTreeNode" column="cooperation_id"
+                    ofType="team.oha.laboa.dto.CooperationTreeDto" />
+    </resultMap>
+
+    <select id="getTreeNode" parameterType="java.lang.Integer" resultMap="treeMap">
+        SELECT
+        cooperation_id, name
+        FROM <include refid="tableName"/>
+        WHERE <include refid="tableName"/>.parent_id = #{id}
+    </select>
+
+    <select id="getTree" parameterType="java.lang.Integer" resultMap="treeMap">
+        SELECT
+        cooperation_id, name
+        FROM <include refid="tableName"/>
+        WHERE <include refid="tableName"/>.cooperation_id = #{id}
+    </select>
+
+
+    <sql id="conditions">
+        <if test="filterQuery!=null">
+            <where>
+                <if test="filterQuery.cooperationId">AND child.cooperation_id = #{filterQuery.cooperationId}</if>
+                <if test="filterQuery.beginDateBegin">AND child.begin_date &gt;= #{filterQuery.beginDateBegin}</if>
+                <if test="filterQuery.beginDateEnd">AND child.begin_date &lt;= #{filterQuery.beginDateEnd}</if>
+                <if test="filterQuery.endDateBegin">AND child.end_date &gt;= #{filterQuery.endDateBegin}</if>
+                <if test="filterQuery.endDateEnd">AND child.end_date &lt;= #{filterQuery.endDateEnd}</if>
+                <if test="filterQuery.updateTimeBegin">AND child.update_time &gt;= #{filterQuery.updateTimeBegin}</if>
+                <if test="filterQuery.updateTimeEnd">AND child.update_time &lt;= #{filterQuery.updateTimeEnd}</if>
+                <if test="filterQuery.createTimeBegin">AND child.create_time &gt;= #{filterQuery.createTimeBegin}</if>
+                <if test="filterQuery.createTimeEnd">AND child.create_time &lt;= #{filterQuery.createTimeEnd}</if>
+                <if test="filterQuery.name">AND child.name LIKE concat('%', #{filterQuery.name}, '%')</if>
+                <if test="filterQuery.remark">AND child.remark LIKE concat('%', #{filterQuery.remark}, '%')</if>
+                <if test="filterQuery.ownerName">AND owner.name LIKE concat('%', #{filterQuery.ownerName}, '%')</if>
+                <if test="filterQuery.hasParent != null">
+                    <choose>
+                        <when test="filterQuery.hasParent">
+                            AND child.parent_id IS NOT NULL
+                        </when>
+                        <otherwise>
+                            AND child.parent_id IS NULL
+                        </otherwise>
+                    </choose>
+                </if>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="page">
+        <if test="pageQuery!=null">
+            LIMIT ${pageQuery.offset},${pageQuery.rows}
+        </if>
+    </sql>
+
+    <sql id="order">
+        <if test="orderQuery!=null">
+            ORDER BY ${@team.oha.laboa.util.CaseFormatUtil@lowerCamelToLowerUnderScore(orderQuery.field.name())} ${orderQuery.order}
+        </if>
+    </sql>
+
+    <select id="list" parameterType="team.oha.laboa.query.cooperation.CooperationSelectQuery" resultType="team.oha.laboa.dto.CooperationDto">
+        SELECT
+        child.coopeartion_id AS coopeartion_id,
+        parent.name AS parent_name,
+        owner.username AS ownerName,
+        child.name AS name,
+        child.remark AS remark,
+        child.beginDate AS beginDate,
+        child.endDate AS endDate,
+        child.invite AS invite,
+        child.update_time AS update_time,
+        child.create_time AS create_time
+        FROM <include refid="tableName"/> AS child
+        JOIN cooperation_member AS owner_member ON owner_member.coopeartion_id = child.coopeartion_id AND owner_member.role = 'owner'
+        JOIN user AS owner ON owner_member.user_id = owner.user_id
+        <choose>
+            <when test="filterQuery.role='owner'">
+                AND owner.username = #{username}
+            </when>
+            <otherwise>
+                JOIN cooperation_member AS member ON member.coopeartion_id = child.coopeartion_id AND member.role = #{filterQuery.role}
+                JOIN user AS member_user ON member_user.user_id = member.user_id and member_user.name = #{username}
+            </otherwise>
+        </choose>
+        JOIN cooperation AS parent ON child.parent_id = parent.coopeartion_id
+        <include refid="conditions"/>
+        <include refid="order"/>
+        <include refid="page"/>
+    </select>
+
+    <select id="count" parameterType="team.oha.laboa.query.cooperation.CooperationFilterQuery" resultType="java.lang.Integer">
+        <bind name="filterQuery" value="_parameter"/>
+        SELECT COUNT(*)
+        FROM <include refid="tableName"/> AS child
+        JOIN cooperation_member AS owner_member ON owner_member.coopeartion_id = child.coopeartion_id AND owner_member.role = 'owner'
+        JOIN user AS owner ON owner_member.user_id = owner.user_id
+        <choose>
+            <when test="filterQuery.role='owner'">
+                AND owner.username = #{username}
+            </when>
+            <otherwise>
+                JOIN cooperation_member AS member ON member.coopeartion_id = child.coopeartion_id AND member.role = #{filterQuery.role}
+                JOIN user AS member_user ON member_user.user_id = member.user_id
+            </otherwise>
+        </choose>
+        JOIN cooperation AS parent ON child.parent_id = parent.coopeartion_id
+        <include refid="conditions"/>
+    </select>
+
+</mapper>

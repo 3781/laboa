@@ -25,6 +25,6 @@ public interface FileDao {
     Integer save(FileDo fileDo);
     Integer update(FileDo fieDo);
     Integer delete(BatchVo deleteVo);
-    List<FileDto> list(FileSelectQuery userSelectQuery);
+    List<FileDto> list(FileSelectQuery fileSelectQuery);
     Integer count(FileFilterQuery filterQuery);
 }

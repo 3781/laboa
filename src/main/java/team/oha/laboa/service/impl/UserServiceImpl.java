@@ -175,6 +175,7 @@ public class UserServiceImpl implements UserService {
         UserDo userDo = userDao.getByUsername((String)principal);
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.addRole(userDo.getRole().name());
+        authorizationInfo.addRoles(userDao.listCooperationRole((String)principal));
         return authorizationInfo;
     }
 

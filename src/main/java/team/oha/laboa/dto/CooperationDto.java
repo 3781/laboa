@@ -18,8 +18,8 @@ public class CooperationDto implements Serializable {
     private String ownerName;
     private String name;
     private String remark;
-    private LocalDate beginTime;
-    private LocalDate endTime;
+    private LocalDate beginDate;
+    private LocalDate endDate;
     private Boolean invite;
     private LocalDateTime updateTime;
     private LocalDateTime createTime;
@@ -64,20 +64,20 @@ public class CooperationDto implements Serializable {
         this.remark = remark;
     }
 
-    public LocalDate getBeginTime() {
-        return beginTime;
+    public LocalDate getBeginDate() {
+        return beginDate;
     }
 
-    public void setBeginTime(LocalDate beginTime) {
-        this.beginTime = beginTime;
+    public void setBeginDate(LocalDate beginDate) {
+        this.beginDate = beginDate;
     }
 
-    public LocalDate getEndTime() {
-        return endTime;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setEndTime(LocalDate endTime) {
-        this.endTime = endTime;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public Boolean getInvite() {
@@ -112,8 +112,8 @@ public class CooperationDto implements Serializable {
                 ", ownerName='" + ownerName + '\'' +
                 ", name='" + name + '\'' +
                 ", remark='" + remark + '\'' +
-                ", beginTime=" + beginTime +
-                ", endTime=" + endTime +
+                ", beginDate=" + beginDate +
+                ", endDate=" + endDate +
                 ", invite=" + invite +
                 ", updateTime=" + updateTime +
                 ", createTime=" + createTime +

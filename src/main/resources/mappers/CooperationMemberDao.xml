@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.oha.laboa.dao.CooperationMemberDao">
+    <sql id="tableName">cooperation_member</sql>
+    <insert id="save" parameterType="team.oha.laboa.model.CooperationMemberDo" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO  <include refid="tableName"/>
+        (cooperation_id, user_id, role, join_time)
+        VALUE (#{cooperationId},#{userId},#{role},#{joinTime})
+    </insert>
+    <insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        INSERT INTO  <include refid="tableName"/>
+        (cooperation_id, user_id, role, join_time)
+        VALUES
+        <foreach collection="collection" item="item" separator=",">
+            (#{item.cooperationId},#{item.userId},#{item.role},#{item.joinTime})
+        </foreach>
+        ON DUPLICATE KEY UPDATE role = VALULS(role)
+    </insert>
+    <delete id="deleteBatch" parameterType="team.oha.laboa.vo.BatchVo">
+        DELETE FROM <include refid="tableName"/>
+        WHERE member_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </delete>
+
+    <sql id="conditions">
+        <if test="filterQuery!=null">
+            <where>
+                <if test="filterQuery.memberId">AND <include refid="tableName"/>.memberId = #{filterQuery.memberId}</if>
+                <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
+                <if test="filterQuery.name">AND userinfo.name LIKE concat('%', #{filterQuery.name}, '%')</if>
+                <if test="filterQuery.employeeNumber">AND userinfo.employee_number LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
+                <if test="filterQuery.qq">AND userinfo.qq LIKE concat('%', #{filterQuery.qq}, '%')</if>
+                <if test="filterQuery.email">AND userinfo.email LIKE concat('%', #{filterQuery.email}, '%')</if>
+                <if test="filterQuery.phone">AND userinfo.phone LIKE concat('%', #{filterQuery.phone}, '%')</if>
+                <if test="filterQuery.joinTimeBegin">AND <include refid="tableName"/>.join_time &gt;= #{filterQuery.joinTimeBegin}</if>
+                <if test="filterQuery.joinTimeEnd">AND <include refid="tableName"/>.join_time &lt;= #{filterQuery.joinTimeEnd}</if>
+
+            </where>
+        </if>
+    </sql>
+
+    <sql id="page">
+        <if test="pageQuery!=null">
+            LIMIT ${pageQuery.offset},${pageQuery.rows}
+        </if>
+    </sql>
+
+    <sql id="order">
+        <if test="orderQuery!=null">
+            ORDER BY ${@team.oha.laboa.util.CaseFormatUtil@lowerCamelToLowerUnderScore(orderQuery.field.name())} ${orderQuery.order}
+        </if>
+    </sql>
+
+    <select id="list" parameterType="team.oha.laboa.query.cooperation.member.MemberSelectQuery" resultType="team.oha.laboa.dto.CooperationMemberDto">
+        SELECT
+        <include refid="tableName"/>.member_id AS member_id,
+        user.username AS username,
+        userinfo.name AS name,
+        userinfo.employee_number AS employee_number,
+        userinfo.qq AS qq,
+        userinfo.email AS email,
+        userinfo.phone AS phone,
+        <include refid="tableName"/>.join_time AS join_time
+        FROM <include refid="tableName"/>
+        JOIN user ON user.user_id = <include refid="tableName"/>.user_id
+        LEFT JOIN userinfo ON user.user_id = userinfo.user_id
+        <include refid="conditions"/>
+        <include refid="order"/>
+        <include refid="page"/>
+    </select>
+
+    <select id="count" parameterType="team.oha.laboa.query.cooperation.member.MemberSelectQuery" resultType="java.lang.Integer">
+        <bind name="filterQuery" value="_parameter"/>
+        SELECT COUNT(*)
+        FROM <include refid="tableName"/>
+        JOIN user ON user.user_id = <include refid="tableName"/>.user_id
+        LEFT JOIN userinfo ON user.user_id = userinfo.user_id
+        <include refid="conditions"/>
+    </select>
+
+    <select id="listAvailable" parameterType="team.oha.laboa.query.cooperation.member.MemberAvailableQuery" resultType="team.oha.laboa.dto.MemberAvailableDto">
+        SELECT
+        user.user_id AS user_id,
+        user.username AS username,
+        userinfo.name AS name,
+        userinfo.employee_number AS employee_number
+        FROM user JOIN userinfo ON user.user_id = userinfo.user_id
+        <if test="cooperationId != null">
+        WHERE user.user_id IN
+        (
+        SELECT user_id FROM <include refid="tableName"/>
+        WHERE <include refid="tableName"/>.cooperation_id = #{cooperationId}
+        )
+        </if>
+        AND user.username LIKE concat('%', #{username}, '%')
+    </select>
+</mapper>
