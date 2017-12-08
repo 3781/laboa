@@ -15,4 +15,5 @@ import java.util.List;
 public interface CooperationAgendaParticipantDao {
     Integer save(CooperationAgendaParticipantDo cooperationAgendaParticipantDo);
     Integer saveBatch(List<CooperationAgendaParticipantDo> cooperationAgendaParticipantDos);
+    Integer delete(Integer id);
 }

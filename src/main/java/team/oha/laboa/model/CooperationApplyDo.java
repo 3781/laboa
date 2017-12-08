@@ -21,7 +21,7 @@ public class CooperationApplyDo implements Serializable{
     private LocalDateTime applyTime;
 
     public static enum ApplyStatus{
-        pass, reject, never
+        todo, pass, reject, never
     }
 
     public Integer getApplyId() {

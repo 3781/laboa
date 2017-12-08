@@ -1,6 +1,7 @@
 package team.oha.laboa.dao;
 
 import team.oha.laboa.model.CooperationApplyDo;
+import team.oha.laboa.vo.ApplyDealBatchVo;
 
 /**
  * <p></p>
@@ -12,4 +13,5 @@ import team.oha.laboa.model.CooperationApplyDo;
  */
 public interface CooperationApplyDao {
     Integer save(CooperationApplyDo cooperationApplyDo);
+    Integer dealApply(ApplyDealBatchVo applyDealBatchVo);
 }

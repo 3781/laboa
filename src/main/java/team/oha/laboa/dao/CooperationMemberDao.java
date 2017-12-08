@@ -1,6 +1,7 @@
 package team.oha.laboa.dao;
 
 import team.oha.laboa.model.CooperationMemberDo;
+import team.oha.laboa.vo.BatchVo;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ import java.util.List;
 public interface CooperationMemberDao {
     Integer save(CooperationMemberDo cooperationMemberDo);
     Integer saveBatch(List<CooperationMemberDo> cooperationMemberDos);
+    Integer deleteBatch(BatchVo batchVo);
 }

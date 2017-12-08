@@ -12,4 +12,5 @@ import team.oha.laboa.model.CooperationAgendaDo;
  */
 public interface CooperationAgendaDao {
     Integer save(CooperationAgendaDo cooperationAgendaDo);
+    Integer cleanAgendaSummary();
 }

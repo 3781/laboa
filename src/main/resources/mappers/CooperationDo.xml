@@ -9,4 +9,65 @@
         (parent_id, name, remark,begin_date,end_date, invite, update_time, create_time)
         VALUE (#{parentId},#{name},#{remark},#{beginDate},#{endDate},#{invite},#{updateTime},#{createTime})
     </insert>
+
+    <update id="update" parameterType="team.oha.laboa.model.CooperationDo">
+        UPDATE <include refid="tableName"/>
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            <if test="begin_date != null">begin_date=#{beginDate},</if>
+            <if test="end_date != null">end_date=#{endDate},</if>
+            <if test="invite != null">invite=#{invite},</if>
+            <if test="update_time != null">update_time=#{updateTime},</if>
+        </set>
+        WHERE cooperation_id = #{cooperationId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM <include refid="tableName"/> WHERE cooperation_id = #{cooperationId}
+    </delete>
+
+    <select id="get" parameterType="java.lang.Integer" resultType="team.oha.laboa.dto.CooperationDto">
+        SELECT
+        parent.name AS parentName,
+        user.username AS ownerName,
+        child.cooperation_id AS cooperation_id,
+        child.name AS name,
+        child.remark AS remark,
+        child.begin_date AS begin_date,
+        child.end_date AS end_date,
+        child.invite AS invite,
+        child.update_time AS update_time,
+        child.create_time AS create_time
+        FROM <include refid="tableName"/> AS child
+        JOIN <include refid="tableName"/> AS parent ON child.parent_id = child.cooperation_id
+        JOIN cooperation_member
+        ON cooperation_member.cooperation_id = <include refid="tableName"/>.cooperation_id
+        AND cooperation_member.role = 'owner'
+        JOIN user ON user_id = cooperation_member.user_id
+    </select>
+
+    <resultMap id="treeMap" type="team.oha.laboa.dto.CooperationTreeDto">
+        <id property="cooperationId" column="cooperation_id"/>
+        <result property="label" column="name"/>
+        <collection property="children" select="getTreeNode" column="cooperation_id"
+                    ofType="team.oha.laboa.dto.CooperationTreeDto" />
+    </resultMap>
+
+    <select id="getTreeNode" parameterType="java.lang.Integer" resultMap="treeMap">
+        SELECT
+        cooperation_id, name
+        FROM <include refid="tableName"/>
+        WHERE <include refid="tableName"/>.parent_id = #{id}
+    </select>
+
+    <select id="getTree" parameterType="java.lang.Integer" resultMap="treeMap">
+        SELECT
+        cooperation_id, name
+        FROM <include refid="tableName"/>
+        WHERE <include refid="tableName"/>.cooperation_id = #{id}
+    </select>
+
+
+
 </mapper>

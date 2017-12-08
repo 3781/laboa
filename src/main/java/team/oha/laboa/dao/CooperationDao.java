@@ -1,5 +1,7 @@
 package team.oha.laboa.dao;
 
+import team.oha.laboa.dto.CooperationDto;
+import team.oha.laboa.dto.CooperationTreeDto;
 import team.oha.laboa.model.CooperationDo;
 
 /**
@@ -12,4 +14,9 @@ import team.oha.laboa.model.CooperationDo;
  */
 public interface CooperationDao {
     Integer save(CooperationDo cooperationDo);
+    Integer update(CooperationDo cooperationDo);
+    Integer delete(Integer id);
+    CooperationDto get(Integer id);
+    CooperationTreeDto getTree(Integer id);
+    CooperationTreeDto getTreeNode(Integer id);
 }
