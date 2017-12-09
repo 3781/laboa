@@ -133,8 +133,9 @@
 
     <select id="listCooperationRole" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT
-        cooperation_member.role + cooperation_member.cooperation_id
+        CONCAT(cooperation_member.role,cooperation_member.cooperation_id)
         FROM cooperation_member
         JOIN <include refid="tableName"/> ON cooperation_member.user_id = user.user_id
+        WHERE user.username = #{username}
     </select>
 </mapper>

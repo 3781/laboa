@@ -74,6 +74,7 @@ public class UserServiceImpl implements UserService {
         LoginDto loginDto = new LoginDto();
         loginDto.setUsername(username);
         loginDto.setRole(userDo.getRole());
+        loginDto.setPermissions(userDao.listCooperationRole(username));
         loginDto.setLastLoginTime(userDo.getLoginTime());
 
         UserDo updateUserDo = new UserDo();
@@ -94,8 +95,8 @@ public class UserServiceImpl implements UserService {
         LoginDto loginDto = new LoginDto();
         loginDto.setUsername(username);
         loginDto.setRole(userDo.getRole());
+        loginDto.setPermissions(userDao.listCooperationRole(username));
         loginDto.setLastLoginTime(userDo.getLoginTime());
-
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(loginDto);
@@ -175,7 +176,7 @@ public class UserServiceImpl implements UserService {
         UserDo userDo = userDao.getByUsername((String)principal);
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.addRole(userDo.getRole().name());
-        authorizationInfo.addRoles(userDao.listCooperationRole((String)principal));
+        authorizationInfo.addStringPermissions(userDao.listCooperationRole((String)principal));
         return authorizationInfo;
     }
 

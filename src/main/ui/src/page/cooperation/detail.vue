@@ -40,9 +40,12 @@
                 <span>{{ cooperationInfo!=null?cooperationInfo.createTime:'' }}</span>
               </el-form-item>
               <el-form-item  v-show="cooperationInfo!=null">
-                <el-button type="primary" @click="createDialogVisible = true">添加子协作</el-button>
-                <el-button type="warning" @click="prepareUpdate">更新</el-button>
-                <el-button type="danger" @click="doDelete">删除</el-button>
+                <el-button  v-show="checkManage || checkOwn"
+                  type="primary" @click="createDialogVisible = true">添加子协作</el-button>
+                <el-button  v-show="checkOwn"
+                  type="warning" @click="prepareUpdate">更新</el-button>
+                <el-button v-show="checkOwn"
+                           type="danger" @click="doDelete">删除</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -55,7 +58,7 @@
           <el-tab-pane label="协作日程" name="agenda">
             协作日程
           </el-tab-pane>
-          <el-tab-pane label="协作申请" name="apply">
+          <el-tab-pane label="协作申请" name="apply"  :disabled="!(checkManage || checkOwn)">
             协作申请
           </el-tab-pane>
         </el-tabs>
@@ -95,7 +98,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
   import cooperationCreate from './create';
 
   export default {
@@ -129,6 +132,15 @@
     },
     created() {
       this.loadTreeData();
+    },
+    computed: {
+      ...mapGetters(['getPermissions']),
+      checkOwn() {
+        return this.getPermissions.includes(`owner${this.currentCooperationId}`);
+      },
+      checkManage() {
+        return this.getPermissions.includes(`manager${this.currentCooperationId}`);
+      },
     },
     methods: {
       ...mapActions(['listCooperationTree', 'getCooperation', 'updateCooperation', 'deleteCooperation']),

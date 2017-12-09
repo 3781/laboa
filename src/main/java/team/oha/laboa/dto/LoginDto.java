@@ -3,6 +3,7 @@ package team.oha.laboa.dto;
 import team.oha.laboa.model.UserDo;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 /**
  * <p></p>
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class LoginDto {
     private String username;
     private UserDo.Role role;
+    private Collection<String> permissions;
     private LocalDateTime lastLoginTime;
 
     public String getUsername() {
@@ -33,6 +35,14 @@ public class LoginDto {
         this.role = role;
     }
 
+    public Collection<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Collection<String> permissions) {
+        this.permissions = permissions;
+    }
+
     public LocalDateTime getLastLoginTime() {
         return lastLoginTime;
     }
@@ -46,6 +56,7 @@ public class LoginDto {
         return "LoginDto{" +
                 "username='" + username + '\'' +
                 ", role=" + role +
+                ", permissions=" + permissions +
                 ", lastLoginTime=" + lastLoginTime +
                 '}';
     }
