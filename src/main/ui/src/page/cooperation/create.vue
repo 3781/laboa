@@ -1,8 +1,8 @@
 <template>
   <el-row>
     <el-form :model="cooperationForm" ref="cooperationForm" :statusIcon="true" label-width="120px" size="small">
-      <el-form-item v-if="parentName != null" label="所属协作">
-        <span v-text="parentName">  </span>
+      <el-form-item v-if="parent != null" label="所属协作">
+        <span v-text="parent.name">  </span>
       </el-form-item>
       <el-form-item label="协作名" prop="name"
                     :rules="[{ type:'string', required: true, message: '协作名不能为空'}]">
@@ -36,12 +36,8 @@
   export default {
     name: 'cooperationCreate',
     props: {
-      parentCooperationId: {
-        type: Number,
-        default: null,
-      },
-      parentName: {
-        type: String,
+      parent: {
+        type: Object,
         default: null,
       },
     },
@@ -49,7 +45,7 @@
       return {
         loading: false,
         cooperationForm: {
-          parentId: this.parentCooperationId,
+          parentId: null,
           name: null,
           beginDate: null,
           endDate: null,
@@ -61,10 +57,14 @@
     methods: {
       ...mapActions(['saveCooperation']),
       doCreate() {
+        if (this.parent != null) {
+          this.cooperationForm.parentId = this.parent.cooperationId;
+        }
+
         this.loading = true;
         this.$refs.cooperationForm.validate((valid) => {
           if (valid) {
-            this.saveCooperation(this.cooperationForm).then(() => {
+            this.saveCooperation(this.cooperationForm).then((cooperationId) => {
               this.$notify({
                 message: `协作${this.cooperationForm.name}创建成功`,
                 type: 'info',
@@ -72,6 +72,10 @@
                 offset: 40,
               });
               this.loading = false;
+              this.cooperationForm.beginDate = null;
+              this.cooperationForm.endDate = null;
+              this.$refs.cooperationForm.resetFields();
+              this.$emit('createSuccess', cooperationId);
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
               this.loading = false;

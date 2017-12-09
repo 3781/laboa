@@ -67,6 +67,34 @@ public class CooperationServiceImpl implements CooperationService {
     }
 
     @Override
+    public ApiDto updateCooperation(CooperationVo cooperationVo) {
+        CooperationDo cooperationDo = new CooperationDo();
+        BeanUtils.copyProperties(cooperationVo, cooperationDo);
+        cooperationDo.setCreateTime(LocalDateTime.now());
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(cooperationDao.update(cooperationDo));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto deleteCooperation(Integer cooperationId) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(cooperationDao.delete(cooperationId));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto getCooperationById(Integer id) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(cooperationDao.get(id));
+        return apiDto;
+    }
+
+    @Override
     public ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery) {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
@@ -85,6 +113,14 @@ public class CooperationServiceImpl implements CooperationService {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(pageDto);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto listCooperationTree(Integer cooperationId) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(cooperationDao.getTree(cooperationId));
         return apiDto;
     }
 

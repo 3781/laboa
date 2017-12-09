@@ -191,9 +191,6 @@
         },
       };
     },
-    // created() {
-    //   this.getCooperationData();
-    // },
     computed: {
       currentPage() {
         return this.cooperationSelectQuery.pageQuery.offset

@@ -33,6 +33,22 @@ const actions = {
       });
     });
   },
+  updateCooperation({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.updateCooperation(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
   listOwnCooperation({ commit }, formData) {
     return new Promise((resolve, reject) => {
       cooperationApi.listOwnCooperation(formData).then((response) => {
@@ -68,6 +84,54 @@ const actions = {
   listJoinCooperation({ commit }, formData) {
     return new Promise((resolve, reject) => {
       cooperationApi.listJoinCooperation(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  listCooperationTree({ commit }, cooperationId) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.listCooperationTree(cooperationId).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  getCooperation({ commit }, cooperationId) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.getCooperation(cooperationId).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  deleteCooperation({ commit }, cooperationId) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.deleteCooperation(cooperationId).then((response) => {
         if (response) {
           const res = response.data;
           if (res.success) {

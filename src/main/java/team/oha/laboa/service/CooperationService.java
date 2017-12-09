@@ -18,8 +18,12 @@ import team.oha.laboa.vo.CooperationVo;
 public interface CooperationService {
 
     ApiDto saveCooperation(CooperationVo cooperationVo);
+    ApiDto updateCooperation(CooperationVo cooperationVo);
+    ApiDto deleteCooperation(Integer cooperationId);
+    ApiDto getCooperationById(Integer id);
     ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery);
     ApiDto listCooperation(CooperationSelectQuery cooperationSelectQuery);
+    ApiDto listCooperationTree(Integer cooperationId);
     ApiDto listApply(ApplySelectQuery applySelectQuery);
     ApiDto listMember(MemberSelectQuery memberSelectQuery);
 }

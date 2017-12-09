@@ -15,10 +15,10 @@
         <set>
             <if test="name != null">name=#{name},</if>
             <if test="remark != null">remark=#{remark},</if>
-            <if test="begin_date != null">begin_date=#{beginDate},</if>
-            <if test="end_date != null">end_date=#{endDate},</if>
+            <if test="beginDate != null">begin_date=#{beginDate},</if>
+            <if test="endDate != null">end_date=#{endDate},</if>
             <if test="invite != null">invite=#{invite},</if>
-            <if test="update_time != null">update_time=#{updateTime},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
         </set>
         WHERE cooperation_id = #{cooperationId}
     </update>
@@ -29,8 +29,8 @@
 
     <select id="get" parameterType="java.lang.Integer" resultType="team.oha.laboa.dto.CooperationDto">
         SELECT
-        parent.name AS parentName,
-        user.username AS ownerName,
+        parent.name AS parent_name,
+        user.username AS owner_name,
         child.cooperation_id AS cooperation_id,
         child.name AS name,
         child.remark AS remark,
@@ -40,16 +40,15 @@
         child.update_time AS update_time,
         child.create_time AS create_time
         FROM <include refid="tableName"/> AS child
-        JOIN <include refid="tableName"/> AS parent ON child.parent_id = child.cooperation_id
-        JOIN cooperation_member
-        ON cooperation_member.cooperation_id = <include refid="tableName"/>.cooperation_id
-        AND cooperation_member.role = 'owner'
-        JOIN user ON user_id = cooperation_member.user_id
+        LEFT JOIN <include refid="tableName"/> AS parent ON child.parent_id = parent.cooperation_id
+        JOIN cooperation_member ON cooperation_member.cooperation_id = child.cooperation_id AND cooperation_member.role = 'owner'
+        JOIN user ON user.user_id = cooperation_member.user_id
+        WHERE child.cooperation_id = #{cooperationId}
     </select>
 
     <resultMap id="treeMap" type="team.oha.laboa.dto.CooperationTreeDto">
         <id property="cooperationId" column="cooperation_id"/>
-        <result property="label" column="name"/>
+        <result property="name" column="name"/>
         <collection property="children" select="getTreeNode" column="cooperation_id"
                     ofType="team.oha.laboa.dto.CooperationTreeDto" />
     </resultMap>

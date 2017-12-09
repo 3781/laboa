@@ -46,6 +46,34 @@ public class CooperationController {
 
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
+    @PatchMapping
+    public ApiDto updateCooperation(@RequestBody CooperationVo cooperationVo) {
+        return cooperationService.updateCooperation(cooperationVo);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{cooperationId:[1-9][0-9]*}")
+    public ApiDto deleteCooperation(@PathVariable Integer cooperationId) {
+        return cooperationService.deleteCooperation(cooperationId);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{cooperationId:[1-9][0-9]*}")
+    public ApiDto getCooperation(@PathVariable Integer cooperationId) {
+        return cooperationService.getCooperationById(cooperationId);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{cooperationId:[1-9][0-9]*}/tree")
+    public ApiDto listTree(@PathVariable Integer cooperationId) {
+        return cooperationService.listCooperationTree(cooperationId);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{role:owner|manager|member}")
     public ApiDto listOwn(CooperationSelectQuery cooperationSelectQuery, @PathVariable("role") CooperationMemberDo.CooperationRole role){
         if(cooperationSelectQuery.getFilterQuery()==null){

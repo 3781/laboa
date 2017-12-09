@@ -3,12 +3,21 @@ package team.oha.laboa.vo;
 import java.time.LocalDate;
 
 public class CooperationVo {
+    private Integer cooperationId;
     private Integer parentId;
     private String name;
     private LocalDate beginDate;
     private LocalDate endDate;
     private String remark;
     private Boolean invite;
+
+    public Integer getCooperationId() {
+        return cooperationId;
+    }
+
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
+    }
 
     public Integer getParentId() {
         return parentId;
@@ -61,7 +70,8 @@ public class CooperationVo {
     @Override
     public String toString() {
         return "CooperationVo{" +
-                "parentId=" + parentId +
+                "cooperationId=" + cooperationId +
+                ", parentId=" + parentId +
                 ", name='" + name + '\'' +
                 ", beginDate=" + beginDate +
                 ", endDate=" + endDate +

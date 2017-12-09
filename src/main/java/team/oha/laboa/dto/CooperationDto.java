@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  */
 public class CooperationDto implements Serializable {
     private Integer cooperationId;
-    private Integer parentName;
+    private String parentName;
     private String ownerName;
     private String name;
     private String remark;
@@ -32,11 +32,11 @@ public class CooperationDto implements Serializable {
         this.cooperationId = cooperationId;
     }
 
-    public Integer getParentName() {
+    public String getParentName() {
         return parentName;
     }
 
-    public void setParentName(Integer parentName) {
+    public void setParentName(String parentName) {
         this.parentName = parentName;
     }
 
@@ -108,7 +108,7 @@ public class CooperationDto implements Serializable {
     public String toString() {
         return "CooperationDto{" +
                 "cooperationId=" + cooperationId +
-                ", parentName=" + parentName +
+                ", parentName='" + parentName + '\'' +
                 ", ownerName='" + ownerName + '\'' +
                 ", name='" + name + '\'' +
                 ", remark='" + remark + '\'' +
