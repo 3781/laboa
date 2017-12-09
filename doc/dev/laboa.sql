@@ -1,34 +1,8 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/8 10:33:39                           */
+/* Created on:     2017/12/9 17:43:10                           */
 /*==============================================================*/
 
-
-drop table if exists agenda;
-
-drop table if exists agenda_item;
-
-drop table if exists agenda_summary;
-
-drop table if exists cooperation;
-
-drop table if exists cooperation_agenda;
-
-drop index uk on cooperation_agenda_participant;
-
-drop table if exists cooperation_agenda_participant;
-
-drop table if exists cooperation_apply;
-
-drop index uk on cooperation_member;
-
-drop table if exists cooperation_member;
-
-drop table if exists file;
-
-drop table if exists user;
-
-drop table if exists userinfo;
 
 /*==============================================================*/
 /* Table: agenda                                                */
