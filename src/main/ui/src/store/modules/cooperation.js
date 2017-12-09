@@ -33,6 +33,54 @@ const actions = {
       });
     });
   },
+  listOwnCooperation({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.listOwnCooperation(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  listManageCooperation({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.listManageCooperation(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  listJoinCooperation({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.listJoinCooperation(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
 };
 
 export default {

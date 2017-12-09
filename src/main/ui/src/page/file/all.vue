@@ -125,9 +125,6 @@
         },
       };
     },
-    created() {
-      this.getFilesData();
-    },
     computed: {
       currentPage() {
         return this.fileSelectQuery.pageQuery.offset / this.fileSelectQuery.pageQuery.rows;

@@ -1,5 +1,6 @@
 package team.oha.laboa.controller;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
+import team.oha.laboa.model.CooperationMemberDo;
+import team.oha.laboa.query.cooperation.CooperationFilterQuery;
+import team.oha.laboa.query.cooperation.CooperationSelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.service.CooperationService;
 import team.oha.laboa.vo.CooperationVo;
@@ -38,5 +42,19 @@ public class CooperationController {
     @PostMapping
     public ApiDto saveCooperation(@RequestBody CooperationVo cooperationVo) {
         return cooperationService.saveCooperation(cooperationVo);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{role:owner|manager|member}")
+    public ApiDto listOwn(CooperationSelectQuery cooperationSelectQuery, @PathVariable("role") CooperationMemberDo.CooperationRole role){
+        if(cooperationSelectQuery.getFilterQuery()==null){
+            cooperationSelectQuery.setFilterQuery(new CooperationFilterQuery());
+        }
+
+        cooperationSelectQuery.getFilterQuery().setUsername((String)SecurityUtils.getSubject().getPrincipal());
+        cooperationSelectQuery.getFilterQuery().setRole(role);
+
+        return cooperationService.listCooperation(cooperationSelectQuery);
     }
 }

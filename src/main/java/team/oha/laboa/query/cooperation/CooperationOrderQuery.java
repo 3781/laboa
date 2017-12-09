@@ -15,7 +15,7 @@ public class CooperationOrderQuery extends OrderQuery<CooperationOrderQuery.Sort
 
     public static enum SortField{
         cooperationId,
-        hasParent,
+        parentName,
         name,
         ownername,
         beginDate,

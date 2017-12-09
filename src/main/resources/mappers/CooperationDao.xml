@@ -112,29 +112,29 @@
 
     <select id="list" parameterType="team.oha.laboa.query.cooperation.CooperationSelectQuery" resultType="team.oha.laboa.dto.CooperationDto">
         SELECT
-        child.coopeartion_id AS coopeartion_id,
+        child.cooperation_id AS cooperation_id,
         parent.name AS parent_name,
-        owner.username AS ownerName,
+        owner.username AS owner_name,
         child.name AS name,
         child.remark AS remark,
-        child.beginDate AS beginDate,
-        child.endDate AS endDate,
+        child.begin_date AS begin_date,
+        child.end_date AS end_date,
         child.invite AS invite,
         child.update_time AS update_time,
         child.create_time AS create_time
         FROM <include refid="tableName"/> AS child
-        JOIN cooperation_member AS owner_member ON owner_member.coopeartion_id = child.coopeartion_id AND owner_member.role = 'owner'
+        JOIN cooperation_member AS owner_member ON owner_member.cooperation_id = child.cooperation_id AND owner_member.role = 'owner'
         JOIN user AS owner ON owner_member.user_id = owner.user_id
         <choose>
-            <when test="filterQuery.role='owner'">
-                AND owner.username = #{username}
+            <when test="filterQuery.role!=null and filterQuery.role.name()=='owner'">
+                AND owner.username = #{filterQuery.username}
             </when>
             <otherwise>
-                JOIN cooperation_member AS member ON member.coopeartion_id = child.coopeartion_id AND member.role = #{filterQuery.role}
+                JOIN cooperation_member AS member ON member.cooperation_id = child.cooperation_id AND member.role = #{filterQuery.role}
                 JOIN user AS member_user ON member_user.user_id = member.user_id and member_user.name = #{username}
             </otherwise>
         </choose>
-        JOIN cooperation AS parent ON child.parent_id = parent.coopeartion_id
+        LEFT JOIN cooperation AS parent ON child.parent_id = parent.cooperation_id
         <include refid="conditions"/>
         <include refid="order"/>
         <include refid="page"/>
@@ -144,18 +144,18 @@
         <bind name="filterQuery" value="_parameter"/>
         SELECT COUNT(*)
         FROM <include refid="tableName"/> AS child
-        JOIN cooperation_member AS owner_member ON owner_member.coopeartion_id = child.coopeartion_id AND owner_member.role = 'owner'
+        JOIN cooperation_member AS owner_member ON owner_member.cooperation_id = child.cooperation_id AND owner_member.role = 'owner'
         JOIN user AS owner ON owner_member.user_id = owner.user_id
         <choose>
-            <when test="filterQuery.role='owner'">
-                AND owner.username = #{username}
+            <when test="filterQuery.role!=null and filterQuery.role.name()=='owner'">
+                AND owner.username = #{filterQuery.username}
             </when>
             <otherwise>
-                JOIN cooperation_member AS member ON member.coopeartion_id = child.coopeartion_id AND member.role = #{filterQuery.role}
+                JOIN cooperation_member AS member ON member.cooperation_id = child.cooperation_id AND member.role = #{filterQuery.role}
                 JOIN user AS member_user ON member_user.user_id = member.user_id
             </otherwise>
         </choose>
-        JOIN cooperation AS parent ON child.parent_id = parent.coopeartion_id
+        LEFT JOIN cooperation AS parent ON child.parent_id = parent.cooperation_id
         <include refid="conditions"/>
     </select>
 

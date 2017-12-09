@@ -227,9 +227,6 @@
         },
       };
     },
-    created() {
-      this.getAgendasData();
-    },
     computed: {
       currentPage() {
         return this.agendaSelectQuery.pageQuery.offset / this.agendaSelectQuery.pageQuery.rows;
