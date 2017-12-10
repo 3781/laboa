@@ -1,5 +1,7 @@
 package team.oha.laboa.dto;
 
+import team.oha.laboa.model.CooperationMemberDo;
+
 import java.time.LocalDateTime;
 
 /**
@@ -18,6 +20,7 @@ public class CooperationMemberDto {
     private String qq;
     private String email;
     private String phone;
+    private CooperationMemberDo.CooperationRole role;
     private LocalDateTime joinTime;
 
     public Integer getMemberId() {
@@ -76,6 +79,14 @@ public class CooperationMemberDto {
         this.phone = phone;
     }
 
+    public CooperationMemberDo.CooperationRole getRole() {
+        return role;
+    }
+
+    public void setRole(CooperationMemberDo.CooperationRole role) {
+        this.role = role;
+    }
+
     public LocalDateTime getJoinTime() {
         return joinTime;
     }
@@ -94,6 +105,7 @@ public class CooperationMemberDto {
                 ", qq='" + qq + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", role=" + role +
                 ", joinTime=" + joinTime +
                 '}';
     }

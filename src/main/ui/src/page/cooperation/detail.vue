@@ -53,7 +53,7 @@
             <mavon-editor v-if="cooperationInfo!=null" :value="cooperationInfo.remark" :toolbarsFlag="false" :subfield="false" default_open="preview"></mavon-editor>
           </el-tab-pane>
           <el-tab-pane label="协作成员" name="member">
-            <cooperation-member :cooperationId="currentCooperationId"></cooperation-member>
+            <cooperation-member :cooperationId="currentCooperationId" :parentId="currentParentId" :isLoad="activeTab === 'member'"></cooperation-member>
           </el-tab-pane>
           <el-tab-pane label="协作日程" name="agenda">
             协作日程
@@ -120,6 +120,7 @@
         },
         cooperationTreeData: [],
         currentCooperationId: null,
+        currentParentId: null,
         cooperationInfo: null,
         dialogVisible: false,
         updateLoading: false,
@@ -180,6 +181,7 @@
         this.activeTab = null;
         this.cooperationInfo = null;
         this.currentCooperationId = data.cooperationId;
+        this.currentParentId = data.currentParentId;
       },
       prepareUpdate() {
         this.dialogVisible = true;

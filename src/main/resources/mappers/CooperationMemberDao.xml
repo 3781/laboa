@@ -16,15 +16,15 @@
     </update>
     <delete id="delete" parameterType="java.lang.Integer">
         DELETE FROM <include refid="tableName"/>
-        WHERE member_id in
-        <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+        WHERE member_id = #{memberId}
         and role != 'owner'
     </delete>
 
     <sql id="conditions">
         <if test="filterQuery!=null">
             <where>
-                <if test="filterQuery.memberId">AND <include refid="tableName"/>.memberId = #{filterQuery.memberId}</if>
+                AND <include refid="tableName"/>.cooperation_id = #{filterQuery.cooperationId}
+                <if test="filterQuery.memberId">AND <include refid="tableName"/>.member_id = #{filterQuery.memberId}</if>
                 <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
                 <if test="filterQuery.name">AND userinfo.name LIKE concat('%', #{filterQuery.name}, '%')</if>
                 <if test="filterQuery.employeeNumber">AND userinfo.employee_number LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
@@ -33,7 +33,9 @@
                 <if test="filterQuery.phone">AND userinfo.phone LIKE concat('%', #{filterQuery.phone}, '%')</if>
                 <if test="filterQuery.joinTimeBegin">AND <include refid="tableName"/>.join_time &gt;= #{filterQuery.joinTimeBegin}</if>
                 <if test="filterQuery.joinTimeEnd">AND <include refid="tableName"/>.join_time &lt;= #{filterQuery.joinTimeEnd}</if>
-
+                <if test="filterQuery.roles">
+                    AND <include refid="tableName"/>.role IN <foreach collection="filterQuery.roles" item="role" separator="," open="(" close=")">#{role}</foreach>
+                </if>
             </where>
         </if>
     </sql>
@@ -59,6 +61,7 @@
         userinfo.qq AS qq,
         userinfo.email AS email,
         userinfo.phone AS phone,
+        <include refid="tableName"/>.role as role,
         <include refid="tableName"/>.join_time AS join_time
         FROM <include refid="tableName"/>
         JOIN user ON user.user_id = <include refid="tableName"/>.user_id
@@ -83,14 +86,18 @@
         user.username AS username,
         userinfo.name AS name,
         userinfo.employee_number AS employee_number
-        FROM user JOIN userinfo ON user.user_id = userinfo.user_id
-        <if test="parentId != null">
-        WHERE user.user_id IN
+        FROM user JOIN userinfo ON user.user_id = userinfo.user_id AND user.username LIKE concat('%', #{username}, '%')
+        WHERE user.user_id NOT IN
         (
-        SELECT user_id FROM <include refid="tableName"/>
-        WHERE <include refid="tableName"/>.cooperation_id = #{cooperationId}
+            SELECT user_id FROM <include refid="tableName"/>
+            WHERE <include refid="tableName"/>.cooperation_id = #{cooperationId}
         )
+        <if test="parentId != null">
+            AND user.user_id IN
+            (
+            SELECT user_id FROM <include refid="tableName"/>
+            WHERE <include refid="tableName"/>.cooperation_id = #{parentId}
+            )
         </if>
-        AND user.username LIKE concat('%', #{username}, '%')
     </select>
 </mapper>

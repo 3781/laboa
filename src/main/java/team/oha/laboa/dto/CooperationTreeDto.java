@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class CooperationTreeDto {
     private Integer cooperationId;
+    private Integer parentId;
     private String name;
     private List<CooperationTreeDto> children;
 
@@ -21,6 +22,14 @@ public class CooperationTreeDto {
 
     public void setCooperationId(Integer cooperationId) {
         this.cooperationId = cooperationId;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getName() {
@@ -43,6 +52,7 @@ public class CooperationTreeDto {
     public String toString() {
         return "CooperationTreeDto{" +
                 "cooperationId=" + cooperationId +
+                ", parentId=" + parentId +
                 ", name='" + name + '\'' +
                 ", children=" + children +
                 '}';

@@ -13,6 +13,7 @@ import team.oha.laboa.query.cooperation.CooperationFilterQuery;
 import team.oha.laboa.query.cooperation.CooperationSelectQuery;
 import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
+import team.oha.laboa.query.cooperation.member.MemberFilterQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
 import team.oha.laboa.service.CooperationService;
 import team.oha.laboa.vo.ApplyDealBatchVo;
@@ -93,8 +94,11 @@ public class CooperationController {
 
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/member")
+    @GetMapping("/members")
     public ApiDto listMember(MemberSelectQuery memberSelectQuery) {
+        if(memberSelectQuery.getFilterQuery()==null){
+            memberSelectQuery.setFilterQuery(new MemberFilterQuery());
+        }
         return cooperationService.listMember(memberSelectQuery);
     }
 

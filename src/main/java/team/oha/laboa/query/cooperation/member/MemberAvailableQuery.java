@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 public class MemberAvailableQuery implements Serializable{
     private Integer parentId;
+    private Integer cooperationId;
     private String username;
 
     public Integer getParentId() {
@@ -13,6 +14,14 @@ public class MemberAvailableQuery implements Serializable{
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public Integer getCooperationId() {
+        return cooperationId;
+    }
+
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
     }
 
     public String getUsername() {
@@ -27,6 +36,7 @@ public class MemberAvailableQuery implements Serializable{
     public String toString() {
         return "MemberAvailableQuery{" +
                 "parentId=" + parentId +
+                ", cooperationId=" + cooperationId +
                 ", username='" + username + '\'' +
                 '}';
     }

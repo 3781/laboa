@@ -1,10 +1,14 @@
 package team.oha.laboa.query.cooperation.member;
 
 
+import team.oha.laboa.model.CooperationMemberDo;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class MemberFilterQuery implements Serializable{
+    private Integer cooperationId;
     private Integer memberId;
     private String username;
     private String name;
@@ -12,8 +16,17 @@ public class MemberFilterQuery implements Serializable{
     private String qq;
     private String phone;
     private String email;
+    private CooperationMemberDo.CooperationRole[] roles;
     private LocalDateTime joinTimeBegin;
     private LocalDateTime joinTimeEnd;
+
+    public Integer getCooperationId() {
+        return cooperationId;
+    }
+
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
+    }
 
     public Integer getMemberId() {
         return memberId;
@@ -71,6 +84,14 @@ public class MemberFilterQuery implements Serializable{
         this.email = email;
     }
 
+    public CooperationMemberDo.CooperationRole[] getRoles() {
+        return roles;
+    }
+
+    public void setRoles(CooperationMemberDo.CooperationRole[] roles) {
+        this.roles = roles;
+    }
+
     public LocalDateTime getJoinTimeBegin() {
         return joinTimeBegin;
     }
@@ -90,13 +111,15 @@ public class MemberFilterQuery implements Serializable{
     @Override
     public String toString() {
         return "MemberFilterQuery{" +
-                "memberId=" + memberId +
+                "cooperationId=" + cooperationId +
+                ", memberId=" + memberId +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", employeeNumber='" + employeeNumber + '\'' +
                 ", qq='" + qq + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", roles=" + Arrays.toString(roles) +
                 ", joinTimeBegin=" + joinTimeBegin +
                 ", joinTimeEnd=" + joinTimeEnd +
                 '}';

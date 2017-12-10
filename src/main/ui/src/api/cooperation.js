@@ -1,7 +1,7 @@
 import httpUtil from '../util/http';
 
-export function getAvailableUsers(params) {
-  return httpUtil.get('/cooperation/user', { params });
+export function getAvailableUsers(formData) {
+  return httpUtil.get('/cooperation/user', { params: formData });
 }
 
 export function saveCooperation(formData) {
@@ -34,6 +34,10 @@ export function getCooperation(cooperationId) {
 
 export function deleteCooperation(cooperationId) {
   return httpUtil.delete(`/cooperation/${cooperationId}`);
+}
+
+export function listMembers(formData) {
+  return httpUtil.get('/cooperation/members', { params: formData });
 }
 
 export function saveMember(formData) {

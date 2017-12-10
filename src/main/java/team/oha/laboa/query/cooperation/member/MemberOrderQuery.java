@@ -21,6 +21,7 @@ public class MemberOrderQuery extends OrderQuery<MemberOrderQuery.SortField> {
         qq,
         phone,
         email,
+        role,
         joinTime,
     }
 }
