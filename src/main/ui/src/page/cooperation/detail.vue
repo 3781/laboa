@@ -59,7 +59,7 @@
             协作日程
           </el-tab-pane>
           <el-tab-pane label="协作申请" name="apply"  :disabled="!(checkManage || checkOwn)">
-            <cooperation-apply :cooperationId="currentCooperationId"></cooperation-apply>
+            <cooperation-apply :cooperationId="currentCooperationId" :isLoad="activeTab === 'apply'"></cooperation-apply>
           </el-tab-pane>
         </el-tabs>
       </el-col>

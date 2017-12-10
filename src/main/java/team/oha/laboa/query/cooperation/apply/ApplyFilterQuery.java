@@ -5,6 +5,7 @@ import team.oha.laboa.model.CooperationApplyDo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class ApplyFilterQuery implements Serializable{
     private Integer applyId;
@@ -14,8 +15,7 @@ public class ApplyFilterQuery implements Serializable{
     private String qq;
     private String phone;
     private String email;
-    private CooperationApplyDo.ApplyStatus status;
-    private String remark;
+    private CooperationApplyDo.ApplyStatus[] statuses;
     private LocalDateTime updateTimeBegin;
     private LocalDateTime updateTimeEnd;
     private LocalDateTime applyTimeBegin;
@@ -77,20 +77,12 @@ public class ApplyFilterQuery implements Serializable{
         this.email = email;
     }
 
-    public CooperationApplyDo.ApplyStatus getStatus() {
-        return status;
+    public CooperationApplyDo.ApplyStatus[] getStatuses() {
+        return statuses;
     }
 
-    public void setStatus(CooperationApplyDo.ApplyStatus status) {
-        this.status = status;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setStatuses(CooperationApplyDo.ApplyStatus[] statuses) {
+        this.statuses = statuses;
     }
 
     public LocalDateTime getUpdateTimeBegin() {
@@ -127,7 +119,7 @@ public class ApplyFilterQuery implements Serializable{
 
     @Override
     public String toString() {
-        return "MemberFilterQuery{" +
+        return "ApplyFilterQuery{" +
                 "applyId=" + applyId +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
@@ -135,8 +127,7 @@ public class ApplyFilterQuery implements Serializable{
                 ", qq='" + qq + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", status=" + status +
-                ", remark='" + remark + '\'' +
+                ", statuses=" + Arrays.toString(statuses) +
                 ", updateTimeBegin=" + updateTimeBegin +
                 ", updateTimeEnd=" + updateTimeEnd +
                 ", applyTimeBegin=" + applyTimeBegin +

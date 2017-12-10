@@ -51,3 +51,7 @@ export function changeMemberRole(formData) {
 export function deleteMember(memberId) {
   return httpUtil.delete(`/cooperation/member/${memberId}`);
 }
+
+export function listApplys(formData) {
+  return httpUtil.get('/cooperation/apply', { params: formData });
+}

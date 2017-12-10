@@ -6,8 +6,8 @@
     <sql id="tableName">cooperation_apply</sql>
     <insert id="save" parameterType="team.oha.laboa.model.CooperationApplyDo" useGeneratedKeys="true" keyProperty="applyId">
         INSERT INTO  <include refid="tableName"/>
-        (applicant_id,cooperation_id,status, remark, apply_time)
-        VALUE (#{applicantId},#{parentId},#{status},#{remark}, #{applyTime})
+        (applicant_id,cooperation_id,status, apply_time)
+        VALUE (#{applicantId},#{parentId},#{status}, #{applyTime})
     </insert>
 
     <insert id="saveMembers" parameterType="team.oha.laboa.vo.ApplyDealBatchVo" useGeneratedKeys="true">
@@ -29,7 +29,7 @@
     <sql id="conditions">
         <if test="filterQuery!=null">
             <where>
-                <if test="filterQuery.applyId">AND <include refid="tableName"/>.applyId = #{filterQuery.applyId}</if>
+                <if test="filterQuery.applyId">AND <include refid="tableName"/>.apply_id = #{filterQuery.applyId}</if>
                 <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
                 <if test="filterQuery.name">AND userinfo.name LIKE concat('%', #{filterQuery.name}, '%')</if>
                 <if test="filterQuery.employeeNumber">AND userinfo.employee_number LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
@@ -39,7 +39,6 @@
                 <if test="filterQuery.statuses">AND user.status in
                     <foreach collection="filterQuery.statuses" open="(" close=")" item="status" separator=",">#{status}</foreach>
                 </if>
-                <if test="filterQuery.remark">AND <include refid="tableName"/>.remark LIKE concat('%', #{filterQuery.remark}, '%')</if>
                 <if test="filterQuery.updateTimeBegin">AND <include refid="tableName"/>.update_time &gt;= #{filterQuery.updateTimeBegin}</if>
                 <if test="filterQuery.updateTimeEnd">AND <include refid="tableName"/>.update_time &lt;= #{filterQuery.updateTimeEnd}</if>
                 <if test="filterQuery.applyTimeBegin">AND <include refid="tableName"/>.apply_time &gt;= #{filterQuery.applyTimeBegin}</if>
@@ -71,7 +70,6 @@
         userinfo.email AS email,
         userinfo.phone AS phone,
         <include refid="tableName"/>.status AS status,
-        <include refid="tableName"/>.remark AS remark,
         <include refid="tableName"/>.update_time AS update_time,
         <include refid="tableName"/>.apply_time AS apply_time
         FROM <include refid="tableName"/>

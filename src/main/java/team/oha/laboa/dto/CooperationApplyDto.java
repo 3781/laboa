@@ -21,7 +21,6 @@ public class CooperationApplyDto {
     private String email;
     private String phone;
     private CooperationApplyDo.ApplyStatus status;
-    private String remark;
     private LocalDateTime updateTime;
     private LocalDateTime applyTime;
 
@@ -89,14 +88,6 @@ public class CooperationApplyDto {
         this.status = status;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public LocalDateTime getUpdateTime() {
         return updateTime;
     }
@@ -124,7 +115,6 @@ public class CooperationApplyDto {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", status=" + status +
-                ", remark='" + remark + '\'' +
                 ", updateTime=" + updateTime +
                 ", applyTime=" + applyTime +
                 '}';

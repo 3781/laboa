@@ -23,7 +23,6 @@ public class ApplyOrderQuery extends OrderQuery<ApplyOrderQuery.SortField> {
         email,
         applyTime,
         updateTime,
-        status,
-        reamrk
+        status
     }
 }
