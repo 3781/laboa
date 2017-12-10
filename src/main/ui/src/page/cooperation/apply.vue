@@ -82,6 +82,14 @@
         </el-col>
       </el-row>
       <el-row>
+        <div style="float:left">
+          <el-button style="display:inline-block" type="success" size="mini" @click="handleApply('pass')"
+                     :loading="loading">通过
+          </el-button>
+          <el-button style="display:inline-block" type="danger" size="mini"
+                     @click="handleApply('reject')" :loading="loading">拒绝
+          </el-button>
+        </div>
         <div style="float:right">
           <el-button style="display:inline-block" icon="el-icon-refresh" type="primary" size="mini" @click="reset"
                      :loading="loading">重置
@@ -93,7 +101,7 @@
       </el-row>
     </el-form>
     <el-table :data="applys" v-loading="loading" size="small" :stripe="true" :border="true" ref="applyTable"
-              @sort-change="handleSortChange"
+              @sort-change="handleSortChange"  @selection-change="handleSelectChange"
               :defaultSort="{prop:this.applySelectQuery.orderQuery.field, order: this.applySelectQuery.orderQuery.order+'ending'}">
       <el-table-column type="expand">
         <template slot-scope="scope">
@@ -112,6 +120,8 @@
             </el-form-item>
           </el-form>
         </template>
+      </el-table-column>
+      <el-table-column align="center" type="selection">
       </el-table-column>
       <el-table-column align="center" label="用户名" column-key="username" prop="username"
                        sortable="custom" :resizable="true" width="100px">
@@ -164,6 +174,7 @@
     },
     data() {
       return {
+        selectRows: [],
         loading: false,
         applys: [],
         totalSize: 0,
@@ -206,6 +217,9 @@
           reject: '拒绝',
         };
       },
+      selectIds() {
+        return this.selectRows.map(item => item.applyId);
+      },
     },
     watch: {
       isLoad() {
@@ -215,7 +229,7 @@
       },
     },
     methods: {
-      ...mapActions(['listApplys']),
+      ...mapActions(['listApplys', 'dealApply']),
       getApplyData() {
         this.loading = true;
         if (this.cooperationId != null) {
@@ -257,6 +271,27 @@
           orderQuery.order = order;
         }
         this.getApplyData();
+      },
+      handleSelectChange(selection) {
+        this.selectRows = selection;
+      },
+      handleApply(status) {
+        if (this.selectIds.length !== 0) {
+          this.loading = true;
+          this.dealApply({ status, ids: this.selectIds }).then((updateSize) => {
+            this.$notify({
+              message: `成功处理了${updateSize}条`,
+              type: 'info',
+              position: 'bottom-right',
+              offset: 40,
+            });
+            this.loading = false;
+            this.getApplyData();
+          }).catch((errorMessage) => {
+            this.$message.error(errorMessage);
+            this.loading = false;
+          });
+        }
       },
     },
   };

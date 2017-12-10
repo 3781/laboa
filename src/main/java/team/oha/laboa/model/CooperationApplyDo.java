@@ -16,7 +16,6 @@ public class CooperationApplyDo implements Serializable{
     private Integer applicantId;
     private Integer cooperationId;
     private ApplyStatus status;
-    private String remark;
     private LocalDateTime updateTime;
     private LocalDateTime applyTime;
 
@@ -56,14 +55,6 @@ public class CooperationApplyDo implements Serializable{
         this.status = status;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public LocalDateTime getUpdateTime() {
         return updateTime;
     }
@@ -87,7 +78,6 @@ public class CooperationApplyDo implements Serializable{
                 ", applicantId=" + applicantId +
                 ", cooperationId=" + cooperationId +
                 ", status=" + status +
-                ", remark='" + remark + '\'' +
                 ", updateTime=" + updateTime +
                 ", applyTime=" + applyTime +
                 '}';

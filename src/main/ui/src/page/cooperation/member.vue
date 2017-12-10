@@ -69,7 +69,7 @@
       </el-row>
       <el-row>
         <div style="float:left">
-          <el-button style="display:inline-block" icon="el-icon-plus" type="primary" size="mini"
+          <el-button style="display:inline-block" icon="el-icon-plus" type="primary" size="mini" v-if="checkOwn || checkManage"
                      @click="dialogVisible=true">添加
           </el-button>
         </div>
@@ -122,9 +122,9 @@
       <el-table-column align="center" label="加入时间" column-key="joinTime" prop="joinTime"
                        sortable="custom" :resizable="true">
       </el-table-column>
-      <el-table-column align="center" label="操作" :resizable="true">
+      <el-table-column align="center" label="操作" :resizable="true" v-if="checkOwn || checkManage">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" v-show="scope.row.role!='owner'"
+          <el-button type="warning" size="mini" v-show="scope.row.role!='owner' && checkOwn"
                      @click="doChangeRole({memberId:scope.row.memberId, role: scope.row.role==='member'?'manager':'member'})">修改角色</el-button>
           <el-button type="danger" size="mini" v-show="scope.row.role!='owner'" @click="doRemove(scope.row.memberId)">移出协作</el-button>
         </template>
@@ -168,7 +168,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'cooperationMember',
@@ -226,6 +226,7 @@
       };
     },
     computed: {
+      ...mapGetters(['getPermissions']),
       currentPage() {
         return this.memberSelectQuery.pageQuery.offset
           / this.memberSelectQuery.pageQuery.rows;
@@ -246,6 +247,12 @@
           },
         };
       },
+      checkOwn() {
+        return this.getPermissions.includes(`owner${this.cooperationId}`);
+      },
+      checkManage() {
+        return this.getPermissions.includes(`manager${this.cooperationId}`);
+      },
     },
     watch: {
       isLoad() {
@@ -255,7 +262,11 @@
       },
     },
     methods: {
-      ...mapActions(['listMembers', 'getAvailableUsers', 'saveMember', 'changeMemberRole', 'deleteMember']),
+      ...mapActions(['listMembers',
+        'getAvailableUsers',
+        'saveMember',
+        'changeMemberRole',
+        'deleteMember']),
       getMemberData() {
         this.loading = true;
         if (this.cooperationId != null) {

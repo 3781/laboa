@@ -4,7 +4,7 @@ import team.oha.laboa.model.CooperationApplyDo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * <p></p>
@@ -15,15 +15,15 @@ import java.util.ArrayList;
  * @modified
  */
 public class ApplyDealBatchVo implements Serializable {
-    ArrayList<Integer> ids;
-    CooperationApplyDo.ApplyStatus status;
-    LocalDateTime updateTime;
+    private Integer[] ids;
+    private CooperationApplyDo.ApplyStatus status;
+    private LocalDateTime updateTime;
 
-    public ArrayList<Integer> getIds() {
+    public Integer[] getIds() {
         return ids;
     }
 
-    public void setIds(ArrayList<Integer> ids) {
+    public void setIds(Integer[] ids) {
         this.ids = ids;
     }
 
@@ -46,7 +46,7 @@ public class ApplyDealBatchVo implements Serializable {
     @Override
     public String toString() {
         return "ApplyDealBatchVo{" +
-                "ids=" + ids +
+                "ids=" + Arrays.toString(ids) +
                 ", status=" + status +
                 ", updateTime=" + updateTime +
                 '}';

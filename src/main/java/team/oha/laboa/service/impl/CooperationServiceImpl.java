@@ -12,6 +12,7 @@ import team.oha.laboa.dao.CooperationDao;
 import team.oha.laboa.dao.CooperationMemberDao;
 import team.oha.laboa.dao.UserDao;
 import team.oha.laboa.dto.*;
+import team.oha.laboa.model.CooperationApplyDo;
 import team.oha.laboa.model.CooperationDo;
 import team.oha.laboa.model.CooperationMemberDo;
 import team.oha.laboa.query.cooperation.CooperationSelectQuery;
@@ -128,8 +129,48 @@ public class CooperationServiceImpl implements CooperationService {
     }
 
     @Override
+    public ApiDto doApply(Integer cooperationId) {
+        ApiDto apiDto = new ApiDto();
+
+        CooperationMemberDo cooperationMemberDo = new CooperationMemberDo();
+        cooperationMemberDo.setCooperationId(cooperationId);
+        cooperationMemberDo.setUserId(userDao.getByUsername((String)SecurityUtils.getSubject().getPrincipal()).getUserId());
+
+        CooperationDo cooperationDo = cooperationDao.getById(cooperationId);
+        if(cooperationDo==null){
+            apiDto.setInfo("此协作不存在");
+            apiDto.setSuccess(false);
+        }else if(memberDao.get(cooperationMemberDo)!=null){
+            apiDto.setInfo("您已经是此协作的成员了");
+            apiDto.setSuccess(true);
+        }else if(cooperationDo.getInvite().equals(false)){
+            apiDto.setInfo("邀请链接无效！");
+            apiDto.setSuccess(false);
+        }else{
+            CooperationApplyDo cooperationApplyDo = new CooperationApplyDo();
+            cooperationApplyDo.setApplicantId(cooperationMemberDo.getUserId());
+            cooperationApplyDo.setCooperationId(cooperationId);
+            cooperationApplyDo.setStatus(CooperationApplyDo.ApplyStatus.todo);
+
+            if(applyDao.getApply(cooperationApplyDo)!=null){
+                apiDto.setInfo("已申请，等待审核中。。。。");
+                apiDto.setSuccess(false);
+            }else{
+                cooperationApplyDo.setApplyTime(LocalDateTime.now());
+                applyDao.save(cooperationApplyDo);
+                apiDto.setSuccess(false);
+                apiDto.setInfo("申请成功");
+            }
+        }
+
+        return apiDto;
+    }
+
+    @Override
     public ApiDto dealApply(ApplyDealBatchVo applyDealBatchVo) {
-        applyDao.saveMembers(applyDealBatchVo);
+        if(applyDealBatchVo.getStatus().equals(CooperationApplyDo.ApplyStatus.pass)){
+            applyDao.saveMembers(applyDealBatchVo);
+        }
 
         applyDealBatchVo.setUpdateTime(LocalDateTime.now());
         ApiDto apiDto = new ApiDto();

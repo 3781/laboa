@@ -44,6 +44,13 @@ public class CooperationController {
     }
 
     @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/apply/{cooperationId:[1-9][0-9]*}")
+    public ApiDto doApply(@PathVariable Integer cooperationId) {
+        return cooperationService.doApply(cooperationId);
+    }
+
+    @RequiresUser
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ApiDto saveCooperation(@RequestBody CooperationVo cooperationVo) {
@@ -133,7 +140,7 @@ public class CooperationController {
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/apply")
-    public ApiDto dealApply(ApplyDealBatchVo applyDealBatchVo) {
+    public ApiDto dealApply(@RequestBody ApplyDealBatchVo applyDealBatchVo) {
         return cooperationService.dealApply(applyDealBatchVo);
     }
 }

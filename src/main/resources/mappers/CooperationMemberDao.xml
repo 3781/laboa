@@ -10,6 +10,12 @@
         VALUE (#{cooperationId},#{userId},#{role},#{joinTime})
         ON DUPLICATE KEY UPDATE role = VALUES(role)
     </insert>
+
+    <select id="get" parameterType="team.oha.laboa.model.CooperationMemberDo" resultType="team.oha.laboa.model.CooperationMemberDo">
+        SELECT * FROM <include refid="tableName"/>
+        WHERE cooperation_id = #{cooperationId} AND user_id = #{userId}
+    </select>
+
     <update id="update" parameterType="team.oha.laboa.model.CooperationMemberDo">
         UPDATE <include refid="tableName"/> SET <include refid="tableName"/>.role = #{role}
         WHERE member_id = #{memberId} and role != 'owner'

@@ -7,11 +7,16 @@
     <insert id="save" parameterType="team.oha.laboa.model.CooperationApplyDo" useGeneratedKeys="true" keyProperty="applyId">
         INSERT INTO  <include refid="tableName"/>
         (applicant_id,cooperation_id,status, apply_time)
-        VALUE (#{applicantId},#{parentId},#{status}, #{applyTime})
+        VALUE (#{applicantId},#{cooperationId},#{status}, #{applyTime})
     </insert>
 
+    <select id="getApply" parameterType="team.oha.laboa.model.CooperationApplyDo" resultType="team.oha.laboa.model.CooperationApplyDo">
+        SELECT * FROM <include refid="tableName"/>
+        WHERE applicant_id = #{applicantId} AND status = #{status} AND cooperation_id = #{cooperationId}
+    </select>
+
     <insert id="saveMembers" parameterType="team.oha.laboa.vo.ApplyDealBatchVo" useGeneratedKeys="true">
-        INSERT INTO cooperation_member(cooperation_id, user_id, role, update_time)
+        INSERT INTO cooperation_member(cooperation_id, user_id, role, join_time)
         SELECT cooperation_id, applicant_id, 'member', #{updateTime}
         FROM cooperation_apply
         WHERE apply_id in
@@ -22,8 +27,8 @@
     <update id="dealApply" parameterType="team.oha.laboa.vo.ApplyDealBatchVo">
         UPDATE <include refid="tableName"/>
         SET update_time = #{updateTime}, status = #{status}
-        WHERE apply_id in <foreach collection="ids" separator="," open="(" close="）" item="id">#{id}</foreach>
-        and status = 'todo'
+        WHERE apply_id in <foreach collection="ids" separator="," open="(" close=")" item="id">#{id}</foreach>
+        AND status = 'todo'
     </update>
 
     <sql id="conditions">

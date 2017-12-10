@@ -27,6 +27,7 @@ public interface CooperationService {
     ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery);
     ApiDto listCooperation(CooperationSelectQuery cooperationSelectQuery);
     ApiDto listCooperationTree(Integer cooperationId);
+    ApiDto doApply(Integer cooperationId);
     ApiDto dealApply(ApplyDealBatchVo applyDealBatchVo);
     ApiDto listApply(ApplySelectQuery applySelectQuery);
     ApiDto saveMember(CooperationMemberVo cooperationMemberVo);

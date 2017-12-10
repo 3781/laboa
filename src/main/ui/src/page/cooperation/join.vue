@@ -90,7 +90,7 @@
       </el-row>
     </el-form>
     <el-table :data="cooperations" v-loading="loading" size="small" :stripe="true" :border="true" ref="cooperationTable"
-              @sort-change="handleSortChange" @filter-change="handleFilterChange" @selection-change="handleSelectChange"
+              @sort-change="handleSortChange" @filter-change="handleFilterChange"
               :defaultSort="{prop:this.cooperationSelectQuery.orderQuery.field, order: this.cooperationSelectQuery.orderQuery.order+'ending'}">
       <el-table-column type="expand" >
         <template slot-scope="scope">
@@ -201,9 +201,6 @@
         return this.cooperationSelectQuery.pageQuery.offset
           / this.cooperationSelectQuery.pageQuery.rows;
       },
-      selectIds() {
-        return this.selectRows.map(item => item.parentId);
-      },
     },
     methods: {
       ...mapActions(['listJoinCooperation']),
@@ -257,9 +254,6 @@
           this.cooperationSelectQuery.filterQuery[key] = filters[key];
         });
         this.getCooperationData();
-      },
-      handleSelectChange(selection) {
-        this.selectRows = selection;
       },
     },
   };

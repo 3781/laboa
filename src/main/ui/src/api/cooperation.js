@@ -55,3 +55,11 @@ export function deleteMember(memberId) {
 export function listApplys(formData) {
   return httpUtil.get('/cooperation/apply', { params: formData });
 }
+
+export function doApply(cooperationId) {
+  return httpUtil.post(`/cooperation/apply/${cooperationId}`);
+}
+
+export function dealApply(formData) {
+  return httpUtil.patch('/cooperation/apply', formData);
+}

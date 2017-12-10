@@ -8,7 +8,6 @@ import team.oha.laboa.model.CooperationMemberDo;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberFilterQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
-import team.oha.laboa.vo.ApplyDealBatchVo;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ import java.util.List;
 @Mapper
 public interface CooperationMemberDao {
     Integer save(CooperationMemberDo cooperationMemberDo);
+    CooperationMemberDo get(CooperationMemberDo cooperationMemberDo);
     Integer delete(Integer memberId);
     Integer update(CooperationMemberDo cooperationMemberDo);
     List<MemberAvailableDto> listAvailable(MemberAvailableQuery memberAvailableQuery);

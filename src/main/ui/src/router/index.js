@@ -32,6 +32,7 @@ const vueRouter = new VueRouter({
         { path: '/cooperation/own', component: () => import('../page/cooperation/own') },
         { path: '/cooperation/manage', component: () => import('../page/cooperation/manage') },
         { path: '/cooperation/join', component: () => import('../page/cooperation/join') },
+        { path: '/cooperation/apply/:cooperationId', component: () => import('../page/cooperation/toApply') },
         { path: '/cooperation/:cooperationId', component: () => import('../page/cooperation/detail') },
         { path: '/file/create', component: () => import('../page/file/create') },
         { path: '/file/own', component: () => import('../page/file/own') },

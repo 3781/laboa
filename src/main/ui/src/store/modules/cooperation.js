@@ -241,6 +241,38 @@ const actions = {
       });
     });
   },
+  doApply({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.doApply(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  dealApply({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.dealApply(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
 };
 
 export default {

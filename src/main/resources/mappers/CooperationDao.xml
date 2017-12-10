@@ -27,6 +27,10 @@
         DELETE FROM <include refid="tableName"/> WHERE cooperation_id = #{cooperationId}
     </delete>
 
+    <select id="getById" parameterType="java.lang.Integer" resultType="team.oha.laboa.model.CooperationDo">
+        select * FROM <include refid="tableName"/> WHERE cooperation_id = #{id}
+    </select>
+
     <select id="get" parameterType="java.lang.Integer" resultType="team.oha.laboa.dto.CooperationDto">
         SELECT
         parent.name AS parent_name,

@@ -24,6 +24,7 @@ public interface CooperationDao {
     Integer save(CooperationDo cooperationDo);
     Integer update(CooperationDo cooperationDo);
     Integer delete(Integer id);
+    CooperationDo getById(Integer id);
     CooperationDto get(Integer id);
     CooperationTreeDto getTree(Integer id);
     CooperationTreeDto getTreeNode(Integer id);
