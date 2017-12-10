@@ -30,6 +30,7 @@
     <select id="get" parameterType="java.lang.Integer" resultType="team.oha.laboa.dto.CooperationDto">
         SELECT
         parent.name AS parent_name,
+        parent.cooperation_id AS parent_id,
         user.username AS owner_name,
         child.cooperation_id AS cooperation_id,
         child.name AS name,
@@ -71,7 +72,7 @@
     <sql id="conditions">
         <if test="filterQuery!=null">
             <where>
-                <if test="filterQuery.cooperationId">AND child.cooperation_id = #{filterQuery.cooperationId}</if>
+                <if test="filterQuery.cooperationId">AND child.cooperation_d = #{filterQuery.cooperationId}</if>
                 <if test="filterQuery.beginDateBegin">AND child.begin_date &gt;= #{filterQuery.beginDateBegin}</if>
                 <if test="filterQuery.beginDateEnd">AND child.begin_date &lt;= #{filterQuery.beginDateEnd}</if>
                 <if test="filterQuery.endDateBegin">AND child.end_date &gt;= #{filterQuery.endDateBegin}</if>

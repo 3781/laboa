@@ -11,9 +11,14 @@ import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.model.CooperationMemberDo;
 import team.oha.laboa.query.cooperation.CooperationFilterQuery;
 import team.oha.laboa.query.cooperation.CooperationSelectQuery;
+import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
+import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
 import team.oha.laboa.service.CooperationService;
+import team.oha.laboa.vo.ApplyDealBatchVo;
+import team.oha.laboa.vo.CooperationMemberVo;
 import team.oha.laboa.vo.CooperationVo;
+import team.oha.laboa.vo.MemberRoleChangeVo;
 
 /**
  * <p></p>
@@ -75,7 +80,7 @@ public class CooperationController {
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{role:owner|manager|member}")
-    public ApiDto listOwn(CooperationSelectQuery cooperationSelectQuery, @PathVariable("role") CooperationMemberDo.CooperationRole role){
+    public ApiDto listCooperation(CooperationSelectQuery cooperationSelectQuery, @PathVariable("role") CooperationMemberDo.CooperationRole role){
         if(cooperationSelectQuery.getFilterQuery()==null){
             cooperationSelectQuery.setFilterQuery(new CooperationFilterQuery());
         }
@@ -84,5 +89,47 @@ public class CooperationController {
         cooperationSelectQuery.getFilterQuery().setRole(role);
 
         return cooperationService.listCooperation(cooperationSelectQuery);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/member")
+    public ApiDto listMember(MemberSelectQuery memberSelectQuery) {
+        return cooperationService.listMember(memberSelectQuery);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/member")
+    public ApiDto saveMember(@RequestBody CooperationMemberVo cooperationMemberVo) {
+        return cooperationService.saveMember(cooperationMemberVo);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/member")
+    public ApiDto updateMember(@RequestBody MemberRoleChangeVo memberRoleChangeVo) {
+        return cooperationService.changeMemberRole(memberRoleChangeVo);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/member/{memberId:[1-9][0-9]*}")
+    public ApiDto deleteMember(@PathVariable Integer memberId) {
+        return cooperationService.deleteMember(memberId);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/apply")
+    public ApiDto listApply(ApplySelectQuery applySelectQuery) {
+        return cooperationService.listApply(applySelectQuery);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/apply")
+    public ApiDto dealApply(ApplyDealBatchVo applyDealBatchVo) {
+        return cooperationService.dealApply(applyDealBatchVo);
     }
 }

@@ -145,6 +145,54 @@ const actions = {
       });
     });
   },
+  saveMember({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.saveMember(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  changeMemberRole({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.changeMemberRole(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  deleteMember({ commit }, cooperationId) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.deleteMember(cooperationId).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
 };
 
 export default {

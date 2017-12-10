@@ -197,7 +197,7 @@
           / this.cooperationSelectQuery.pageQuery.rows;
       },
       selectIds() {
-        return this.selectRows.map(item => item.cooperationId);
+        return this.selectRows.map(item => item.parentId);
       },
     },
     methods: {

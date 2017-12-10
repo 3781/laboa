@@ -22,8 +22,8 @@ import java.util.List;
 @Mapper
 public interface CooperationApplyDao {
     Integer save(CooperationApplyDo cooperationApplyDo);
+    Integer saveMembers(ApplyDealBatchVo applyDealBatchVo);
     Integer dealApply(ApplyDealBatchVo applyDealBatchVo);
-
     List<CooperationApplyDto> list(ApplySelectQuery applySelectQuery);
     Integer count(ApplyFilterQuery filterQuery);
 }

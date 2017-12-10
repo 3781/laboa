@@ -19,7 +19,10 @@ import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
 import team.oha.laboa.service.CooperationService;
+import team.oha.laboa.vo.ApplyDealBatchVo;
+import team.oha.laboa.vo.CooperationMemberVo;
 import team.oha.laboa.vo.CooperationVo;
+import team.oha.laboa.vo.MemberRoleChangeVo;
 
 import java.time.LocalDateTime;
 
@@ -125,6 +128,17 @@ public class CooperationServiceImpl implements CooperationService {
     }
 
     @Override
+    public ApiDto dealApply(ApplyDealBatchVo applyDealBatchVo) {
+        applyDao.saveMembers(applyDealBatchVo);
+
+        applyDealBatchVo.setUpdateTime(LocalDateTime.now());
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(applyDao.dealApply(applyDealBatchVo));
+        return apiDto;
+    }
+
+    @Override
     public ApiDto listApply(ApplySelectQuery applySelectQuery) {
         PageDto<CooperationApplyDto> pageDto = new PageDto<>();
         pageDto.setTotalSize(applyDao.count(applySelectQuery.getFilterQuery()));
@@ -135,6 +149,39 @@ public class CooperationServiceImpl implements CooperationService {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(pageDto);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto saveMember(CooperationMemberVo cooperationMemberVo) {
+        CooperationMemberDo cooperationMemberDo = new CooperationMemberDo();
+        if(cooperationMemberVo.getRole().equals(CooperationMemberDo.CooperationRole.owner)){
+            cooperationMemberVo.setRole(CooperationMemberDo.CooperationRole.member);
+        }
+        BeanUtils.copyProperties(cooperationMemberVo, cooperationMemberDo);
+        cooperationMemberDo.setJoinTime(LocalDateTime.now());
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(memberDao.save(cooperationMemberDo));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto changeMemberRole(MemberRoleChangeVo memberRoleChangeVo) {
+        CooperationMemberDo cooperationMemberDo = new CooperationMemberDo();
+        BeanUtils.copyProperties(memberRoleChangeVo, cooperationMemberDo);
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(memberDao.update(cooperationMemberDo));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto deleteMember(Integer memberId) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(memberDao.delete(memberId));
         return apiDto;
     }
 

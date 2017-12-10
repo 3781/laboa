@@ -8,20 +8,17 @@
         INSERT INTO  <include refid="tableName"/>
         (cooperation_id, user_id, role, join_time)
         VALUE (#{cooperationId},#{userId},#{role},#{joinTime})
+        ON DUPLICATE KEY UPDATE role = VALUES(role)
     </insert>
-    <insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true">
-        INSERT INTO  <include refid="tableName"/>
-        (cooperation_id, user_id, role, join_time)
-        VALUES
-        <foreach collection="collection" item="item" separator=",">
-            (#{item.cooperationId},#{item.userId},#{item.role},#{item.joinTime})
-        </foreach>
-        ON DUPLICATE KEY UPDATE role = VALULS(role)
-    </insert>
-    <delete id="deleteBatch" parameterType="team.oha.laboa.vo.BatchVo">
+    <update id="update" parameterType="team.oha.laboa.model.CooperationMemberDo">
+        UPDATE <include refid="tableName"/> SET <include refid="tableName"/>.role = #{role}
+        WHERE member_id = #{memberId} and role != 'owner'
+    </update>
+    <delete id="delete" parameterType="java.lang.Integer">
         DELETE FROM <include refid="tableName"/>
         WHERE member_id in
         <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+        and role != 'owner'
     </delete>
 
     <sql id="conditions">
@@ -87,7 +84,7 @@
         userinfo.name AS name,
         userinfo.employee_number AS employee_number
         FROM user JOIN userinfo ON user.user_id = userinfo.user_id
-        <if test="cooperationId != null">
+        <if test="parentId != null">
         WHERE user.user_id IN
         (
         SELECT user_id FROM <include refid="tableName"/>

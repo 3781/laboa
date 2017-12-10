@@ -31,7 +31,7 @@
                 <span>{{ cooperationInfo!=null?cooperationInfo.ownerName:'' }}</span>
               </el-form-item>
               <el-form-item label="邀请链接" v-show="cooperationInfo!=null && cooperationInfo.invite">
-                <span>http://localhost:3000/cooperation/invite/{{cooperationInfo!=null?cooperationInfo.cooperationId:''}}</span>
+                <span>http://localhost:3000/cooperation/invite/{{cooperationInfo!=null?cooperationInfo.parentId:''}}</span>
               </el-form-item>
               <el-form-item label="更新时间" v-show="cooperationInfo!=null && cooperationInfo.updateTime != null">
                 <span>{{ cooperationInfo!=null?cooperationInfo.updateTime:'' }}</span>
@@ -53,13 +53,13 @@
             <mavon-editor v-if="cooperationInfo!=null" :value="cooperationInfo.remark" :toolbarsFlag="false" :subfield="false" default_open="preview"></mavon-editor>
           </el-tab-pane>
           <el-tab-pane label="协作成员" name="member">
-            协作成员
+            <cooperation-member :cooperationId="currentCooperationId"></cooperation-member>
           </el-tab-pane>
           <el-tab-pane label="协作日程" name="agenda">
             协作日程
           </el-tab-pane>
           <el-tab-pane label="协作申请" name="apply"  :disabled="!(checkManage || checkOwn)">
-            协作申请
+            <cooperation-apply :cooperationId="currentCooperationId"></cooperation-apply>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -100,11 +100,15 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import cooperationCreate from './create';
+  import cooperationMember from './member';
+  import cooperationApply from './apply';
 
   export default {
     name: 'cooperationDetail',
     components: {
       cooperationCreate,
+      cooperationMember,
+      cooperationApply,
     },
     data() {
       return {
@@ -231,7 +235,7 @@
               position: 'bottom-right',
               offset: 40,
             });
-            this.currentCooperationId = null;
+            this.currentCooperationId = this.cooperationInfo.parentId;
             this.cooperationInfo = null;
             this.loadTreeData();
           }).catch((errorMessage) => {

@@ -7,7 +7,16 @@
     <insert id="save" parameterType="team.oha.laboa.model.CooperationApplyDo" useGeneratedKeys="true" keyProperty="applyId">
         INSERT INTO  <include refid="tableName"/>
         (applicant_id,cooperation_id,status, remark, apply_time)
-        VALUE (#{applicantId},#{cooperationId},#{status},#{remark}, #{applyTime})
+        VALUE (#{applicantId},#{parentId},#{status},#{remark}, #{applyTime})
+    </insert>
+
+    <insert id="saveMembers" parameterType="team.oha.laboa.vo.ApplyDealBatchVo" useGeneratedKeys="true">
+        INSERT INTO cooperation_member(cooperation_id, user_id, role, update_time)
+        SELECT cooperation_id, applicant_id, 'member', #{updateTime}
+        FROM cooperation_apply
+        WHERE apply_id in
+         <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+         AND `status` = 'todo'
     </insert>
 
     <update id="dealApply" parameterType="team.oha.laboa.vo.ApplyDealBatchVo">

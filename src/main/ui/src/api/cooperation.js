@@ -35,3 +35,15 @@ export function getCooperation(cooperationId) {
 export function deleteCooperation(cooperationId) {
   return httpUtil.delete(`/cooperation/${cooperationId}`);
 }
+
+export function saveMember(formData) {
+  return httpUtil.post('/cooperation/member', formData);
+}
+
+export function changeMemberRole(formData) {
+  return httpUtil.patch('/cooperation/member', formData);
+}
+
+export function deleteMember(memberId) {
+  return httpUtil.delete(`/cooperation/member/${memberId}`);
+}

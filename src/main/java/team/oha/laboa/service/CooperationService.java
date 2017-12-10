@@ -5,7 +5,10 @@ import team.oha.laboa.query.cooperation.CooperationSelectQuery;
 import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
+import team.oha.laboa.vo.ApplyDealBatchVo;
+import team.oha.laboa.vo.CooperationMemberVo;
 import team.oha.laboa.vo.CooperationVo;
+import team.oha.laboa.vo.MemberRoleChangeVo;
 
 /**
  * <p></p>
@@ -24,6 +27,10 @@ public interface CooperationService {
     ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery);
     ApiDto listCooperation(CooperationSelectQuery cooperationSelectQuery);
     ApiDto listCooperationTree(Integer cooperationId);
+    ApiDto dealApply(ApplyDealBatchVo applyDealBatchVo);
     ApiDto listApply(ApplySelectQuery applySelectQuery);
+    ApiDto saveMember(CooperationMemberVo cooperationMemberVo);
+    ApiDto changeMemberRole(MemberRoleChangeVo memberRoleChangeVo);
+    ApiDto deleteMember(Integer memberId);
     ApiDto listMember(MemberSelectQuery memberSelectQuery);
 }
