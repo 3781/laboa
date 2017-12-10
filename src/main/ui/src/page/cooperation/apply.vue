@@ -42,9 +42,9 @@
             <el-input v-model.trim="applySelectQuery.filterQuery.email" placeholder="请输入邮箱"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="16">
           <el-form-item label="状态" style="margin-right:0;" prop="statuses">
-            <el-select v-model="applySelectQuery.filterQuery.statuses" :multiple="true" placeholder="请选择状态">
+            <el-select v-model="applySelectQuery.filterQuery.statuses" :multiple="true" placeholder="请选择状态" style="width:240px">
               <el-option
                 v-for="(value, key) in statusOptions"
                 :key="key"
