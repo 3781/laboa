@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/9 17:43:10                           */
+/* Created on:     2017/12/11 1:11:21                           */
 /*==============================================================*/
 
 
@@ -105,7 +105,6 @@ create table cooperation_apply
    apply_id             int(10) unsigned not null auto_increment,
    applicant_id         int(10) unsigned not null,
    cooperation_id       int(10) unsigned not null,
-   remark               varchar(255),
    status               varchar(255),
    update_time          datetime,
    apply_time           datetime,
