@@ -8,5 +8,41 @@
         INSERT INTO  <include refid="tableName"/>
         (agenda_id, summary_time)
         VALUE (#{agendaId},#{summaryTime})
+        ON DUPLICATE KEY UPDATE summaryTime = VALUES(summaryTime)
     </insert>
+
+    <update id="updateSummaryTime" parameterType="team.oha.laboa.model.AgendaItemDo">
+        UPDATE <include refid="tableName"/>
+        SET summary_time = #{summaryTime}
+        FROM <include refid="tableName"/>
+        JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
+        AND agenda.next_time = <include refid="tableName"/>.summary_time AND agenda.open = 0 AND agenda.next_time &gt; #{summaryTime}
+        AND agenda_id = #{agendaId}
+    </update>
+
+    <insert id="generatePersonalSummary" parameterType="team.oha.laboa.model.AgendaItemDo" useGeneratedKeys="true">
+        INSERT INTO agenda_summary(item_id, summarizer_id, status)
+        SELECT #{itemId}, agenda.owner_id, 'todo'
+        FROM <include refid="tableName"/> JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
+    </insert>
+
+    <insert id="generateCooperationSummary" parameterType="team.oha.laboa.model.AgendaItemDo" useGeneratedKeys="true">
+        INSERT INTO agenda_summary(item_id, summarizer_id, status)
+        SELECT #{itemId}, cooperation_member.user_id, 'todo'
+        FROM <include refid="tableName"/>
+        JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
+        JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
+        JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
+        JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
+    </insert>
+
+    <delete id="cleanCloseAgendaItem" parameterType="team.oha.laboa.vo.AgendaBatchVo">
+        DELETE <include refid="tableName"/> FROM
+        <include refid="tableName"/>
+        JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
+        AND agenda.agenda_id IN <foreach collection="agendaIds" item="agendaId" open="(" close=")" separator=",">#{agendaId}</foreach>
+        AND agenda.next_time = <include refid="tableName"/>.summary_time
+        AND agenda.owner_id = #{userId}
+        AND agenda.open = 0
+    </delete>
 </mapper>

@@ -18,6 +18,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -46,6 +47,7 @@ import static com.fasterxml.jackson.databind.MapperFeature.DEFAULT_VIEW_INCLUSIO
 
 @Configuration
 @EnableWebMvc
+@EnableScheduling
 @ComponentScan("team.oha.laboa.controller")
 @Import(ShiroAnnotationProcessorConfiguration.class)
 public class MvcConfig implements WebMvcConfigurer {

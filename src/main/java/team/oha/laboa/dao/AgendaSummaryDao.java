@@ -22,4 +22,6 @@ public interface AgendaSummaryDao {
     Integer save(AgendaSummaryDo agendaSummaryDo);
     Integer update(AgendaSummaryDo agendaSummaryDo);
     List<AgendaSummaryDto> listToDo(AgendaToDoQuery agendaToDoQuery);
+    Integer saveByParticipantId(Integer participantId);
+    Integer deleteByParticipantId(Integer participantId);
 }

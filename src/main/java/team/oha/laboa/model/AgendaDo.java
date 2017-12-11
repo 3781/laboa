@@ -26,7 +26,7 @@ public class AgendaDo implements Serializable{
     private LocalDateTime createTime;
 
     public static enum AgendaUnit{
-        month,week,day
+        once,month,week,day
     }
 
     public static enum  AgendaType{

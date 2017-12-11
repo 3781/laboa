@@ -4,6 +4,7 @@ import team.oha.laboa.model.AgendaDo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  * <p></p>
@@ -20,8 +21,9 @@ public class AgendaVo implements Serializable {
     private Integer quantity;
     private AgendaDo.AgendaUnit unit;
     private String remark;
-    private Boolean open;
 
+    private Integer cooperationId;
+    private Integer[] memberIds;
 
     public Integer getAgendaId() {
         return agendaId;
@@ -71,12 +73,20 @@ public class AgendaVo implements Serializable {
         this.remark = remark;
     }
 
-    public Boolean getOpen() {
-        return open;
+    public Integer getCooperationId() {
+        return cooperationId;
     }
 
-    public void setOpen(Boolean open) {
-        this.open = open;
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
+    }
+
+    public Integer[] getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(Integer[] memberIds) {
+        this.memberIds = memberIds;
     }
 
     @Override
@@ -88,7 +98,8 @@ public class AgendaVo implements Serializable {
                 ", quantity=" + quantity +
                 ", unit=" + unit +
                 ", remark='" + remark + '\'' +
-                ", open=" + open +
+                ", cooperationId=" + cooperationId +
+                ", memberIds=" + Arrays.toString(memberIds) +
                 '}';
     }
 }

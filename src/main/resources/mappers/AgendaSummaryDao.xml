@@ -15,10 +15,9 @@
         <set>
             <if test="content != null">content=#{content},</if>
             <if test="summaryTime != null">summary_time=#{summaryTime},</if>
-            <if test="updateTime != null">update_time=#{updateTime},</if>
             <if test="status != null">status=#{status},</if>
         </set>
-        WHERE summary_id = #{summaryId}
+        WHERE summary_id = #{summaryId} and summarizer_id = #{summarizerId}
     </update>
 
     <select id="listToDo" parameterType="team.oha.laboa.query.agenda.AgendaToDoQuery" resultType="team.oha.laboa.dto.AgendaSummaryDto">
@@ -34,4 +33,29 @@
         AND date_format(agenda_item.summary_time,'%Y-%m')=date_format(#{targetDate},'%Y-%m')
         ORDER BY agenda_item.summary_time asc
     </select>
+
+    <insert id="saveByParticipantId" parameterType="java.lang.Integer">
+        INSERT INTO  <include refid="tableName"/>
+        (item_id, summarizer_id, status)
+        SELECT agenda_item.item_id, cooperation_member.user_id, 'todo'
+        FROM
+        agenda_item ON agenda_item.item_id = <include refid="tableName"/>.item_id
+        JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id AND agenda.next_time = agenda_item.summary_time
+        JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
+        JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
+        AND cooperation_agenda_participant.participant_id = #{participantId}
+        JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
+    </insert>
+
+    <delete id="deleteByParticipantId" parameterType="java.lang.Integer">
+        DELETE <include refid="tableName"/>
+        FROM  <include refid="tableName"/>
+        JOIN agenda_item ON agenda_item.item_id = <include refid="tableName"/>.item_id
+        JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id AND agenda.next_time = agenda_item.summary_time
+        JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
+        JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
+        AND cooperation_agenda_participant.participant_id = #{participantId}
+        JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
+        WHERE <include refid="tableName"/>.status = 'todo' AND agenda_summary.user_id = cooperation_member.user_id
+    </delete>
 </mapper>

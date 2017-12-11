@@ -7,7 +7,7 @@
         <insert id="save" parameterType="team.oha.laboa.model.CooperationAgendaDo" useGeneratedKeys="true" keyProperty="cooperationAgendaId">
                 INSERT INTO  <include refid="tableName"/>
                 (cooperation_id,agenda_id)
-                VALUE (#{parentId},#{agendaId})
+                VALUE (#{cooperationId},#{agendaId})
         </insert>
 
         <delete id="cleanAgendaSummary">

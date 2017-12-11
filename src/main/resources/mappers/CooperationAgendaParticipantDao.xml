@@ -9,12 +9,12 @@
         (member_id,cooperation_agenda_id)
         VALUE (#{memberId},#{cooperationAgendaId})
     </insert>
-    <insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    <insert id="saveBatch" useGeneratedKeys="true">
         INSERT INTO  <include refid="tableName"/>
         (member_id,cooperation_agenda_id)
         VALUES
-        <foreach collection="collection" item="item" separator=",">
-            (#{item.memberId},#{item.cooperationAgendaId})
+        <foreach collection="memberIds" item="memberId" separator=",">
+            (#{memberId},#{cooperationAgendaId})
         </foreach>
     </insert>
 

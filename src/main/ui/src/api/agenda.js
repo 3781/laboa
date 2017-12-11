@@ -9,7 +9,7 @@ export function updateAgenda(formData) {
 }
 
 export function summaryAgenda(formData) {
-  return httpUtil.post('/agenda/summary', formData);
+  return httpUtil.patch('/agenda/summary', formData);
 }
 
 export function list(formData) {

@@ -10,11 +10,30 @@
         VALUE (#{ownerId},#{title},#{type},#{nextTime},#{quantity},#{unit},#{remark},#{open},#{updateTime},#{createTime})
     </insert>
 
+    <delete id="deleteBatch" parameterType="team.oha.laboa.vo.AgendaBatchVo">
+        DELETE FROM <include refid="tableName"/>
+        WHERE agenda_id IN <foreach collection="agendaIds" item="agendaId" open="(" close=")" separator=",">#{agendaId}</foreach>
+        AND owner_id = #{userId}
+    </delete>
+
+    <update id="openBatch" parameterType="team.oha.laboa.vo.AgendaBatchVo">
+        UPDATE <include refid="tableName"/>
+        SET open = 1
+        WHERE agenda_id IN <foreach collection="agendaIds" item="agendaId" open="(" close=")" separator=",">#{agendaId}</foreach>
+        AND owner_id = #{userId} AND open = 0 AND next_time &gt; #{nowTime}
+    </update>
+
+    <update id="closeBatch" parameterType="team.oha.laboa.vo.AgendaBatchVo">
+        UPDATE <include refid="tableName"/>
+        SET open = 0
+        WHERE agenda_id IN <foreach collection="agendaIds" item="agendaId" open="(" close=")" separator=",">#{agendaId}</foreach>
+        AND owner_id = #{userId} AND open = 1
+    </update>
+
     <update id="update" parameterType="team.oha.laboa.model.AgendaDo">
         UPDATE <include refid="tableName"/>
         <set>
             <if test="nextTime != null">next_time=#{nextTime},</if>
-            <if test="open != null">open=#{open},</if>
             <if test="quantity != null">quantity=#{quantity},</if>
             <if test="remark != null">remark=#{remark},</if>
             <if test="title != null">title=#{title},</if>
@@ -23,6 +42,20 @@
         </set>
         WHERE agenda_id = #{agendaId}
     </update>
+
+    <select id="listNeedGenerateItemAgenda" resultType="team.oha.laboa.model.AgendaDo">
+        SELECT * FROM <include refid="tableName"/>
+        WHERE open = 1 AND next_time NOT IN
+        (
+        SELECT summary_time FROM agenda_item
+        WHERE agenda_item.agenda_id = <include refid="tableName"/>.agenda_id
+        )
+    </select>
+
+    <select id="listNeedReGenerateItemAgenda" resultType="team.oha.laboa.model.AgendaDo" parameterType="java.time.LocalDateTime">
+        SELECT * FROM <include refid="tableName"/>
+        WHERE open = 1 AND next_time &lt; #{nowTime}
+    </select>
 
     <sql id="conditions">
         <if test="filterQuery!=null">
@@ -85,10 +118,4 @@
         <include refid="conditions"/>
     </select>
 
-    <update id="close" parameterType="team.oha.laboa.vo.BatchVo">
-        UPDATE <include refid="tableName"/> SET open = 0
-        WHERE agenda_id IN
-        <foreach collection="ids" separator="," open="(" close=")" item="id">#{id}</foreach>
-        AND open != 0
-    </update>
 </mapper>

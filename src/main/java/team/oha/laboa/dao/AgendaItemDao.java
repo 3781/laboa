@@ -3,6 +3,7 @@ package team.oha.laboa.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import team.oha.laboa.model.AgendaItemDo;
+import team.oha.laboa.vo.AgendaBatchVo;
 
 /**
  * <p></p>
@@ -16,4 +17,8 @@ import team.oha.laboa.model.AgendaItemDo;
 @Mapper
 public interface AgendaItemDao {
     Integer save(AgendaItemDo agendaItemDo);
+    Integer updateSummaryTime(AgendaItemDo agendaItemDo);
+    Integer generatePersonalSummary(AgendaItemDo agendaItemDo);
+    Integer generateCooperationSummary(AgendaItemDo agendaItemDo);
+    Integer cleanCloseAgendaItem(AgendaBatchVo agendaBatchVo);
 }

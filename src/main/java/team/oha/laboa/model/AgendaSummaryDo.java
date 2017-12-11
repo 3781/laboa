@@ -18,7 +18,6 @@ public class AgendaSummaryDo implements Serializable{
     private SummaryStatus status;
     private String content;
     private LocalDateTime summaryTime;
-    private LocalDateTime updateTime;
 
     public static enum SummaryStatus{
         todo, finished, unfinished
@@ -72,14 +71,6 @@ public class AgendaSummaryDo implements Serializable{
         this.summaryTime = summaryTime;
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
     @Override
     public String toString() {
         return "AgendaSummaryDo{" +
@@ -89,7 +80,6 @@ public class AgendaSummaryDo implements Serializable{
                 ", status=" + status +
                 ", content='" + content + '\'' +
                 ", summaryTime=" + summaryTime +
-                ", updateTime=" + updateTime +
                 '}';
     }
 }

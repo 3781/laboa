@@ -1,10 +1,9 @@
 package team.oha.laboa.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.oha.laboa.model.CooperationAgendaParticipantDo;
-
-import java.util.List;
 
 /**
  * <p></p>
@@ -18,6 +17,6 @@ import java.util.List;
 @Mapper
 public interface CooperationAgendaParticipantDao {
     Integer save(CooperationAgendaParticipantDo cooperationAgendaParticipantDo);
-    Integer saveBatch(List<CooperationAgendaParticipantDo> cooperationAgendaParticipantDos);
+    Integer saveBatch(@Param("cooperationAgendaId") Integer cooperationAgendaId, @Param("memberIds") Integer[] memberIds);
     Integer delete(Integer id);
 }

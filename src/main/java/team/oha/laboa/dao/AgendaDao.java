@@ -1,13 +1,15 @@
 package team.oha.laboa.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.oha.laboa.dto.AgendaDto;
 import team.oha.laboa.model.AgendaDo;
 import team.oha.laboa.query.agenda.AgendaFilterQuery;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
-import team.oha.laboa.vo.BatchVo;
+import team.oha.laboa.vo.AgendaBatchVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -22,8 +24,12 @@ import java.util.List;
 @Mapper
 public interface AgendaDao {
     Integer save(AgendaDo agendaDo);
+    Integer deleteBatch(AgendaBatchVo agendaBatchVo);
+    Integer openBatch(AgendaBatchVo agendaBatchVo);
+    Integer closeBatch(AgendaBatchVo agendaBatchVo);
+    List<AgendaDo> listNeedGenerateItemAgenda();
+    List<AgendaDo> listNeedReGenerateItemAgenda(@Param("nowTime") LocalDateTime nowTime);
     List<AgendaDto> list(AgendaSelectQuery agendaSelectQuery);
     Integer count(AgendaFilterQuery filterQuery);
-    Integer close(BatchVo batchVo);
     Integer update(AgendaDo agendaDo);
 }
