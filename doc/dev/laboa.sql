@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/11 1:11:21                           */
+/* Created on:     2017/12/11 16:12:10                          */
 /*==============================================================*/
 
 
@@ -45,7 +45,6 @@ create table agenda_summary
    status               varchar(255),
    content              text,
    summary_time         datetime,
-   update_time          datetime,
    primary key (summary_id)
 );
 
