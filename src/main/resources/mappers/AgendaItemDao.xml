@@ -23,13 +23,14 @@
         INSERT INTO agenda_summary(item_id, summarizer_id, status)
         SELECT #{itemId}, agenda.owner_id, 'todo'
         FROM <include refid="tableName"/> JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
+        AND agenda.next_time = <include refid="tableName"/>.summary_time
     </insert>
 
     <insert id="generateCooperationSummary" parameterType="team.oha.laboa.model.AgendaItemDo" useGeneratedKeys="true">
         INSERT INTO agenda_summary(item_id, summarizer_id, status)
         SELECT #{itemId}, cooperation_member.user_id, 'todo'
         FROM <include refid="tableName"/>
-        JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
+        JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id AND agenda.next_time = <include refid="tableName"/>.summary_time
         JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
         JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
         JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id

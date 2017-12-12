@@ -147,7 +147,7 @@
 
     <select id="getAgendaDetail" parameterType="java.lang.Integer" resultMap="agendaDetailMap">
         SELECT
-        <include refid="tableName"/>.id AS id,
+        <include refid="tableName"/>.agenda_id AS agenda_id,
         owner.username AS owner_username,
         <include refid="tableName"/>.title AS title,
         <include refid="tableName"/>.type AS type,
@@ -160,15 +160,16 @@
         <include refid="tableName"/>.create_time AS create_time,
         agenda_item.item_id AS item_id,
         agenda_item.summary_time AS preset_time,
-        agenda_summray.summray_id AS summary_id,
+        agenda_summary.summary_id AS summary_id,
         summarizer.username AS summarizer_username,
-        agenda_summray.status AS status,
-        agenda_summray.content AS content,
-        agenda_summray.summray_time AS actual_time
+        agenda_summary.status AS status,
+        agenda_summary.content AS content,
+        agenda_summary.summary_time AS actual_time
         FROM <include refid="tableName"/>
-        JOIN user AS owner ON user.user_id = <include refid="tableName"/>.owner_id
+        JOIN user AS owner ON owner.user_id = <include refid="tableName"/>.owner_id
         JOIN agenda_item ON agenda_item.agenda_id = agenda.agenda_id
-        JOIN agenda_summray ON agenda_summary.item_id = agenda_item.item_id
-        JOIN user as summarizer ON user.user_id = agenda_summray.summarizer_id
+        JOIN agenda_summary ON agenda_summary.item_id = agenda_item.item_id
+        JOIN user as summarizer ON summarizer.user_id = agenda_summary.summarizer_id
+        ORDER BY preset_time ASC, summarizer_username ASC
     </select>
 </mapper>

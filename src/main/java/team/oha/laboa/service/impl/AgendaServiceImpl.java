@@ -22,6 +22,7 @@ import team.oha.laboa.vo.CooperationAgendaParticipantVo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -141,6 +142,7 @@ public class AgendaServiceImpl implements AgendaService {
         AgendaSummaryDo agendaSummaryDo = new AgendaSummaryDo();
         BeanUtils.copyProperties(agendaSummaryVo, agendaSummaryDo);
         agendaSummaryDo.setSummaryTime(LocalDateTime.now());
+        agendaSummaryDo.setSummarizerId(userDao.getByUsername((String)SecurityUtils.getSubject().getPrincipal()).getUserId());
 
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
@@ -228,7 +230,7 @@ public class AgendaServiceImpl implements AgendaService {
     @Override
     public void refreshAgenda() {
         AgendaDo agenda = new AgendaDo();
-        List<AgendaDo> agendaDoList = agendaDao.listNeedReGenerateItemAgenda(LocalDateTime.from(LocalDate.now()));
+        List<AgendaDo> agendaDoList = agendaDao.listNeedReGenerateItemAgenda(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
         if(agendaDoList!=null){
             for(AgendaDo agendaDo: agendaDoList){
                 agenda.setAgendaId(agendaDo.getAgendaId());

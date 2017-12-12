@@ -62,7 +62,7 @@ public class AgendaController {
 
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/summary")
+    @PatchMapping("/summary")
     public ApiDto summaryAgenda(@RequestBody AgendaSummaryVo agendaSummaryVo) {
         return agendaService.summaryAgenda(agendaSummaryVo);
     }
