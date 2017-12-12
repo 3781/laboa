@@ -65,9 +65,9 @@ const actions = {
       });
     });
   },
-  listAgendas({ commit }, queryForm) {
+  listOwnAgendas({ commit }, queryForm) {
     return new Promise((resolve, reject) => {
-      agendaApi.list(queryForm).then((response) => {
+      agendaApi.listOwnAgendas(queryForm).then((response) => {
         if (response) {
           const res = response.data;
           if (res.success) {
@@ -84,6 +84,54 @@ const actions = {
   closeAgenda({ commit }, formData) {
     return new Promise((resolve, reject) => {
       agendaApi.close(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  openAgenda({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      agendaApi.open(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  deleteAgenda({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      agendaApi.del(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  getAgendaDetail({ commit }, agendaId) {
+    return new Promise((resolve, reject) => {
+      agendaApi.getAgendaDetail(agendaId).then((response) => {
         if (response) {
           const res = response.data;
           if (res.success) {

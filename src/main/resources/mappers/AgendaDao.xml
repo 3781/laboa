@@ -118,4 +118,57 @@
         <include refid="conditions"/>
     </select>
 
+
+
+    <resultMap id="agendaDetailMap" type="team.oha.laboa.dto.AgendaDetailDto">
+        <id column="agenda_id" property="agendaId"/>
+        <result column="owner_username" property="ownerName"/>
+        <result column="title" property="title"/>
+        <result column="type" property="type"/>
+        <result column="next_time" property="nextTime"/>
+        <result column="quantity" property="quantity"/>
+        <result column="unit" property="unit"/>
+        <result column="remark" property="remark"/>
+        <result column="open" property="open"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="itemList" ofType="team.oha.laboa.dto.AgendaItemDetailDto">
+            <id column="item_id" property="itemId"/>
+            <result column="preset_time" property="summaryTime"/>
+            <collection property="summaryList" ofType="team.oha.laboa.dto.AgendaSummaryDetailDto">
+                <id column="summary_id" property="summaryId"/>
+                <result column="summarizer_username" property="username"/>
+                <result column="status" property="status"/>
+                <result column="content" property="content"/>
+                <result column="actual_time" property="summaryTime"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="getAgendaDetail" parameterType="java.lang.Integer" resultMap="agendaDetailMap">
+        SELECT
+        <include refid="tableName"/>.id AS id,
+        owner.username AS owner_username,
+        <include refid="tableName"/>.title AS title,
+        <include refid="tableName"/>.type AS type,
+        <include refid="tableName"/>.next_time AS next_time,
+        <include refid="tableName"/>.quantity AS quantity,
+        <include refid="tableName"/>.unit AS unit,
+        <include refid="tableName"/>.remark AS remark,
+        <include refid="tableName"/>.open AS open,
+        <include refid="tableName"/>.update_time AS update_time,
+        <include refid="tableName"/>.create_time AS create_time,
+        agenda_item.item_id AS item_id,
+        agenda_item.summary_time AS preset_time,
+        agenda_summray.summray_id AS summary_id,
+        summarizer.username AS summarizer_username,
+        agenda_summray.status AS status,
+        agenda_summray.content AS content,
+        agenda_summray.summray_time AS actual_time
+        FROM <include refid="tableName"/>
+        JOIN user AS owner ON user.user_id = <include refid="tableName"/>.owner_id
+        JOIN agenda_item ON agenda_item.agenda_id = agenda.agenda_id
+        JOIN agenda_summray ON agenda_summary.item_id = agenda_item.item_id
+        JOIN user as summarizer ON user.user_id = agenda_summray.summarizer_id
+    </select>
 </mapper>

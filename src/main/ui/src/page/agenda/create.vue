@@ -8,8 +8,8 @@
       :rules="[{ type:'string', required: true, message: '首次执行时间不能为空', trigger: 'change'}]">
       <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="agendaForm.nextTime"></el-date-picker>
     </el-form-item>
-    <el-form-item label="重复单位" prop="quantity"
-                  :rules="[{ type:'number', required: true, message: '重复不能为空'}]">
+    <el-form-item label="重复" prop="quantity"
+                  :rules="[{ type:'integer', required: true, message: '数量为大于1的整数', min: 1}]">
       <el-input v-model.number="agendaForm.quantity" style="width:220px"></el-input>
       <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:80px">
         <el-option
@@ -20,16 +20,7 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="开启" prop="open"
-                  :rules="[{ type:'boolean', required: true, message: '重复不能为空'}]">
-      <el-switch
-        style="display: block"
-        v-model="agendaForm.open"
-        active-color="#13ce66"
-        inactive-color="#ff4949">
-      </el-switch>
-    </el-form-item>
-    <el-form-item label="说明">
+    <el-form-item label="说明" prop="remark">
       <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
     </el-form-item>
     <el-form-item>
@@ -51,9 +42,9 @@
           remark: '',
           unit: 'day',
           quantity: null,
-          open: true,
         },
         unitOption: [
+          { label: '一次', value: 'once' },
           { label: '天', value: 'day' },
           { label: '周', value: 'week' },
           { label: '月', value: 'month' },
@@ -74,6 +65,7 @@
                 offset: 40,
               });
               this.loading = false;
+              this.$refs.agendaForm.resetFields();
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
               this.loading = false;

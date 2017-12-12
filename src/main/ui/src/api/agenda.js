@@ -12,8 +12,8 @@ export function summaryAgenda(formData) {
   return httpUtil.patch('/agenda/summary', formData);
 }
 
-export function list(formData) {
-  return httpUtil.get('/agenda/list', { params: formData });
+export function listOwnAgendas(formData) {
+  return httpUtil.get('/agenda/own', { params: formData });
 }
 
 export function listToDo(formData) {
@@ -21,6 +21,18 @@ export function listToDo(formData) {
 }
 
 export function close(formData) {
+  return httpUtil.patch('/agenda', formData, { params: { open: false } });
+}
+
+export function open(formData) {
+  return httpUtil.patch('/agenda', formData, { params: { open: true } });
+}
+
+export function del(formData) {
   return httpUtil.delete('/agenda', { params: formData });
+}
+
+export function getAgendaDetail(agendaId) {
+  return httpUtil.get(`/agenda/${agendaId}`);
 }
 

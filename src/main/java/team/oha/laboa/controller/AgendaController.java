@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
+import team.oha.laboa.model.AgendaDo;
+import team.oha.laboa.query.agenda.AgendaFilterQuery;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
 import team.oha.laboa.query.agenda.AgendaToDoQuery;
 import team.oha.laboa.service.AgendaService;
@@ -66,7 +68,7 @@ public class AgendaController {
     }
 
     /**
-     * <p>分页日程列表</p>
+     * <p>分页个人日程列表</p>
      *
      * @author loser
      * @version 1.0
@@ -75,8 +77,13 @@ public class AgendaController {
      */
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/list")
-    public ApiDto list(AgendaSelectQuery agendaSelectQuery){
+    @GetMapping("/own")
+    public ApiDto ownList(AgendaSelectQuery agendaSelectQuery){
+        if(agendaSelectQuery.getFilterQuery()==null){
+            agendaSelectQuery.setFilterQuery(new AgendaFilterQuery());
+        }
+        agendaSelectQuery.getFilterQuery().setUsername((String)SecurityUtils.getSubject().getPrincipal());
+        agendaSelectQuery.getFilterQuery().setType(AgendaDo.AgendaType.personal);
         return agendaService.listAgendas(agendaSelectQuery);
     }
 
@@ -123,6 +130,13 @@ public class AgendaController {
     @DeleteMapping("/participant/{participantId:[1-9][0-9]*}")
     public ApiDto deleteParticipant(@PathVariable Integer participantId) {
         return agendaService.deleteCooperationAgendaParticipant(participantId);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{agendaId:[1-9][0-9]*}")
+    public ApiDto getAgendaDetail(@PathVariable Integer agendaId) {
+        return agendaService.getAgendaDetail(agendaId);
     }
 
     @Scheduled(cron = "0 0 0 * * *")

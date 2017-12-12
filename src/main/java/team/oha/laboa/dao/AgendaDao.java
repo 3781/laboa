@@ -3,6 +3,7 @@ package team.oha.laboa.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import team.oha.laboa.dto.AgendaDetailDto;
 import team.oha.laboa.dto.AgendaDto;
 import team.oha.laboa.model.AgendaDo;
 import team.oha.laboa.query.agenda.AgendaFilterQuery;
@@ -32,4 +33,6 @@ public interface AgendaDao {
     List<AgendaDto> list(AgendaSelectQuery agendaSelectQuery);
     Integer count(AgendaFilterQuery filterQuery);
     Integer update(AgendaDo agendaDo);
+
+    AgendaDetailDto getAgendaDetail(Integer agendaId);
 }

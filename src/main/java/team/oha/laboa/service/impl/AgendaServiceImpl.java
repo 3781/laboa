@@ -1,6 +1,8 @@
 package team.oha.laboa.service.impl;
 
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ import java.util.List;
 @Service
 @Transactional
 public class AgendaServiceImpl implements AgendaService {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -168,18 +172,24 @@ public class AgendaServiceImpl implements AgendaService {
 
     @Override
     public ApiDto update(AgendaVo agendaVo) {
-        AgendaItemDo agendaItemDo = new AgendaItemDo();
-        agendaItemDo.setAgendaId(agendaVo.getAgendaId());
-        agendaItemDo.setSummaryTime(agendaVo.getNextTime());
-        agendaItemDao.updateSummaryTime(agendaItemDo);
-
-        AgendaDo agendaDo = new AgendaDo();
-        BeanUtils.copyProperties(agendaVo, agendaDo);
-        agendaDo.setOpen(null);
-        agendaDo.setUpdateTime(LocalDateTime.now());
         ApiDto apiDto = new ApiDto();
-        apiDto.setSuccess(true);
-        apiDto.setInfo(agendaDao.update(agendaDo));
+        if(agendaVo.getNextTime().isBefore(LocalDateTime.now())){
+            apiDto.setSuccess(false);
+            apiDto.setInfo("下次执行时间要晚于现在！");
+        }else{
+            AgendaItemDo agendaItemDo = new AgendaItemDo();
+            agendaItemDo.setAgendaId(agendaVo.getAgendaId());
+            agendaItemDo.setSummaryTime(agendaVo.getNextTime());
+            agendaItemDao.updateSummaryTime(agendaItemDo);
+
+            AgendaDo agendaDo = new AgendaDo();
+            BeanUtils.copyProperties(agendaVo, agendaDo);
+            agendaDo.setOpen(null);
+            agendaDo.setUpdateTime(LocalDateTime.now());
+
+            apiDto.setSuccess(true);
+            apiDto.setInfo(agendaDao.update(agendaDo));
+        }
 
         return apiDto;
     }
@@ -204,6 +214,14 @@ public class AgendaServiceImpl implements AgendaService {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(cooperationAgendaParticipantDao.delete(participantId));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto getAgendaDetail(Integer agendaId) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(agendaDao.getAgendaDetail(agendaId));
         return apiDto;
     }
 

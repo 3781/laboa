@@ -1,28 +1,21 @@
-package team.oha.laboa.model;
+package team.oha.laboa.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p></p>
  *
  * @author loser
  * @version 1.0
- * @data 2017/12/5
+ * @data 2017/12/12
  * @modified
  */
-public class AgendaItemDo implements Serializable{
-    private Integer agendaId;
+public class AgendaItemDetailDto implements Serializable {
     private Integer itemId;
     private LocalDateTime summaryTime;
-
-    public Integer getAgendaId() {
-        return agendaId;
-    }
-
-    public void setAgendaId(Integer agendaId) {
-        this.agendaId = agendaId;
-    }
+    private List<AgendaSummaryDetailDto> summaryList;
 
     public Integer getItemId() {
         return itemId;
@@ -40,12 +33,20 @@ public class AgendaItemDo implements Serializable{
         this.summaryTime = summaryTime;
     }
 
+    public List<AgendaSummaryDetailDto> getSummaryList() {
+        return summaryList;
+    }
+
+    public void setSummaryList(List<AgendaSummaryDetailDto> summaryList) {
+        this.summaryList = summaryList;
+    }
+
     @Override
     public String toString() {
-        return "AgendaItemDo{" +
-                "agendaId=" + agendaId +
-                ", itemId=" + itemId +
+        return "AgendaItemDetailDto{" +
+                "itemId=" + itemId +
                 ", summaryTime=" + summaryTime +
+                ", summaryList=" + summaryList +
                 '}';
     }
 }

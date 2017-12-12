@@ -8,16 +8,15 @@
         INSERT INTO  <include refid="tableName"/>
         (agenda_id, summary_time)
         VALUE (#{agendaId},#{summaryTime})
-        ON DUPLICATE KEY UPDATE summaryTime = VALUES(summaryTime)
+        ON DUPLICATE KEY UPDATE summary_time = VALUES(summary_time)
     </insert>
 
     <update id="updateSummaryTime" parameterType="team.oha.laboa.model.AgendaItemDo">
         UPDATE <include refid="tableName"/>
-        SET summary_time = #{summaryTime}
-        FROM <include refid="tableName"/>
         JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
-        AND agenda.next_time = <include refid="tableName"/>.summary_time AND agenda.open = 0 AND agenda.next_time &gt; #{summaryTime}
-        AND agenda_id = #{agendaId}
+        AND agenda.next_time = <include refid="tableName"/>.summary_time
+        AND agenda.agenda_id = #{agendaId}
+        SET summary_time = #{summaryTime}
     </update>
 
     <insert id="generatePersonalSummary" parameterType="team.oha.laboa.model.AgendaItemDo" useGeneratedKeys="true">

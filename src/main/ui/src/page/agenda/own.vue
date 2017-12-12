@@ -68,7 +68,11 @@
       </el-row>
       <el-row>
         <div style="float:left">
-          <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="danger" @click="handleClose">关闭</el-button>
+          <el-button-group>
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="danger" @click="handleDelete">删除</el-button>
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="warning" @click="handleClose">关闭</el-button>
+            <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="success" @click="handleOpen">开启</el-button>
+          </el-button-group>
         </div>
         <div style="float:right">
           <el-button style="display:inline-block" icon="el-icon-refresh" type="primary" size="mini" @click="reset" :loading="loading">重置</el-button>
@@ -81,7 +85,6 @@
               :defaultSort="{prop:this.agendaSelectQuery.orderQuery.field, order: this.agendaSelectQuery.orderQuery.order+'ending'}">
       <el-table-column type="expand" >
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" style="margin-bottom: 20px" @click="handleUpdateAgenda(scope.row)">更新日程</el-button>
           <mavon-editor v-model="scope.row.remark" :toolbarsFlag="false" :subfield="false" default_open="preview"></mavon-editor>
         </template>
       </el-table-column>
@@ -101,7 +104,7 @@
       </el-table-column>
       <el-table-column align="center" label="单位" column-key="units" prop="unit"
                        sortable="custom" :resizable="true" filter-placement="top" width="100px"
-                       :filters="[{text: '天',value: 'day'},{text: '周',value: 'week'},{text: '月',value: 'month'}]">
+                       :filters="[{text: '一次',value: 'once'},{text: '天',value: 'day'},{text: '周',value: 'week'},{text: '月',value: 'month'}]">
         <template slot-scope="scope">
           {{ unitFormatter(scope.row.unit) }}
         </template>
@@ -117,6 +120,16 @@
       </el-table-column>
       <el-table-column align="center" label="创建时间" column-key="createTime" prop="createTime"
                        sortable="custom" :resizable="true">
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="140px">
+          <template slot-scope="scope">
+            <el-button-group>
+              <el-button size="mini" type="warning" @click="handleUpdateAgenda(scope.row)">更新</el-button>
+              <router-link :to="`/agenda/${scope.row.agendaId}`" tag="span">
+                <el-button size="mini" type="info">详情</el-button>
+              </router-link>
+            </el-button-group>
+          </template>
       </el-table-column>
     </el-table>
     <el-pagination background style="float:right;margin-top:20px"
@@ -140,7 +153,7 @@
           <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="agendaForm.nextTime"></el-date-picker>
         </el-form-item>
         <el-form-item label="重复单位" prop="quantity"
-                      :rules="[{ type:'number', required: true, message: '重复不能为空'}]">
+                      :rules="[{ type:'integer', min: 1, required: true, message: '数量为大于1的整数'}]">
           <el-input v-model.number="agendaForm.quantity" style="width:220px"></el-input>
           <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:80px">
             <el-option
@@ -150,15 +163,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="开启" prop="open"
-                      :rules="[{ type:'boolean', required: true, message: '重复不能为空'}]">
-          <el-switch
-            style="display: block"
-            v-model="agendaForm.open"
-            active-color="#13ce66"
-            inactive-color="#ff4949">
-          </el-switch>
         </el-form-item>
         <el-form-item label="说明">
           <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
@@ -186,10 +190,10 @@
           nextTime: null,
           quantity: null,
           unit: null,
-          open: null,
           remark: null,
         },
         unitOption: [
+          { label: '一次', value: 'once' },
           { label: '天', value: 'day' },
           { label: '周', value: 'week' },
           { label: '月', value: 'month' },
@@ -236,10 +240,10 @@
       },
     },
     methods: {
-      ...mapActions(['listAgendas', 'closeAgenda', 'updateAgenda']),
+      ...mapActions(['listOwnAgendas', 'closeAgenda', 'openAgenda', 'updateAgenda', 'deleteAgenda']),
       getAgendasData() {
         this.loading = true;
-        this.listAgendas(this.agendaSelectQuery).then((response) => {
+        this.listOwnAgendas(this.agendaSelectQuery).then((response) => {
           this.agendas = response.data;
           this.totalSize = response.totalSize;
           this.loading = false;
@@ -322,9 +326,9 @@
           }
         });
       },
-      handleClose(status) {
+      handleClose() {
         this.loading = true;
-        this.closeAgenda({ ids: this.selectIds, status }).then((updateCount) => {
+        this.closeAgenda({ agendaIds: this.selectIds }).then((updateCount) => {
           if (updateCount) {
             this.$notify({
               message: `成功关闭${updateCount}条日程`,
@@ -336,6 +340,56 @@
           } else {
             this.$notify({
               message: '没有日程被关闭',
+              type: 'warning',
+              position: 'bottom-right',
+              offset: 40,
+            });
+          }
+          this.loading = false;
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+          this.loading = false;
+        });
+      },
+      handleOpen() {
+        this.loading = true;
+        this.openAgenda({ agendaIds: this.selectIds }).then((updateCount) => {
+          if (updateCount) {
+            this.$notify({
+              message: `成功开启${updateCount}条日程`,
+              type: 'info',
+              position: 'bottom-right',
+              offset: 40,
+            });
+            this.getAgendasData();
+          } else {
+            this.$notify({
+              message: '没有日程被开启，日程下次时间需要在今天后',
+              type: 'warning',
+              position: 'bottom-right',
+              offset: 40,
+            });
+          }
+          this.loading = false;
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+          this.loading = false;
+        });
+      },
+      handleDelete() {
+        this.loading = true;
+        this.deleteAgenda({ agendaIds: this.selectIds }).then((updateCount) => {
+          if (updateCount) {
+            this.$notify({
+              message: `成功删除${updateCount}条日程`,
+              type: 'info',
+              position: 'bottom-right',
+              offset: 40,
+            });
+            this.getAgendasData();
+          } else {
+            this.$notify({
+              message: '没有日程被删除',
               type: 'warning',
               position: 'bottom-right',
               offset: 40,

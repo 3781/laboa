@@ -29,5 +29,7 @@ public interface AgendaService {
     ApiDto saveCooperationAgendaParticipant(CooperationAgendaParticipantVo cooperationAgendaParticipantVo);
     ApiDto deleteCooperationAgendaParticipant(Integer participantId);
 
+    ApiDto getAgendaDetail(Integer agendaId);
+
     void refreshAgenda();
 }

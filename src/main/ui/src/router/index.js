@@ -28,6 +28,7 @@ const vueRouter = new VueRouter({
         { path: '/agenda/todo', component: () => import('../page/agenda/todo') },
         { path: '/agenda/own', component: () => import('../page/agenda/own') },
         { path: '/agenda/cooperation', component: () => import('../page/agenda/cooperation') },
+        { path: '/agenda/:agendaId', component: () => import('../page/agenda/detail') },
         { path: '/cooperation/create', component: () => import('../page/cooperation/create') },
         { path: '/cooperation/own', component: () => import('../page/cooperation/own') },
         { path: '/cooperation/manage', component: () => import('../page/cooperation/manage') },
