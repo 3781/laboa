@@ -166,7 +166,7 @@
         cooperationSelectQuery: {
           filterQuery: {
             cooperationId: null,
-            hasParent: null,
+            hasParent: false,
             invite: null,
             remark: null,
             name: null,
