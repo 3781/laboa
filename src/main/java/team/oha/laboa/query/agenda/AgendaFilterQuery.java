@@ -11,6 +11,7 @@ public class AgendaFilterQuery {
     private Integer agendaId;
     private Integer ownerId;
     private Integer summarizerId;
+    private Integer cooperationId;
     private String ownerName;
     private String title;
     private String remark;
@@ -48,6 +49,14 @@ public class AgendaFilterQuery {
 
     public void setSummarizerId(Integer summarizerId) {
         this.summarizerId = summarizerId;
+    }
+
+    public Integer getCooperationId() {
+        return cooperationId;
+    }
+
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
     }
 
     public String getOwnerName() {
@@ -168,6 +177,7 @@ public class AgendaFilterQuery {
                 "agendaId=" + agendaId +
                 ", ownerId=" + ownerId +
                 ", summarizerId=" + summarizerId +
+                ", cooperationId=" + cooperationId +
                 ", ownerName='" + ownerName + '\'' +
                 ", title='" + title + '\'' +
                 ", remark='" + remark + '\'' +

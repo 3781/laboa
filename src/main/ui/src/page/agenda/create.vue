@@ -42,6 +42,9 @@
           remark: '',
           unit: 'day',
           quantity: null,
+
+          cooperationId: null,
+          memberIds: [],
         },
         unitOption: [
           { label: '一次', value: 'once' },

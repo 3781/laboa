@@ -160,16 +160,7 @@ public class AgendaServiceImpl implements AgendaService {
                 userDao.getByUsername((String)SecurityUtils.getSubject().getPrincipal()).getUserId()
         );
 
-        PageDto<AgendaDto> pageDto = new PageDto<>();
-        pageDto.setTotalSize(agendaDao.count(agendaSelectQuery.getFilterQuery()));
-        if(pageDto.getTotalSize() != 0){
-            pageDto.setData(agendaDao.list(agendaSelectQuery));
-        }
-
-        ApiDto apiDto = new ApiDto();
-        apiDto.setSuccess(true);
-        apiDto.setInfo(pageDto);
-        return apiDto;
+        return listAgendas(agendaSelectQuery);
     }
 
     @Override
@@ -181,6 +172,11 @@ public class AgendaServiceImpl implements AgendaService {
                 userDao.getByUsername((String)SecurityUtils.getSubject().getPrincipal()).getUserId()
         );
 
+        return listAgendas(agendaSelectQuery);
+    }
+
+    @Override
+    public ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery) {
         PageDto<AgendaDto> pageDto = new PageDto<>();
         pageDto.setTotalSize(agendaDao.count(agendaSelectQuery.getFilterQuery()));
         if(pageDto.getTotalSize() != 0){

@@ -99,7 +99,7 @@ const actions = {
   },
   listJoinAgendas({ commit }, queryForm) {
     return new Promise((resolve, reject) => {
-      agendaApi.listOwnAgendas(queryForm).then((response) => {
+      agendaApi.listJoinAgendas(queryForm).then((response) => {
         if (response) {
           const res = response.data;
           if (res.success) {

@@ -106,11 +106,15 @@
         agenda.update_time AS update_time,
         agenda.create_time AS create_time
         FROM <include refid="tableName"/> JOIN user ON user.user_id = agenda.owner_id
-        <if test="filterQuery.ownerId">AND user.user_id = #{filterQuery.ownerId}</if>
-        <if test="filterQuery.summarizerId">
+        <if test="filterQuery.ownerId!=null">AND user.user_id = #{filterQuery.ownerId}</if>
+        <if test="filterQuery.summarizerId!=null">
         JOIN agenda_item ON agenda.agenda_id = agenda_item.agenda_id
-        JOIN agenda_summray ON agenda_item.item_id = agenda_summray.item_id
-        AND agenda_summray.summarizer_id = #{summarizerId}
+        JOIN agenda_summary ON agenda_item.item_id = agenda_summary.item_id
+        AND agenda_summary.summarizer_id = #{filterQuery.summarizerId}
+        </if>
+        <if test="filterQuery.cooperationId!=null">
+            JOIN cooperation_agenda ON cooperation_agenda.agenda_id = <include refid="tableName"/>.agenda_id
+            AND cooperation_agenda.cooperation_id = #{filterQuery.cooperationId}
         </if>
         <include refid="conditions"/>
         <include refid="order"/>
@@ -121,12 +125,16 @@
         <bind name="filterQuery" value="_parameter"/>
         SELECT COUNT(DISTINCT(agenda.agenda_id))
         FROM <include refid="tableName"/>  JOIN user ON user.user_id = agenda.owner_id
-        <if test="filterQuery.summarizerId">
+        <if test="filterQuery.ownerId!=null">AND user.user_id = #{filterQuery.ownerId}</if>
+        <if test="filterQuery.summarizerId!=null">
             JOIN agenda_item ON agenda.agenda_id = agenda_item.agenda_id
-            JOIN agenda_summray ON agenda_item.item_id = agenda_summray.item_id
-            AND agenda_summray.summarizer_id = #{summarizerId}
+            JOIN agenda_summary ON agenda_item.item_id = agenda_summary.item_id
+            AND agenda_summary.summarizer_id = #{filterQuery.summarizerId}
         </if>
-        <if test="filterQuery.ownerId">AND user.user_id = #{filterQuery.ownerId}</if>
+        <if test="filterQuery.cooperationId!=null">
+            JOIN cooperation_agenda ON cooperation_agenda.agenda_id = <include refid="tableName"/>.agenda_id
+            AND cooperation_agenda.cooperation_id = #{filterQuery.cooperationId}
+        </if>
         <include refid="conditions"/>
     </select>
 

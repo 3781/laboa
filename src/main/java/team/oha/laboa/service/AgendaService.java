@@ -24,6 +24,7 @@ public interface AgendaService {
     ApiDto summaryAgenda(AgendaSummaryVo agendaSummaryVo);
     ApiDto listOwnAgendas(AgendaSelectQuery agendaSelectQuery);
     ApiDto listJoinAgendas(AgendaSelectQuery agendaSelectQuery);
+    ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery);
     ApiDto listToDo(AgendaToDoQuery agendaToDoQuery);
     ApiDto update(AgendaVo agendaVo);
 

@@ -56,7 +56,7 @@
             <cooperation-member :cooperationId="currentCooperationId" :parentId="currentParentId" :isLoad="activeTab === 'member'"></cooperation-member>
           </el-tab-pane>
           <el-tab-pane label="协作日程" name="agenda">
-            协作日程
+            <cooperation-agenda :cooperationId="currentCooperationId" :isLoad="activeTab === 'agenda'"></cooperation-agenda>
           </el-tab-pane>
           <el-tab-pane label="协作申请" name="apply"  :disabled="!(checkManage || checkOwn)">
             <cooperation-apply :cooperationId="currentCooperationId" :isLoad="activeTab === 'apply'"></cooperation-apply>
@@ -102,6 +102,7 @@
   import cooperationCreate from './create';
   import cooperationMember from './member';
   import cooperationApply from './apply';
+  import cooperationAgenda from './agenda';
 
   export default {
     name: 'cooperationDetail',
@@ -109,6 +110,7 @@
       cooperationCreate,
       cooperationMember,
       cooperationApply,
+      cooperationAgenda,
     },
     data() {
       return {

@@ -63,3 +63,7 @@ export function doApply(cooperationId) {
 export function dealApply(formData) {
   return httpUtil.patch('/cooperation/apply', formData);
 }
+
+export function listCooperationAgendas({ cooperationId, formData }) {
+  return httpUtil.get(`cooperation/${cooperationId}/agenda`, { params: formData });
+}

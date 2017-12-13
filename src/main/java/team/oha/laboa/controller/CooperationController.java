@@ -9,12 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.model.CooperationMemberDo;
+import team.oha.laboa.query.agenda.AgendaFilterQuery;
+import team.oha.laboa.query.agenda.AgendaSelectQuery;
 import team.oha.laboa.query.cooperation.CooperationFilterQuery;
 import team.oha.laboa.query.cooperation.CooperationSelectQuery;
 import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberFilterQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
+import team.oha.laboa.service.AgendaService;
 import team.oha.laboa.service.CooperationService;
 import team.oha.laboa.vo.ApplyDealBatchVo;
 import team.oha.laboa.vo.CooperationMemberVo;
@@ -35,6 +38,27 @@ public class CooperationController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private CooperationService cooperationService;
+    @Autowired
+    private AgendaService agendaService;
+
+    /**
+     * <p>分页协作日程列表</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{cooperationId:[1-9][0-9]*}/agenda")
+    public ApiDto cooperationAgenda(AgendaSelectQuery agendaSelectQuery, @PathVariable Integer cooperationId){
+        if( agendaSelectQuery.getFilterQuery() == null){
+            agendaSelectQuery.setFilterQuery(new AgendaFilterQuery());
+        }
+        agendaSelectQuery.getFilterQuery().setCooperationId(cooperationId);
+        return agendaService.listAgendas(agendaSelectQuery);
+    }
 
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)

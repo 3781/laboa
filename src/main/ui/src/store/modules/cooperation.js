@@ -273,6 +273,22 @@ const actions = {
       });
     });
   },
+  listCooperationAgendas({ commit }, queryForm) {
+    return new Promise((resolve, reject) => {
+      cooperationApi.listCooperationAgendas(queryForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
 };
 
 export default {

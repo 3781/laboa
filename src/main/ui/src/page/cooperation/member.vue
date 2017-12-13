@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="member-container">
     <el-form :model="memberSelectQuery.filterQuery" ref="filterForm" label-width="80px" size="mini" inline
              style="margin-bottom: 20px">
       <el-row>
