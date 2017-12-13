@@ -61,7 +61,7 @@
         <if test="filterQuery!=null">
             <where>
                 <if test="filterQuery.agendaId">AND agenda.agenda_id = #{filterQuery.agendaId}</if>
-                <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
+                <if test="filterQuery.ownerName">AND user.username LIKE concat('%', #{filterQuery.ownerName}, '%')</if>
                 <if test="filterQuery.title">AND agenda.title LIKE concat('%', #{filterQuery.title}, '%')</if>
                 <if test="filterQuery.remark">AND agenda.remark LIKE concat('%', #{filterQuery.remark}, '%')</if>
                 <if test="filterQuery.updateTimeBegin">AND agenda.update_time &gt;= #{filterQuery.updateTimeBegin}</if>
@@ -71,7 +71,7 @@
                 <if test="filterQuery.nextTimeBegin">AND agenda.next_time &gt;= #{filterQuery.nextTimeBegin}</if>
                 <if test="filterQuery.nextTimeEnd">AND agenda.next_time &lt;= #{filterQuery.nextTimeEnd}</if>
                 <if test="filterQuery.type">AND agenda.type = #{filterQuery.type}</if>
-                <if test="filterQuery.units">AND user.status in
+                <if test="filterQuery.units">AND agenda.unit in
                     <foreach collection="filterQuery.units" open="(" close=")" item="unit" separator=",">#{unit}</foreach>
                 </if>
                 <if test="filterQuery.quantity">AND agenda.quantity = #{filterQuery.quantity}</if>
@@ -93,8 +93,8 @@
     </sql>
 
     <select id="list" parameterType="team.oha.laboa.query.agenda.AgendaSelectQuery" resultType="team.oha.laboa.dto.AgendaDto">
-        SELECT
-        user.username AS username,
+        SELECT DISTINCT
+        user.username AS owner_name,
         agenda.agenda_id AS agenda_id,
         agenda.title AS title,
         agenda.type AS type,
@@ -106,6 +106,12 @@
         agenda.update_time AS update_time,
         agenda.create_time AS create_time
         FROM <include refid="tableName"/> JOIN user ON user.user_id = agenda.owner_id
+        <if test="filterQuery.ownerId">AND user.user_id = #{filterQuery.ownerId}</if>
+        <if test="filterQuery.summarizerId">
+        JOIN agenda_item ON agenda.agenda_id = agenda_item.agenda_id
+        JOIN agenda_summray ON agenda_item.item_id = agenda_summray.item_id
+        AND agenda_summray.summarizer_id = #{summarizerId}
+        </if>
         <include refid="conditions"/>
         <include refid="order"/>
         <include refid="page"/>
@@ -113,8 +119,14 @@
 
     <select id="count" parameterType="team.oha.laboa.query.agenda.AgendaFilterQuery" resultType="java.lang.Integer">
         <bind name="filterQuery" value="_parameter"/>
-        SELECT COUNT(*)
+        SELECT COUNT(DISTINCT(agenda.agenda_id))
         FROM <include refid="tableName"/>  JOIN user ON user.user_id = agenda.owner_id
+        <if test="filterQuery.summarizerId">
+            JOIN agenda_item ON agenda.agenda_id = agenda_item.agenda_id
+            JOIN agenda_summray ON agenda_item.item_id = agenda_summray.item_id
+            AND agenda_summray.summarizer_id = #{summarizerId}
+        </if>
+        <if test="filterQuery.ownerId">AND user.user_id = #{filterQuery.ownerId}</if>
         <include refid="conditions"/>
     </select>
 

@@ -15,6 +15,9 @@ export function summaryAgenda(formData) {
 export function listOwnAgendas(formData) {
   return httpUtil.get('/agenda/own', { params: formData });
 }
+export function listJoinAgendas(formData) {
+  return httpUtil.get('/agenda/join', { params: formData });
+}
 
 export function listToDo(formData) {
   return httpUtil.get('/agenda/todo', { params: formData });

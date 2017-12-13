@@ -83,8 +83,8 @@
           subMenus: [
             { name: '日程创建', path: '/create', show: this.isShow('enduser') },
             { name: '待办日程', path: '/todo', show: this.isShow('enduser') },
-            { name: '个人日程', path: '/own', show: this.isShow('enduser') },
-            { name: '协作日程', path: '/cooperation', show: this.isShow('enduser') },
+            { name: '我的日程', path: '/own', show: this.isShow('enduser') },
+            { name: '参与日程', path: '/join', show: this.isShow('enduser') },
           ],
         }, {
           name: '协作管理',

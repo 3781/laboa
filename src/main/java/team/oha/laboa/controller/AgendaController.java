@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import team.oha.laboa.dto.ApiDto;
-import team.oha.laboa.model.AgendaDo;
-import team.oha.laboa.query.agenda.AgendaFilterQuery;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
 import team.oha.laboa.query.agenda.AgendaToDoQuery;
 import team.oha.laboa.service.AgendaService;
@@ -68,7 +66,7 @@ public class AgendaController {
     }
 
     /**
-     * <p>分页个人日程列表</p>
+     * <p>分页我的日程列表</p>
      *
      * @author loser
      * @version 1.0
@@ -79,12 +77,22 @@ public class AgendaController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/own")
     public ApiDto ownList(AgendaSelectQuery agendaSelectQuery){
-        if(agendaSelectQuery.getFilterQuery()==null){
-            agendaSelectQuery.setFilterQuery(new AgendaFilterQuery());
-        }
-        agendaSelectQuery.getFilterQuery().setUsername((String)SecurityUtils.getSubject().getPrincipal());
-        agendaSelectQuery.getFilterQuery().setType(AgendaDo.AgendaType.personal);
-        return agendaService.listAgendas(agendaSelectQuery);
+        return agendaService.listOwnAgendas(agendaSelectQuery);
+    }
+
+    /**
+     * <p>分页参与日程列表</p>
+     *
+     * @author loser
+     * @version 1.0
+     * @data 2017/11/27
+     * @modified
+     */
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/join")
+    public ApiDto joinList(AgendaSelectQuery agendaSelectQuery){
+        return agendaService.listJoinAgendas(agendaSelectQuery);
     }
 
     /**

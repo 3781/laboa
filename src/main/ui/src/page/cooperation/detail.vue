@@ -31,7 +31,7 @@
                 <span>{{ cooperationInfo!=null?cooperationInfo.ownerName:'' }}</span>
               </el-form-item>
               <el-form-item label="邀请链接" v-show="cooperationInfo!=null && cooperationInfo.invite">
-                <span>http://localhost:3000/cooperation/invite/{{cooperationInfo!=null?cooperationInfo.parentId:''}}</span>
+                <span>http://localhost:3000/cooperation/invite/{{cooperationInfo!=null?cooperationInfo.cooperationId:''}}</span>
               </el-form-item>
               <el-form-item label="更新时间" v-show="cooperationInfo!=null && cooperationInfo.updateTime != null">
                 <span>{{ cooperationInfo!=null?cooperationInfo.updateTime:'' }}</span>
@@ -141,10 +141,10 @@
     computed: {
       ...mapGetters(['getPermissions']),
       checkOwn() {
-        return this.getPermissions.includes(`owner${this.currentCooperationId}`);
+        return this.getPermissions.includes(`cooperation:owner${this.currentCooperationId}`);
       },
       checkManage() {
-        return this.getPermissions.includes(`manager${this.currentCooperationId}`);
+        return this.getPermissions.includes(`cooperation:manager${this.currentCooperationId}`);
       },
     },
     methods: {

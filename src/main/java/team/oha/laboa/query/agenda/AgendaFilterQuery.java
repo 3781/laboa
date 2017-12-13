@@ -9,7 +9,9 @@ import java.util.Arrays;
 
 public class AgendaFilterQuery {
     private Integer agendaId;
-    private String username;
+    private Integer ownerId;
+    private Integer summarizerId;
+    private String ownerName;
     private String title;
     private String remark;
     private Integer quantity;
@@ -32,12 +34,28 @@ public class AgendaFilterQuery {
         this.agendaId = agendaId;
     }
 
-    public String getUsername() {
-        return username;
+    public Integer getOwnerId() {
+        return ownerId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Integer getSummarizerId() {
+        return summarizerId;
+    }
+
+    public void setSummarizerId(Integer summarizerId) {
+        this.summarizerId = summarizerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getTitle() {
@@ -148,7 +166,9 @@ public class AgendaFilterQuery {
     public String toString() {
         return "AgendaFilterQuery{" +
                 "agendaId=" + agendaId +
-                ", username='" + username + '\'' +
+                ", ownerId=" + ownerId +
+                ", summarizerId=" + summarizerId +
+                ", ownerName='" + ownerName + '\'' +
                 ", title='" + title + '\'' +
                 ", remark='" + remark + '\'' +
                 ", quantity=" + quantity +

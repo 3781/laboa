@@ -97,6 +97,22 @@ const actions = {
       });
     });
   },
+  listJoinAgendas({ commit }, queryForm) {
+    return new Promise((resolve, reject) => {
+      agendaApi.listOwnAgendas(queryForm).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
   closeAgenda({ commit }, formData) {
     return new Promise((resolve, reject) => {
       agendaApi.close(formData).then((response) => {

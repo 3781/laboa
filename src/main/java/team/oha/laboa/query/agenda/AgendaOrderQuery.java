@@ -15,7 +15,7 @@ public class AgendaOrderQuery extends OrderQuery<AgendaOrderQuery.SortField> {
 
     public static enum SortField{
         agendaId,
-        username,
+        ownerName,
         title,
         nextTime,
         quantity,

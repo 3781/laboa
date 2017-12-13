@@ -248,10 +248,10 @@
         };
       },
       checkOwn() {
-        return this.getPermissions.includes(`owner${this.cooperationId}`);
+        return this.getPermissions.includes(`cooperation:owner${this.cooperationId}`);
       },
       checkManage() {
-        return this.getPermissions.includes(`manager${this.cooperationId}`);
+        return this.getPermissions.includes(`cooperation:manager${this.cooperationId}`);
       },
     },
     watch: {

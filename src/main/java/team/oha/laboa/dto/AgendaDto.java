@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class AgendaDto implements Serializable {
     private Integer agendaId;
-    private String username;
+    private String ownerName;
     private String title;
     private String remark;
     private LocalDateTime nextTime;
@@ -28,12 +28,12 @@ public class AgendaDto implements Serializable {
         this.agendaId = agendaId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getOwnerName() {
+        return ownerName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getTitle() {
@@ -120,7 +120,7 @@ public class AgendaDto implements Serializable {
     public String toString() {
         return "AgendaDto{" +
                 "agendaId=" + agendaId +
-                ", username='" + username + '\'' +
+                ", ownerName='" + ownerName + '\'' +
                 ", title='" + title + '\'' +
                 ", remark='" + remark + '\'' +
                 ", nextTime=" + nextTime +

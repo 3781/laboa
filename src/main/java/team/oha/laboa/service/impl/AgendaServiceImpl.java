@@ -12,6 +12,7 @@ import team.oha.laboa.dto.AgendaDto;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.dto.PageDto;
 import team.oha.laboa.model.*;
+import team.oha.laboa.query.agenda.AgendaFilterQuery;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
 import team.oha.laboa.query.agenda.AgendaToDoQuery;
 import team.oha.laboa.service.AgendaService;
@@ -151,7 +152,35 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery) {
+    public ApiDto listOwnAgendas(AgendaSelectQuery agendaSelectQuery) {
+        if( agendaSelectQuery.getFilterQuery() == null){
+            agendaSelectQuery.setFilterQuery(new AgendaFilterQuery());
+        }
+        agendaSelectQuery.getFilterQuery().setOwnerId(
+                userDao.getByUsername((String)SecurityUtils.getSubject().getPrincipal()).getUserId()
+        );
+
+        PageDto<AgendaDto> pageDto = new PageDto<>();
+        pageDto.setTotalSize(agendaDao.count(agendaSelectQuery.getFilterQuery()));
+        if(pageDto.getTotalSize() != 0){
+            pageDto.setData(agendaDao.list(agendaSelectQuery));
+        }
+
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(pageDto);
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto listJoinAgendas(AgendaSelectQuery agendaSelectQuery) {
+        if( agendaSelectQuery.getFilterQuery() == null){
+            agendaSelectQuery.setFilterQuery(new AgendaFilterQuery());
+        }
+        agendaSelectQuery.getFilterQuery().setSummarizerId(
+                userDao.getByUsername((String)SecurityUtils.getSubject().getPrincipal()).getUserId()
+        );
+
         PageDto<AgendaDto> pageDto = new PageDto<>();
         pageDto.setTotalSize(agendaDao.count(agendaSelectQuery.getFilterQuery()));
         if(pageDto.getTotalSize() != 0){
