@@ -17,6 +17,7 @@ import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberFilterQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
+import team.oha.laboa.query.cooperation.participant.ParticipantAvailableQuery;
 import team.oha.laboa.service.AgendaService;
 import team.oha.laboa.service.CooperationService;
 import team.oha.laboa.vo.ApplyDealBatchVo;
@@ -63,8 +64,15 @@ public class CooperationController {
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/user")
-    public ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery) {
-        return cooperationService.listAvailable(memberAvailableQuery);
+    public ApiDto listMemberAvailable(MemberAvailableQuery memberAvailableQuery) {
+        return cooperationService.listMemberAvailable(memberAvailableQuery);
+    }
+
+    @RequiresUser
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/participant")
+    public ApiDto listParticipantAvailable(ParticipantAvailableQuery participantAvailableQuery) {
+        return cooperationService.listParticipantAvailable(participantAvailableQuery);
     }
 
     @RequiresUser

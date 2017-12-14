@@ -41,4 +41,16 @@
             <foreach collection="memberIds" separator="," open="(" close=")" item="memberId">#{memberId}</foreach>
         </if>
     </delete>
+
+    <select id="listAvailable" parameterType="team.oha.laboa.query.cooperation.participant.ParticipantAvailableQuery" resultType="team.oha.laboa.dto.ParticipantAvailableDto">
+        SELECT
+        member.memberId AS memberId,
+        user.username AS username,
+        userinfo.name AS name,
+        userinfo.employee_number AS employee_number
+        FROM cooperation_member
+        JOIN user ON cooperation_member.user_id = user.user_id
+        JOIN userinfo ON user.user_id = userinfo.user_id AND user.username LIKE concat('%', #{username}, '%')
+        WHERE cooperation_member.cooperation_id = #{cooperationId}
+    </select>
 </mapper>

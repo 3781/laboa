@@ -1,20 +1,11 @@
-package team.oha.laboa.query.cooperation.member;
+package team.oha.laboa.query.cooperation.participant;
 
 
 import java.io.Serializable;
 
-public class MemberAvailableQuery implements Serializable{
-    private Integer parentId;
+public class ParticipantAvailableQuery implements Serializable{
     private Integer cooperationId;
     private String username;
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
 
     public Integer getCooperationId() {
         return cooperationId;
@@ -35,8 +26,7 @@ public class MemberAvailableQuery implements Serializable{
     @Override
     public String toString() {
         return "ParticipantAvailableQuery{" +
-                "parentId=" + parentId +
-                ", cooperationId=" + cooperationId +
+                "cooperationId=" + cooperationId +
                 ", username='" + username + '\'' +
                 '}';
     }

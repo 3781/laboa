@@ -7,10 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.oha.laboa.dao.CooperationApplyDao;
-import team.oha.laboa.dao.CooperationDao;
-import team.oha.laboa.dao.CooperationMemberDao;
-import team.oha.laboa.dao.UserDao;
+import team.oha.laboa.dao.*;
 import team.oha.laboa.dto.*;
 import team.oha.laboa.model.CooperationApplyDo;
 import team.oha.laboa.model.CooperationDo;
@@ -19,6 +16,7 @@ import team.oha.laboa.query.cooperation.CooperationSelectQuery;
 import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
+import team.oha.laboa.query.cooperation.participant.ParticipantAvailableQuery;
 import team.oha.laboa.service.CooperationService;
 import team.oha.laboa.vo.ApplyDealBatchVo;
 import team.oha.laboa.vo.CooperationMemberVo;
@@ -49,6 +47,8 @@ public class CooperationServiceImpl implements CooperationService {
     private CooperationApplyDao applyDao;
     @Autowired
     private CooperationMemberDao memberDao;
+    @Autowired
+    private CooperationAgendaParticipantDao participantDao;
 
     @Override
     public ApiDto saveCooperation(CooperationVo cooperationVo) {
@@ -99,10 +99,18 @@ public class CooperationServiceImpl implements CooperationService {
     }
 
     @Override
-    public ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery) {
+    public ApiDto listMemberAvailable(MemberAvailableQuery memberAvailableQuery) {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(memberDao.listAvailable(memberAvailableQuery));
+        return apiDto;
+    }
+
+    @Override
+    public ApiDto listParticipantAvailable(ParticipantAvailableQuery participantAvailableQuery) {
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(true);
+        apiDto.setInfo(participantDao.listAvailable(participantAvailableQuery));
         return apiDto;
     }
 

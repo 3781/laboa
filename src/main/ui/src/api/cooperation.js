@@ -4,6 +4,10 @@ export function getAvailableUsers(formData) {
   return httpUtil.get('/cooperation/user', { params: formData });
 }
 
+export function getAvailableParticipants(formData) {
+  return httpUtil.get('/cooperation/participant', { params: formData });
+}
+
 export function saveCooperation(formData) {
   return httpUtil.post('/cooperation', formData);
 }

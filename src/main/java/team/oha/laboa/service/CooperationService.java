@@ -5,6 +5,7 @@ import team.oha.laboa.query.cooperation.CooperationSelectQuery;
 import team.oha.laboa.query.cooperation.apply.ApplySelectQuery;
 import team.oha.laboa.query.cooperation.member.MemberAvailableQuery;
 import team.oha.laboa.query.cooperation.member.MemberSelectQuery;
+import team.oha.laboa.query.cooperation.participant.ParticipantAvailableQuery;
 import team.oha.laboa.vo.ApplyDealBatchVo;
 import team.oha.laboa.vo.CooperationMemberVo;
 import team.oha.laboa.vo.CooperationVo;
@@ -24,7 +25,8 @@ public interface CooperationService {
     ApiDto updateCooperation(CooperationVo cooperationVo);
     ApiDto deleteCooperation(Integer cooperationId);
     ApiDto getCooperationById(Integer id);
-    ApiDto listAvailable(MemberAvailableQuery memberAvailableQuery);
+    ApiDto listMemberAvailable(MemberAvailableQuery memberAvailableQuery);
+    ApiDto listParticipantAvailable(ParticipantAvailableQuery participantAvailableQuery);
     ApiDto listCooperation(CooperationSelectQuery cooperationSelectQuery);
     ApiDto listCooperationTree(Integer cooperationId);
     ApiDto doApply(Integer cooperationId);
