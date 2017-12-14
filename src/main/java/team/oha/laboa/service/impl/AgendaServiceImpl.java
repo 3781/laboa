@@ -272,10 +272,6 @@ public class AgendaServiceImpl implements AgendaService {
                     }else{
                         agendaSummaryDao.generatePersonalSummary();
                     }
-                }else{
-                    agenda.setNextTime(null);
-                    agenda.setOpen(false);
-                    agendaDao.update(agenda);
                 }
             }
         }
