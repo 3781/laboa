@@ -19,22 +19,34 @@
         SET summary_time = #{summaryTime}
     </update>
 
-    <insert id="generatePersonalSummary" parameterType="team.oha.laboa.model.AgendaItemDo" useGeneratedKeys="true">
+    <insert id="generateCooperationSummary" parameterType="team.oha.laboa.vo.AgendaVo" useGeneratedKeys="true">
         INSERT INTO agenda_summary(item_id, summarizer_id, status)
-        SELECT #{itemId}, agenda.owner_id, 'todo'
-        FROM <include refid="tableName"/> JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id
-        AND agenda.next_time = <include refid="tableName"/>.summary_time
-    </insert>
-
-    <insert id="generateCooperationSummary" parameterType="team.oha.laboa.model.AgendaItemDo" useGeneratedKeys="true">
-        INSERT INTO agenda_summary(item_id, summarizer_id, status)
-        SELECT #{itemId}, cooperation_member.user_id, 'todo'
+        SELECT <include refid="tableName"/>.item_id, cooperation_member.user_id, 'todo'
         FROM <include refid="tableName"/>
         JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id AND agenda.next_time = <include refid="tableName"/>.summary_time
+        AND agenda.agenda_id = #{agendaId}
         JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
         JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
         JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
+        AND cooperation_member.member_id IN
+        <foreach collection="memberIds" item="memberId" open="(" close=")" separator=",">#{memberId}</foreach>
+        ON DUPLICATE KEY UPDATE status = status
     </insert>
+
+    <delete id="cleanCooperationSummary" parameterType="team.oha.laboa.vo.AgendaVo">
+        DELETE FROM agenda_summary
+        FROM agenda_summary
+        JOIN <include refid="tableName"/> ON <include refid="tableName"/>.summray_id = agenda_summary.summray_id
+        JOIN agenda ON agenda.agenda_id = <include refid="tableName"/>.agenda_id AND agenda.next_time = <include refid="tableName"/>.summary_time
+        AND agenda.agenda_id = #{agendaId}
+        WHERE agenda_summary.summarizer_id NOT IN
+        (
+          SELECT cooperation_member.user_id
+          FROM cooperation_member
+          WHERE cooperation_member.member_id NOT IN
+          <foreach collection="memberIds" item="memberId" open="(" close=")" separator=",">#{memberId}</foreach>
+        )
+    </delete>
 
     <delete id="cleanCloseAgendaItem" parameterType="team.oha.laboa.vo.AgendaBatchVo">
         DELETE <include refid="tableName"/> FROM

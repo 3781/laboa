@@ -16,5 +16,6 @@ import team.oha.laboa.model.CooperationAgendaDo;
 @Mapper
 public interface CooperationAgendaDao {
     Integer save(CooperationAgendaDo cooperationAgendaDo);
-    Integer cleanAgendaSummary();
+    Integer generateSummary();
+    Integer cleanSummary();
 }

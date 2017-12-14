@@ -9,16 +9,36 @@
         (member_id,cooperation_agenda_id)
         VALUE (#{memberId},#{cooperationAgendaId})
     </insert>
-    <insert id="saveBatch" useGeneratedKeys="true">
+    <insert id="saveBatch" useGeneratedKeys="true" parameterType="team.oha.laboa.vo.AgendaVo">
         INSERT INTO  <include refid="tableName"/>
         (member_id,cooperation_agenda_id)
-        VALUES
-        <foreach collection="memberIds" item="memberId" separator=",">
-            (#{memberId},#{cooperationAgendaId})
-        </foreach>
+        SELECT cooperation_member.member_id,cooperation_agenda.cooperation_agenda_id
+        FROM cooperation_agenda
+        JOIN cooperation_member ON cooperation_member.cooperation_id = cooperation_agenda.cooperation_id
+
+            AND cooperation_member.member_id IN
+            <foreach collection="memberIds" separator="," open="(" close=")" item="memberId">#{memberId}</foreach>
+            AND cooperation_member.member_id NOT IN
+                (
+                SELECT <include refid="tableName"/>.member_id
+                FROM <include refid="tableName"/>
+                JOIN cooperation_agenda ON cooperation_agenda.cooperation_agenda_id = <include refid="tableName"/>.cooperation_agenda_id
+                AND cooperation_agenda.agenda_id = #{agendaId}
+                WHERE <include refid="tableName"/>.member_id IN
+                <foreach collection="memberIds" separator="," open="(" close=")" item="memberId">#{memberId}</foreach>
+                )
+        WHERE cooperation_agenda.agenda_id = #{agendaId}
     </insert>
 
-    <delete id="delete" parameterType="java.lang.Integer">
-        DELETE FROM <include refid="tableName"/> WHERE participant_id = #{id}
+    <delete id="deleteBatch" parameterType="team.oha.laboa.vo.AgendaVo">
+        DELETE <include refid="tableName"/> FROM
+        <include refid="tableName"/>
+        JOIN cooperation_agenda
+            ON <include refid="tableName"/>.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
+            AND cooperation_agenda.agenda_id = #{agendaId}
+        <if test="memberIds!=null">
+            WHERE <include refid="tableName"/>.member_id NOT IN
+            <foreach collection="memberIds" separator="," open="(" close=")" item="memberId">#{memberId}</foreach>
+        </if>
     </delete>
 </mapper>

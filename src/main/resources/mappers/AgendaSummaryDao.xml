@@ -34,28 +34,31 @@
         ORDER BY agenda_item.summary_time asc
     </select>
 
-    <insert id="saveByParticipantId" parameterType="java.lang.Integer">
-        INSERT INTO  <include refid="tableName"/>
-        (item_id, summarizer_id, status)
-        SELECT agenda_item.item_id, cooperation_member.user_id, 'todo'
-        FROM
-        agenda_item ON agenda_item.item_id = <include refid="tableName"/>.item_id
-        JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id AND agenda.next_time = agenda_item.summary_time
-        JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
-        JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
-        AND cooperation_agenda_participant.participant_id = #{participantId}
-        JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
+    <insert id="generatePersonalSummary" useGeneratedKeys="true">
+        INSERT INTO agenda_summary(item_id, summarizer_id, status)
+        SELECT agenda_item.item_id, agenda.owner_id, 'todo'
+        FROM agenda_summary
+        RIGHT JOIN agenda_item ON agenda_item.item_id = agenda_summary.item_id
+        JOIN agenda ON agenda_item.agenda_id = agenda.agenda_id AND agenda_item.summary_time = agenda.next_time AND agenda.open = 1 AND agenda.type = 'personal'
+        WHERE agenda_summary.summary_id IS NULL
     </insert>
-
-    <delete id="deleteByParticipantId" parameterType="java.lang.Integer">
-        DELETE <include refid="tableName"/>
-        FROM  <include refid="tableName"/>
-        JOIN agenda_item ON agenda_item.item_id = <include refid="tableName"/>.item_id
-        JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id AND agenda.next_time = agenda_item.summary_time
-        JOIN cooperation_agenda ON cooperation_agenda.agenda_id = agenda.agenda_id
+    <insert id="generateCooperationSummary">
+        INSERT INTO agenda_summary(item_id, summarizer_id, status)
+        SELECT agenda_item.item_id, cooperation_member.user_id, 'todo'
+        FROM cooperation_agenda
+        JOIN agenda ON agenda.agenda_id = cooperation_agenda.agenda_id AND agenda.open = 1 AND agenda.type = 'cooperation'
+        JOIN agenda_item ON agenda_item.agenda_id = agenda.agenda_id AND agenda_item.summary_time = agenda.next_time
         JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
-        AND cooperation_agenda_participant.participant_id = #{participantId}
-        JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
-        WHERE <include refid="tableName"/>.status = 'todo' AND agenda_summary.user_id = cooperation_member.user_id
+        JOIN cooperation_member ON cooperation_agenda_participant.member_id = cooperation_member.member_id
+        ON DUPLICATE KEY UPDATE status = status
+    </insert>
+    <delete id="cleanCooperationSummary">
+        DELETE agenda_summary
+        FROM agenda_summary
+        JOIN agenda_item ON agenda_item.item_id = agenda_summary.item_id
+        JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id AND agenda.open = 1 AND agenda.type = 'cooperation' AND agenda_item.summary_time = agenda.next_time
+        JOIN cooperation_agenda ON agenda.agenda_id = cooperation_agenda.agenda_id
+        LEFT JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
+        WHERE cooperation_agenda_participant.participant_id IS NULL
     </delete>
 </mapper>

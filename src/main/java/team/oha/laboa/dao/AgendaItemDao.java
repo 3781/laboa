@@ -18,7 +18,5 @@ import team.oha.laboa.vo.AgendaBatchVo;
 public interface AgendaItemDao {
     Integer save(AgendaItemDo agendaItemDo);
     Integer updateSummaryTime(AgendaItemDo agendaItemDo);
-    Integer generatePersonalSummary(AgendaItemDo agendaItemDo);
-    Integer generateCooperationSummary(AgendaItemDo agendaItemDo);
     Integer cleanCloseAgendaItem(AgendaBatchVo agendaBatchVo);
 }

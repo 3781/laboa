@@ -6,7 +6,6 @@ import team.oha.laboa.query.agenda.AgendaToDoQuery;
 import team.oha.laboa.vo.AgendaBatchVo;
 import team.oha.laboa.vo.AgendaSummaryVo;
 import team.oha.laboa.vo.AgendaVo;
-import team.oha.laboa.vo.CooperationAgendaParticipantVo;
 
 /**
  * <p></p>
@@ -27,9 +26,6 @@ public interface AgendaService {
     ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery);
     ApiDto listToDo(AgendaToDoQuery agendaToDoQuery);
     ApiDto update(AgendaVo agendaVo);
-
-    ApiDto saveCooperationAgendaParticipant(CooperationAgendaParticipantVo cooperationAgendaParticipantVo);
-    ApiDto deleteCooperationAgendaParticipant(Integer participantId);
 
     ApiDto getAgendaDetail(Integer agendaId);
 

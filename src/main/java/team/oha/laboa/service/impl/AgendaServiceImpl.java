@@ -11,7 +11,10 @@ import team.oha.laboa.dao.*;
 import team.oha.laboa.dto.AgendaDto;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.dto.PageDto;
-import team.oha.laboa.model.*;
+import team.oha.laboa.model.AgendaDo;
+import team.oha.laboa.model.AgendaItemDo;
+import team.oha.laboa.model.AgendaSummaryDo;
+import team.oha.laboa.model.CooperationAgendaDo;
 import team.oha.laboa.query.agenda.AgendaFilterQuery;
 import team.oha.laboa.query.agenda.AgendaSelectQuery;
 import team.oha.laboa.query.agenda.AgendaToDoQuery;
@@ -19,7 +22,6 @@ import team.oha.laboa.service.AgendaService;
 import team.oha.laboa.vo.AgendaBatchVo;
 import team.oha.laboa.vo.AgendaSummaryVo;
 import team.oha.laboa.vo.AgendaVo;
-import team.oha.laboa.vo.CooperationAgendaParticipantVo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,27 +54,6 @@ public class AgendaServiceImpl implements AgendaService {
     @Autowired
     private CooperationAgendaDao cooperationAgendaDao;
 
-    private void saveCooperationAgendaRelation(Integer cooperationId, Integer agendaId,Integer[] memberIds){
-        CooperationAgendaDo cooperationAgendaDo = new CooperationAgendaDo();
-        cooperationAgendaDo.setAgendaId(agendaId);
-        cooperationAgendaDo.setCooperationId(cooperationId);
-        cooperationAgendaDao.save(cooperationAgendaDo);
-
-        cooperationAgendaParticipantDao.saveBatch(cooperationAgendaDo.getCooperationAgendaId(), memberIds);
-    }
-
-    private void generateAgendaItem(AgendaDo agendaDo) {
-        AgendaItemDo agendaItemDo = new AgendaItemDo();
-        agendaItemDo.setAgendaId(agendaDo.getAgendaId());
-        agendaItemDo.setSummaryTime(agendaDo.getNextTime());
-        agendaItemDao.save(agendaItemDo);
-        if(agendaDo.getType().equals(AgendaDo.AgendaType.cooperation)){
-            agendaItemDao.generateCooperationSummary(agendaItemDo);
-        }else{
-            agendaItemDao.generatePersonalSummary(agendaItemDo);
-        }
-    }
-
     @Override
     public ApiDto saveAgenda(AgendaVo agendaVo) {
         ApiDto apiDto = new ApiDto();
@@ -91,11 +72,23 @@ public class AgendaServiceImpl implements AgendaService {
                     ? AgendaDo.AgendaType.cooperation:AgendaDo.AgendaType.personal);
             agendaDao.save(agendaDo);
 
-            if(agendaDo.getType().equals(AgendaDo.AgendaType.cooperation)){
-                saveCooperationAgendaRelation(agendaVo.getCooperationId(), agendaDo.getAgendaId(), agendaVo.getMemberIds());
-            }
+            AgendaItemDo agendaItemDo = new AgendaItemDo();
+            agendaItemDo.setAgendaId(agendaDo.getAgendaId());
+            agendaItemDo.setSummaryTime(agendaDo.getNextTime());
+            agendaItemDao.save(agendaItemDo);
 
-            generateAgendaItem(agendaDo);
+            if(agendaDo.getType().equals(AgendaDo.AgendaType.cooperation)){
+                CooperationAgendaDo cooperationAgendaDo = new CooperationAgendaDo();
+                cooperationAgendaDo.setAgendaId(agendaVo.getAgendaId());
+                cooperationAgendaDo.setCooperationId(agendaVo.getCooperationId());
+                cooperationAgendaDao.save(cooperationAgendaDo);
+                if(agendaVo.getMemberIds()!=null && agendaVo.getMemberIds().length!=0){
+                    cooperationAgendaParticipantDao.saveBatch(agendaVo);
+                    agendaSummaryDao.generateCooperationSummary();
+                }
+            }else{
+                agendaSummaryDao.generatePersonalSummary();
+            }
             apiDto.setSuccess(true);
             apiDto.setInfo(agendaDo.getAgendaId());
         }
@@ -131,8 +124,17 @@ public class AgendaServiceImpl implements AgendaService {
         apiDto.setSuccess(true);
         apiDto.setInfo(agendaDao.openBatch(agendaBatchVo));
 
-        for(AgendaDo agendaDo : agendaDao.listNeedGenerateItemAgenda()){
-            generateAgendaItem(agendaDo);
+        AgendaItemDo agendaItemDo = new AgendaItemDo();
+        List<AgendaDo> agendaDoList = agendaDao.listNeedGenerateItemAgenda();
+        for(AgendaDo agendaDo : agendaDoList){
+            agendaItemDo.setAgendaId(agendaDo.getAgendaId());
+            agendaItemDo.setSummaryTime(agendaDo.getNextTime());
+            agendaItemDao.save(agendaItemDo);
+        }
+
+        if(!agendaDoList.isEmpty()){
+            agendaSummaryDao.generatePersonalSummary();
+            agendaSummaryDao.generateCooperationSummary();
         }
 
         return apiDto;
@@ -216,31 +218,17 @@ public class AgendaServiceImpl implements AgendaService {
 
             apiDto.setSuccess(true);
             apiDto.setInfo(agendaDao.update(agendaDo));
+
+            if( cooperationAgendaParticipantDao.deleteBatch(agendaVo) != 0){
+                agendaSummaryDao.cleanCooperationSummary();
+            }
+
+            if(agendaVo.getMemberIds()!=null && cooperationAgendaParticipantDao.saveBatch(agendaVo) !=0){
+                agendaSummaryDao.generatePersonalSummary();
+                agendaSummaryDao.generateCooperationSummary();
+            }
         }
 
-        return apiDto;
-    }
-
-    @Override
-    public ApiDto saveCooperationAgendaParticipant(CooperationAgendaParticipantVo cooperationAgendaParticipantVo) {
-        CooperationAgendaParticipantDo cooperationAgendaParticipantDo = new CooperationAgendaParticipantDo();
-        BeanUtils.copyProperties(cooperationAgendaParticipantVo, cooperationAgendaParticipantDo);
-        cooperationAgendaParticipantDao.save(cooperationAgendaParticipantDo);
-
-        agendaSummaryDao.saveByParticipantId(cooperationAgendaParticipantDo.getParticipantId());
-
-        ApiDto apiDto = new ApiDto();
-        apiDto.setSuccess(true);
-        apiDto.setInfo(cooperationAgendaParticipantDo.getParticipantId());
-        return apiDto;
-    }
-
-    @Override
-    public ApiDto deleteCooperationAgendaParticipant(Integer participantId) {
-        agendaSummaryDao.deleteByParticipantId(participantId);
-        ApiDto apiDto = new ApiDto();
-        apiDto.setSuccess(true);
-        apiDto.setInfo(cooperationAgendaParticipantDao.delete(participantId));
         return apiDto;
     }
 
@@ -274,7 +262,20 @@ public class AgendaServiceImpl implements AgendaService {
 
                 if(!agendaDo.getUnit().equals(AgendaDo.AgendaUnit.once)){
                     agendaDao.update(agenda);
-                    generateAgendaItem(agenda);
+                    AgendaItemDo agendaItemDo = new AgendaItemDo();
+                    agendaItemDo.setAgendaId(agendaDo.getAgendaId());
+                    agendaItemDo.setSummaryTime(agendaDo.getNextTime());
+                    agendaItemDao.save(agendaItemDo);
+
+                    if(agendaDo.getType().equals(AgendaDo.AgendaType.cooperation)){
+                        agendaSummaryDao.generateCooperationSummary();
+                    }else{
+                        agendaSummaryDao.generatePersonalSummary();
+                    }
+                }else{
+                    agenda.setNextTime(null);
+                    agenda.setOpen(false);
+                    agendaDao.update(agenda);
                 }
             }
         }

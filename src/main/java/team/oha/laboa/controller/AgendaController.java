@@ -15,7 +15,6 @@ import team.oha.laboa.service.AgendaService;
 import team.oha.laboa.vo.AgendaBatchVo;
 import team.oha.laboa.vo.AgendaSummaryVo;
 import team.oha.laboa.vo.AgendaVo;
-import team.oha.laboa.vo.CooperationAgendaParticipantVo;
 
 import java.time.LocalDateTime;
 
@@ -124,20 +123,6 @@ public class AgendaController {
     public ApiDto listToDo(AgendaToDoQuery agendaToDoQuery) {
         agendaToDoQuery.setUsername((String) SecurityUtils.getSubject().getPrincipal());
         return agendaService.listToDo(agendaToDoQuery);
-    }
-
-    @RequiresUser
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/participant")
-    public ApiDto saveParticipant(@RequestBody CooperationAgendaParticipantVo cooperationAgendaParticipantVo) {
-        return agendaService.saveCooperationAgendaParticipant(cooperationAgendaParticipantVo);
-    }
-
-    @RequiresUser
-    @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/participant/{participantId:[1-9][0-9]*}")
-    public ApiDto deleteParticipant(@PathVariable Integer participantId) {
-        return agendaService.deleteCooperationAgendaParticipant(participantId);
     }
 
     @RequiresUser
