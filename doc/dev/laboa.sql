@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/11 16:12:10                          */
+/* Created on:     2017/12/14 17:59:57                          */
 /*==============================================================*/
 
 
@@ -30,9 +30,12 @@ create table agenda_item
 (
    item_id              int(10) unsigned not null auto_increment,
    agenda_id            int(10) unsigned not null,
-   summary_time         datetime,
+   summary_time         datetime not null,
    primary key (item_id)
 );
+
+alter table agenda_item
+   add unique AK_uk (agenda_id, summary_time);
 
 /*==============================================================*/
 /* Table: agenda_summary                                        */
@@ -47,6 +50,9 @@ create table agenda_summary
    summary_time         datetime,
    primary key (summary_id)
 );
+
+alter table agenda_summary
+   add unique AK_uk (item_id, summarizer_id);
 
 /*==============================================================*/
 /* Table: cooperation                                           */
