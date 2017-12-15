@@ -2,7 +2,7 @@ package team.oha.laboa.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import team.oha.laboa.dto.AgendaSummaryDto;
+import team.oha.laboa.dto.AgendaToDoDto;
 import team.oha.laboa.model.AgendaSummaryDo;
 import team.oha.laboa.query.agenda.AgendaToDoQuery;
 
@@ -21,7 +21,7 @@ import java.util.List;
 public interface AgendaSummaryDao {
     Integer save(AgendaSummaryDo agendaSummaryDo);
     Integer update(AgendaSummaryDo agendaSummaryDo);
-    List<AgendaSummaryDto> listToDo(AgendaToDoQuery agendaToDoQuery);
+    List<AgendaToDoDto> listToDo(AgendaToDoQuery agendaToDoQuery);
 
     Integer generatePersonalSummary();
     Integer generateCooperationSummary();

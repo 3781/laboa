@@ -14,12 +14,21 @@
       <template slot-scope="props">
         <div v-for="(event, index) in props.showEvents" class="event-item">
           <div class="wrapper">
-            <h3 class="title">{{index+1}}. {{event.title}} <el-button type="primary" size="mini" :round="true" plain>详情</el-button></h3>
+            <h3 class="title">{{index+1}}.
+              <router-link tag="a" :to="`/agenda/${event.agendaId}`">{{event.title}}</router-link>
+              <el-button type="success" size="mini" :round="true" plain @click="handleSummary(event.agendaSummary)">结项</el-button></h3>
             <p class="time">{{ event.summaryTime}}</p>
           </div>
         </div>
       </template>
     </vue-event-calendar>
+    <el-dialog title="结项" :visible.sync="summaryVisible" :fullscreen="true">
+      <agenda-summary ref="agendaSummaryForm" :summary="currentSummary" @onSuccess="summarySuccessCallback"></agenda-summary>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="summaryVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSummary">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -27,10 +36,14 @@
   import { mapActions } from 'vuex';
   import VueEventCalendar from 'vue-event-calendar';
   import Vue from 'vue';
+  import AgendaSummary from './summary';
 
   Vue.use(VueEventCalendar, { lang: 'en' });
 
   export default {
+    components: {
+      AgendaSummary,
+    },
     name: 'agendaTodo',
     data() {
       return {
@@ -38,6 +51,8 @@
         loading: false,
         toDoList: [],
         targetDate: null,
+        summaryVisible: false,
+        currentSummary: null,
       };
     },
     created() {
@@ -75,6 +90,17 @@
         this.$EventCalendar.toDate(`${this.jumpMonth}`);
         this.targetDate = `${this.jumpMonth.replace('/', '年')}月01`;
         this.getTodoList();
+      },
+      handleSummary(summary) {
+        this.currentSummary = summary;
+        this.summaryVisible = true;
+      },
+      summarySuccessCallback() {
+        this.summaryVisible = false;
+        this.getTodoList();
+      },
+      doSummary() {
+        this.$refs.agendaSummaryForm.doSummary();
       },
     },
   };

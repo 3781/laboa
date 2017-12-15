@@ -1,46 +1,44 @@
 package team.oha.laboa.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import team.oha.laboa.model.AgendaSummaryDo;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 
-public class AgendaSummaryDto {
-    private String title;
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    private LocalDateTime date;
+public class AgendaSummaryDto implements Serializable{
+    private Integer summaryId;
+    private AgendaSummaryDo.SummaryStatus status;
+    private String content;
 
-    private LocalDateTime summaryTime;
-
-    public String getTitle() {
-        return title;
+    public Integer getSummaryId() {
+        return summaryId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSummaryId(Integer summaryId) {
+        this.summaryId = summaryId;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public AgendaSummaryDo.SummaryStatus getStatus() {
+        return status;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setStatus(AgendaSummaryDo.SummaryStatus status) {
+        this.status = status;
     }
 
-    public LocalDateTime getSummaryTime() {
-        return summaryTime;
+    public String getContent() {
+        return content;
     }
 
-    public void setSummaryTime(LocalDateTime summaryTime) {
-        this.summaryTime = summaryTime;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
     public String toString() {
         return "AgendaSummaryDto{" +
-                "title='" + title + '\'' +
-                ", date=" + date +
-                ", summaryTime=" + summaryTime +
+                "summaryId=" + summaryId +
+                ", status=" + status +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

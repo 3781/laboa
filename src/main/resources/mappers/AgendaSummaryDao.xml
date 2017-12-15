@@ -20,11 +20,27 @@
         WHERE summary_id = #{summaryId} and summarizer_id = #{summarizerId}
     </update>
 
-    <select id="listToDo" parameterType="team.oha.laboa.query.agenda.AgendaToDoQuery" resultType="team.oha.laboa.dto.AgendaSummaryDto">
+    <resultMap id="agendaToDoMap" type="team.oha.laboa.dto.AgendaToDoDto">
+        <id column="agenda_id" property="agendaId"/>
+        <result column="title" property="title"/>
+        <result column="date" property="date"/>
+        <result column="summary_time" property="summaryTime"/>
+        <association property="agendaSummary" column="summary_id" javaType="team.oha.laboa.dto.AgendaSummaryDto">
+            <id column="summary_id" property="summaryId"/>
+            <result column="content" property="content"/>
+            <result column="status" property="status"/>
+        </association>
+    </resultMap>
+
+    <select id="listToDo" parameterType="team.oha.laboa.query.agenda.AgendaToDoQuery" resultMap="agendaToDoMap">
         SELECT
+        agenda.agenda_id AS agenda_id,
         agenda.title as title,
         agenda_item.summary_time as date,
-        agenda_item.summary_time as summary_time
+        agenda_item.summary_time as summary_time,
+        <include refid="tableName"/>.summary_id AS summary_id,
+        <include refid="tableName"/>.content AS content,
+        <include refid="tableName"/>.status AS status
         FROM <include refid="tableName"/>
         JOIN agenda_item ON agenda_item.item_id = <include refid="tableName"/>.item_id
         JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id
