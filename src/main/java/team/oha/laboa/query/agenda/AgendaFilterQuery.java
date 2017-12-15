@@ -20,12 +20,13 @@ public class AgendaFilterQuery {
     private LocalDateTime nextTimeEnd;
     private AgendaDo.AgendaType type;
     private AgendaDo.AgendaUnit[] units;
-    private AgendaSummaryDo.SummaryStatus[] statuses;
     private LocalDateTime updateTimeBegin;
     private LocalDateTime updateTimeEnd;
     private LocalDateTime createTimeBegin;
     private LocalDateTime createTimeEnd;
     private Boolean open;
+    private LocalDateTime nowTime;
+    private AgendaSummaryDo.SummaryStatus status;
 
     public Integer getAgendaId() {
         return agendaId;
@@ -123,14 +124,6 @@ public class AgendaFilterQuery {
         this.units = units;
     }
 
-    public AgendaSummaryDo.SummaryStatus[] getStatuses() {
-        return statuses;
-    }
-
-    public void setStatuses(AgendaSummaryDo.SummaryStatus[] statuses) {
-        this.statuses = statuses;
-    }
-
     public LocalDateTime getUpdateTimeBegin() {
         return updateTimeBegin;
     }
@@ -171,6 +164,22 @@ public class AgendaFilterQuery {
         this.open = open;
     }
 
+    public LocalDateTime getNowTime() {
+        return nowTime;
+    }
+
+    public void setNowTime(LocalDateTime nowTime) {
+        this.nowTime = nowTime;
+    }
+
+    public AgendaSummaryDo.SummaryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AgendaSummaryDo.SummaryStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "AgendaFilterQuery{" +
@@ -186,12 +195,13 @@ public class AgendaFilterQuery {
                 ", nextTimeEnd=" + nextTimeEnd +
                 ", type=" + type +
                 ", units=" + Arrays.toString(units) +
-                ", statuses=" + Arrays.toString(statuses) +
                 ", updateTimeBegin=" + updateTimeBegin +
                 ", updateTimeEnd=" + updateTimeEnd +
                 ", createTimeBegin=" + createTimeBegin +
                 ", createTimeEnd=" + createTimeEnd +
                 ", open=" + open +
+                ", nowTime=" + nowTime +
+                ", status=" + status +
                 '}';
     }
 }

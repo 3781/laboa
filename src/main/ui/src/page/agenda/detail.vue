@@ -29,7 +29,7 @@
         <el-collapse v-if="agendaDetail.itemList!==null">
           <el-collapse-item v-for="item in agendaDetail.itemList" :key="item.itemId">
             <template slot="title">
-              于{{item.summaryTime}}结项
+              规定于{{item.summaryTime}}结项
             </template>
             <el-collapse v-if="item.summaryList!==null" style="margin-left:40px">
               <el-collapse-item v-for="summary in item.summaryList" :key="summary.summaryId">

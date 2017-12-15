@@ -52,7 +52,8 @@
     props: {
       memberList: {
         type: Array,
-        default: [],
+        default: () => null,
+        required: false,
       },
       showSubmitButton: {
         type: Boolean,
@@ -60,7 +61,7 @@
       },
       agendaFormData: {
         type: Object,
-        default: {
+        default: () => ({
           agendaId: null,
           title: null,
           nextTime: null,
@@ -70,7 +71,7 @@
 
           cooperationId: null,
           memberIds: [],
-        },
+        }),
       },
     },
     data() {

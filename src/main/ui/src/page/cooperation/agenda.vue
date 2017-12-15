@@ -98,6 +98,17 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col :span="24">
+          <el-form-item label="其他限制" prop="status" style="margin-right:0;">
+            <el-radio-group v-model="agendaSelectQuery.filterQuery.status">
+              <el-radio :label="null">全部</el-radio>
+              <el-radio label="todo">未及时结项</el-radio>
+              <el-radio label="unfinished">未及时完成</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
         <div style="float:left">
           <el-button size="mini" :loading="loading" type="primary" v-if="checkOwn || checkManage" @click="handleAgenda()">创建日程</el-button>
           <el-button-group>
@@ -252,6 +263,7 @@
             updateTimeEnd: null,
             createTimeBegin: null,
             createTimeEnd: null,
+            status: null,
           },
           orderQuery: {
             field: 'nextTime',

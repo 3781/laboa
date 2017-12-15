@@ -179,6 +179,10 @@ public class AgendaServiceImpl implements AgendaService {
 
     @Override
     public ApiDto listAgendas(AgendaSelectQuery agendaSelectQuery) {
+        if(agendaSelectQuery.getFilterQuery()!=null && agendaSelectQuery.getFilterQuery().getStatus()!=null){
+            agendaSelectQuery.getFilterQuery().setNowTime(LocalDateTime.now());
+        }
+
         PageDto<AgendaDto> pageDto = new PageDto<>();
         pageDto.setTotalSize(agendaDao.count(agendaSelectQuery.getFilterQuery()));
         if(pageDto.getTotalSize() != 0){
