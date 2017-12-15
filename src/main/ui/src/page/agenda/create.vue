@@ -24,7 +24,7 @@
       <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" size="default" @click="doCreate">提交</el-button>
+      <el-button type="primary" size="default" @click="handleSummit">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -34,9 +34,15 @@
 
   export default {
     name: 'agendaCreate',
-    data() {
-      return {
-        agendaForm: {
+    props: {
+      showSubmitButton: {
+        type: Boolean,
+        default: true,
+      },
+      agendaFormData: {
+        type: Object,
+        default: {
+          agendaId: null,
           title: null,
           nextTime: null,
           remark: '',
@@ -46,6 +52,11 @@
           cooperationId: null,
           memberIds: [],
         },
+      },
+    },
+    data() {
+      return {
+        agendaForm: this.agendaFormData,
         unitOption: [
           { label: '一次', value: 'once' },
           { label: '天', value: 'day' },
@@ -55,7 +66,14 @@
       };
     },
     methods: {
-      ...mapActions(['saveAgenda']),
+      ...mapActions(['saveAgenda', 'updateAgenda']),
+      handleSummit() {
+        if (this.agendaForm.agendaId == null) {
+          this.doCreate();
+        } else {
+          this.doUpdate();
+        }
+      },
       doCreate() {
         this.loading = true;
         this.$refs.agendaForm.validate((valid) => {
@@ -68,7 +86,30 @@
                 offset: 40,
               });
               this.loading = false;
+              this.$emit('successSubmit', this.agendaForm);
               this.$refs.agendaForm.resetFields();
+            }).catch((errorMessage) => {
+              this.$message.error(errorMessage);
+              this.loading = false;
+            });
+          } else {
+            this.loading = false;
+          }
+        });
+      },
+      doUpdate() {
+        this.loading = true;
+        this.$refs.agendaForm.validate((valid) => {
+          if (valid) {
+            this.updateAgenda(this.agendaForm).then(() => {
+              this.$notify({
+                message: `日程${this.agendaForm.title}更新成功`,
+                type: 'info',
+                position: 'bottom-right',
+                offset: 40,
+              });
+              this.loading = false;
+              this.$emit('successSubmit', this.agendaForm);
             }).catch((errorMessage) => {
               this.$message.error(errorMessage);
               this.loading = false;

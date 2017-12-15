@@ -155,31 +155,7 @@
     </el-pagination>
 
     <el-dialog title="日程更新" :visible.sync="showUpdateAgendaForm" :fullscreen="true" v-loading="loading">
-      <el-form :model="agendaForm" ref="agendaForm" :statusIcon="true" label-width="120px" size="small">
-        <el-form-item label="标题" prop="title"
-                      :rules="[{ type:'string', required: true, message: '标题不能为空'}]">
-          <el-input v-model.trim="agendaForm.title" placeholder="请输入标题" style="width:220px"></el-input>
-        </el-form-item>
-        <el-form-item label="首次执行时间" prop="nextTime"
-                      :rules="[{ type:'string', required: true, message: '首次执行时间不能为空', trigger: 'change'}]">
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="agendaForm.nextTime"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="重复单位" prop="quantity"
-                      :rules="[{ type:'integer', min: 1, required: true, message: '数量为大于1的整数'}]">
-          <el-input v-model.number="agendaForm.quantity" style="width:220px"></el-input>
-          <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:80px">
-            <el-option
-              v-for="item in unitOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="说明">
-          <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
-        </el-form-item>
-      </el-form>
+      <agenda-create v-if="showUpdateAgendaForm" ref="agendaUpdateForm" :agenda-form-data="agendaForm" @successSubmit="submitCallback"></agenda-create>
       <span slot="footer" class="dialog-footer">
         <el-button @click="showUpdateAgendaForm = false" >取 消</el-button>
         <el-button type="primary" @click="doUpdateAgenda">提 交</el-button>
@@ -190,8 +166,10 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import AgendaCreate from './create';
 
   export default {
+    components: { AgendaCreate },
     name: 'agendaOwn',
     data() {
       return {
@@ -322,26 +300,11 @@
       },
       doUpdateAgenda() {
         this.loading = true;
-        this.$refs.agendaForm.validate((valid) => {
-          if (valid) {
-            this.updateAgenda(this.agendaForm).then(() => {
-              this.$notify({
-                message: `日程${this.agendaForm.title}更新成功`,
-                type: 'info',
-                position: 'bottom-right',
-                offset: 40,
-              });
-              this.loading = false;
-              this.showUpdateAgendaForm = false;
-              this.getAgendasData();
-            }).catch((errorMessage) => {
-              this.$message.error(errorMessage);
-              this.loading = false;
-            });
-          } else {
-            this.loading = false;
-          }
-        });
+        this.$refs.agendaUpdateForm.doUpdate();
+      },
+      submitCallback() {
+        this.showUpdateAgendaForm = false;
+        this.getAgendasData();
       },
       handleClose() {
         this.loading = true;
