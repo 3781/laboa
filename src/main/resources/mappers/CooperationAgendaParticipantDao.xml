@@ -44,7 +44,7 @@
 
     <select id="listAvailable" parameterType="team.oha.laboa.query.cooperation.participant.ParticipantAvailableQuery" resultType="team.oha.laboa.dto.ParticipantAvailableDto">
         SELECT
-        member.memberId AS memberId,
+        cooperation_member.member_id AS memberId,
         user.username AS username,
         userinfo.name AS name,
         userinfo.employee_number AS employee_number

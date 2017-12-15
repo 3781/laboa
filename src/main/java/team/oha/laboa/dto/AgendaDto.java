@@ -5,6 +5,7 @@ import team.oha.laboa.model.AgendaSummaryDo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AgendaDto implements Serializable {
     private Integer agendaId;
@@ -19,6 +20,8 @@ public class AgendaDto implements Serializable {
     private Boolean open;
     private LocalDateTime updateTime;
     private LocalDateTime createTime;
+    private Integer cooperationId;
+    private List<ParticipantAvailableDto> memberList;
 
     public Integer getAgendaId() {
         return agendaId;
@@ -116,6 +119,22 @@ public class AgendaDto implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getCooperationId() {
+        return cooperationId;
+    }
+
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
+    }
+
+    public List<ParticipantAvailableDto> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<ParticipantAvailableDto> memberList) {
+        this.memberList = memberList;
+    }
+
     @Override
     public String toString() {
         return "AgendaDto{" +
@@ -131,6 +150,8 @@ public class AgendaDto implements Serializable {
                 ", open=" + open +
                 ", updateTime=" + updateTime +
                 ", createTime=" + createTime +
+                ", cooperationId=" + cooperationId +
+                ", memberList=" + memberList +
                 '}';
     }
 }

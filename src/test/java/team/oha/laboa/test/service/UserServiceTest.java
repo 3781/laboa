@@ -33,13 +33,13 @@ public class UserServiceTest {
     @Test
     public void saveTest(){
         RegisterVo registerVo = new RegisterVo();
-        registerVo.setUsername("username");
-        registerVo.setPassword("password");
-        registerVo.setEmail("email@qq.com");
-        registerVo.setName("王大锤");
-        registerVo.setEmployeeNumber("S01223454");
-        registerVo.setQq("3213451111");
-        registerVo.setPhone("1865403333");
+        registerVo.setUsername("u2");
+        registerVo.setPassword("p2");
+        registerVo.setEmail("email2@qq.com");
+        registerVo.setName("王大锤2");
+        registerVo.setEmployeeNumber("S012234542");
+        registerVo.setQq("32134511112");
+        registerVo.setPhone("18654033332");
         userService.register(registerVo);
     }
 

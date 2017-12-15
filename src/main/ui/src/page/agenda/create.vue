@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="agendaForm" ref="agendaForm" :statusIcon="true" label-width="120px" size="small">
+  <el-form :model="agendaForm" ref="agendaForm" :statusIcon="true" label-width="120px" size="small" v-loading.lock="loading">
     <el-form-item label="标题" prop="title"
       :rules="[{ type:'string', required: true, message: '标题不能为空'}]">
       <el-input v-model.trim="agendaForm.title" placeholder="请输入标题" style="width:220px"></el-input>
@@ -11,7 +11,7 @@
     <el-form-item label="重复" prop="quantity"
                   :rules="[{ type:'integer', required: true, message: '数量为大于1的整数', min: 1}]">
       <el-input v-model.number="agendaForm.quantity" style="width:220px"></el-input>
-      <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:80px">
+      <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:100px">
         <el-option
           v-for="item in unitOption"
           :key="item.value"
@@ -20,11 +20,26 @@
         </el-option>
       </el-select>
     </el-form-item>
+    <el-form-item v-if="agendaForm.cooperationId!=null" label="参与成员" prop="memberIds">
+      <el-select v-model="agendaForm.memberIds" placeholder="请选择" :loading="searching" style="width: 100%"
+                 :multiple="true" :filterable="true" :remote="true" :remote-method="searchParticipant">
+        <el-option
+          v-for="item in members"
+          :key="item.memberId"
+          :label="item.username"
+          :value="item.memberId">
+          <span>{{ item.username}}
+            <el-tag>姓名: {{ item.name}}</el-tag>
+            <el-tag>工号: {{ item.employeeNumber}}</el-tag>
+          </span>
+        </el-option>
+      </el-select>
+    </el-form-item>
     <el-form-item label="说明" prop="remark">
       <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
     </el-form-item>
-    <el-form-item>
-      <el-button type="primary" size="default" @click="handleSummit">提交</el-button>
+    <el-form-item v-if="showSubmitButton">
+      <el-button type="primary" size="default" @click="doSummit">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -35,6 +50,10 @@
   export default {
     name: 'agendaCreate',
     props: {
+      memberList: {
+        type: Array,
+        default: [],
+      },
       showSubmitButton: {
         type: Boolean,
         default: true,
@@ -63,11 +82,14 @@
           { label: '周', value: 'week' },
           { label: '月', value: 'month' },
         ],
+        members: this.memberList,
+        searching: false,
+        loading: false,
       };
     },
     methods: {
-      ...mapActions(['saveAgenda', 'updateAgenda']),
-      handleSummit() {
+      ...mapActions(['saveAgenda', 'updateAgenda', 'getAvailableParticipants']),
+      doSummit() {
         if (this.agendaForm.agendaId == null) {
           this.doCreate();
         } else {
@@ -117,6 +139,19 @@
           } else {
             this.loading = false;
           }
+        });
+      },
+      searchParticipant(query) {
+        this.getAvailableParticipants({
+          cooperationId: this.agendaForm.cooperationId,
+          username: query,
+        }).then((members) => {
+          this.members = members;
+          this.searching = false;
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+          this.members = [];
+          this.searching = false;
         });
       },
     },

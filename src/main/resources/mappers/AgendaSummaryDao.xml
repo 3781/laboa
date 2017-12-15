@@ -53,12 +53,26 @@
         ON DUPLICATE KEY UPDATE status = status
     </insert>
     <delete id="cleanCooperationSummary">
-        DELETE agenda_summary
-        FROM agenda_summary
-        JOIN agenda_item ON agenda_item.item_id = agenda_summary.item_id
-        JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id AND agenda.open = 1 AND agenda.type = 'cooperation' AND agenda_item.summary_time = agenda.next_time
-        JOIN cooperation_agenda ON agenda.agenda_id = cooperation_agenda.agenda_id
-        LEFT JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
-        WHERE cooperation_agenda_participant.participant_id IS NULL
+        DELETE FROM agenda_summary
+        WHERE agenda_summary.summarizer_id NOT IN
+        (
+            SELECT
+                t.user_id
+            FROM
+                (
+                    SELECT DISTINCT
+                        (cooperation_member.user_id) AS user_id
+                    FROM
+                        agenda_summary
+                    JOIN agenda_item ON agenda_item.item_id = agenda_summary.item_id
+                    JOIN agenda ON agenda.agenda_id = agenda_item.agenda_id
+                    AND agenda. OPEN = 1
+                    AND agenda.type = 'cooperation'
+                    AND agenda_item.summary_time = agenda.next_time
+                    JOIN cooperation_agenda ON agenda.agenda_id = cooperation_agenda.agenda_id
+                    JOIN cooperation_agenda_participant ON cooperation_agenda_participant.cooperation_agenda_id = cooperation_agenda.cooperation_agenda_id
+                    JOIN cooperation_member ON cooperation_member.member_id = cooperation_agenda_participant.member_id
+                ) AS t
+	    )
     </delete>
 </mapper>

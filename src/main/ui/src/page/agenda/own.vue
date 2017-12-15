@@ -155,7 +155,7 @@
     </el-pagination>
 
     <el-dialog title="日程更新" :visible.sync="showUpdateAgendaForm" :fullscreen="true" v-loading="loading">
-      <agenda-create v-if="showUpdateAgendaForm" ref="agendaUpdateForm" :agenda-form-data="agendaForm" @successSubmit="submitCallback"></agenda-create>
+      <agenda-create :showSubmitButton="false" v-if="showUpdateAgendaForm" ref="agendaUpdateForm" :agenda-form-data="agendaForm" @successSubmit="submitCallback"></agenda-create>
       <span slot="footer" class="dialog-footer">
         <el-button @click="showUpdateAgendaForm = false" >取 消</el-button>
         <el-button type="primary" @click="doUpdateAgenda">提 交</el-button>
@@ -299,7 +299,6 @@
         this.showUpdateAgendaForm = true;
       },
       doUpdateAgenda() {
-        this.loading = true;
         this.$refs.agendaUpdateForm.doUpdate();
       },
       submitCallback() {

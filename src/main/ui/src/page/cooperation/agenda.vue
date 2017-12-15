@@ -99,7 +99,7 @@
       </el-row>
       <el-row>
         <div style="float:left">
-          <el-button size="mini" :loading="loading" type="primary" v-if="checkOwn || checkManage">创建日程</el-button>
+          <el-button size="mini" :loading="loading" type="primary" v-if="checkOwn || checkManage" @click="handleAgenda()">创建日程</el-button>
           <el-button-group>
             <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="danger" @click="handleDelete">删除</el-button>
             <el-button size="mini" :disabled="this.selectRows.length==0" :loading="loading" type="warning" @click="handleClose">关闭</el-button>
@@ -123,16 +123,16 @@
       <el-table-column align="center" type="selection">
       </el-table-column>
       <el-table-column align="center" label="日程ID" column-key="agendaId" prop="agendaId" width="100px"
-                       sortable="custom" :resizable="true">
+                       sortable="custom" :resizable="true" min-width="120px">
       </el-table-column>
       <el-table-column align="center" label="标题" column-key="title" prop="title"
-                       sortable="custom" :resizable="true">
+                       sortable="custom" :resizable="true" min-width="120px">
       </el-table-column>
       <el-table-column align="center" label="创建者" column-key="ownerName" prop="ownerName"
-                       sortable="custom" :resizable="true">
+                       sortable="custom" :resizable="true" min-width="120px">
       </el-table-column>
       <el-table-column align="center" label="执行时间" column-key="nextTime" prop="nextTime"
-                       sortable="custom" :resizable="true">
+                       sortable="custom" :resizable="true" min-width="140px">
       </el-table-column>
       <el-table-column align="center" label="重复" column-key="quantity" prop="quantity"
                        sortable="custom" :resizable="true" width="80px">
@@ -150,15 +150,15 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="更新时间" column-key="updateTime" prop="updateTime"
-                       sortable="custom" :resizable="true">
+                       sortable="custom" :resizable="true" min-width="140px">
       </el-table-column>
       <el-table-column align="center" label="创建时间" column-key="createTime" prop="createTime"
-                       sortable="custom" :resizable="true">
+                       sortable="custom" :resizable="true" min-width="140px">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="70px">
+      <el-table-column align="center" label="操作" min-width="140px">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" type="warning" @click="handleUpdateAgenda(scope.row)">更新</el-button>
+            <el-button size="mini" type="warning" @click="handleAgenda(scope.row)">更新</el-button>
             <router-link :to="`/agenda/${scope.row.agendaId}`" tag="span">
               <el-button size="mini" type="info">详情</el-button>
             </router-link>
@@ -175,35 +175,11 @@
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="totalSize">
     </el-pagination>
-    <el-dialog title="日程更新" :visible.sync="showUpdateAgendaForm" :fullscreen="true" v-loading="loading">
-      <el-form :model="agendaForm" ref="agendaForm" :statusIcon="true" label-width="120px" size="small">
-        <el-form-item label="标题" prop="title"
-                      :rules="[{ type:'string', required: true, message: '标题不能为空'}]">
-          <el-input v-model.trim="agendaForm.title" placeholder="请输入标题" style="width:220px"></el-input>
-        </el-form-item>
-        <el-form-item label="首次执行时间" prop="nextTime"
-                      :rules="[{ type:'string', required: true, message: '首次执行时间不能为空', trigger: 'change'}]">
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="agendaForm.nextTime"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="重复单位" prop="quantity"
-                      :rules="[{ type:'integer', min: 1, required: true, message: '数量为大于1的整数'}]">
-          <el-input v-model.number="agendaForm.quantity" style="width:220px"></el-input>
-          <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:80px">
-            <el-option
-              v-for="item in unitOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="说明">
-          <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
-        </el-form-item>
-      </el-form>
+    <el-dialog :title="agendaFormLabel" :visible.sync="showAgendaForm" :fullscreen="true" v-loading="loading">
+      <agenda-create :memberList="memberList" :showSubmitButton="false" v-if="showAgendaForm" ref="agendaForm" :agenda-form-data="agendaForm" @successSubmit="submitCallback"></agenda-create>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="showUpdateAgendaForm = false" >取 消</el-button>
-        <el-button type="primary" @click="doUpdateAgenda">提 交</el-button>
+        <el-button @click="showAgendaForm = false" >取 消</el-button>
+        <el-button type="primary" @click="doSubmitAgenda">提 交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -211,8 +187,12 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import AgendaCreate from '../agenda/create';
 
   export default {
+    components: {
+      AgendaCreate,
+    },
     name: 'cooperationAgenda',
     props: {
       cooperationId: {
@@ -226,7 +206,7 @@
     },
     data() {
       return {
-        showUpdateAgendaForm: false,
+        showAgendaForm: false,
         agendaForm: {
           agendaId: null,
           title: null,
@@ -234,7 +214,11 @@
           quantity: null,
           unit: null,
           remark: null,
+
+          cooperationId: null,
+          memberIds: null,
         },
+        memberList: [],
         selectRows: [],
         unitOptions: [
           { label: '一次', value: 'once' },
@@ -293,6 +277,9 @@
       },
       checkManage() {
         return this.getPermissions.includes(`cooperation:manager${this.cooperationId}`);
+      },
+      agendaFormLabel() {
+        return this.agendaForm.agendaId == null ? '创建' : '更新';
       },
     },
     watch: {
@@ -439,38 +426,37 @@
           this.loading = false;
         });
       },
-      handleUpdateAgenda(rowData) {
-        this.agendaForm.agendaId = rowData.agendaId;
-        this.agendaForm.title = rowData.title;
-        this.agendaForm.nextTime = rowData.nextTime;
-        this.agendaForm.quantity = rowData.quantity;
-        this.agendaForm.unit = rowData.unit;
-        this.agendaForm.open = rowData.open;
-        this.agendaForm.remark = rowData.remark;
-        this.showUpdateAgendaForm = true;
+      handleAgenda(rowData) {
+        if (rowData != null) {
+          this.agendaForm.agendaId = rowData.agendaId;
+          this.agendaForm.title = rowData.title;
+          this.agendaForm.nextTime = rowData.nextTime;
+          this.agendaForm.quantity = rowData.quantity;
+          this.agendaForm.unit = rowData.unit;
+          this.agendaForm.remark = rowData.remark == null ? '' : rowData.remark;
+          this.agendaForm.cooperationId = rowData.cooperationId;
+          this.agendaForm.memberIds = rowData.memberList.map(member => member.memberId);
+          this.memberList = rowData.memberList;
+          this.showAgendaForm = true;
+        } else {
+          this.agendaForm.agendaId = null;
+          this.agendaForm.title = null;
+          this.agendaForm.nextTime = null;
+          this.agendaForm.quantity = null;
+          this.agendaForm.unit = 'day';
+          this.agendaForm.remark = '';
+          this.agendaForm.cooperationId = this.cooperationId;
+          this.agendaForm.memberIds = [];
+          this.memberList = [];
+        }
+        this.showAgendaForm = true;
       },
-      doUpdateAgenda() {
-        this.loading = true;
-        this.$refs.agendaForm.validate((valid) => {
-          if (valid) {
-            this.updateAgenda(this.agendaForm).then(() => {
-              this.$notify({
-                message: `日程${this.agendaForm.title}更新成功`,
-                type: 'info',
-                position: 'bottom-right',
-                offset: 40,
-              });
-              this.loading = false;
-              this.showUpdateAgendaForm = false;
-              this.getAgendasData();
-            }).catch((errorMessage) => {
-              this.$message.error(errorMessage);
-              this.loading = false;
-            });
-          } else {
-            this.loading = false;
-          }
-        });
+      doSubmitAgenda() {
+        this.$refs.agendaForm.doSummit();
+      },
+      submitCallback() {
+        this.showAgendaForm = false;
+        this.getAgendasData();
       },
     },
   };

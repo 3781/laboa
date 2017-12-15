@@ -71,7 +71,7 @@ public class AgendaServiceImpl implements AgendaService {
             agendaDo.setType(agendaVo.getCooperationId()!=null
                     ? AgendaDo.AgendaType.cooperation:AgendaDo.AgendaType.personal);
             agendaDao.save(agendaDo);
-
+            agendaVo.setAgendaId(agendaDo.getAgendaId());
             AgendaItemDo agendaItemDo = new AgendaItemDo();
             agendaItemDo.setAgendaId(agendaDo.getAgendaId());
             agendaItemDo.setSummaryTime(agendaDo.getNextTime());
