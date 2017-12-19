@@ -10,6 +10,7 @@ import team.oha.laboa.dao.UserDao;
 import team.oha.laboa.dto.ApiDto;
 import team.oha.laboa.dto.FileDto;
 import team.oha.laboa.dto.PageDto;
+import team.oha.laboa.exception.FileNotExistException;
 import team.oha.laboa.model.FileDo;
 import team.oha.laboa.query.file.FileSelectQuery;
 import team.oha.laboa.service.FileService;
@@ -62,6 +63,9 @@ public class FileServiceImpl implements FileService {
     @Override
     public File download(Integer fileId) {
         FileDo fileDo = fileDao.get(fileId);
+        if(fileDo == null){
+            throw new FileNotExistException();
+        }
         return new File(MessageFormat.format("{0}/{1}", getRootPath(), fileDo.getAddress()));
     }
 
