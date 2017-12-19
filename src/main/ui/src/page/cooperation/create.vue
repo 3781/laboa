@@ -13,14 +13,14 @@
         至
         <el-date-picker type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="cooperationForm.endDate"></el-date-picker>
       </el-form-item>
-      <el-form-item label="申请链接开启">
+      <el-form-item label="申请链接开启" prop="invite">
         <el-switch
           v-model="cooperationForm.invite"
           active-color="#13ce66"
           inactive-color="#ff4949">
         </el-switch>
       </el-form-item>
-      <el-form-item label="协作介绍">
+      <el-form-item label="协作介绍" prop="remark">
         <mavon-editor v-model="cooperationForm.remark" style="min-height:290px"></mavon-editor>
       </el-form-item>
       <el-form-item>
