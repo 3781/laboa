@@ -32,6 +32,10 @@ const getters = {
 };
 
 const mutations = {
+  ADD_PERMISSION(thisState, permission) {
+    state.permissions.push(permission);
+    sessionStorage.permissions = state.permissions;
+  },
   SET_SIDEBAR_LOADING(thisState, loading) {
     state.sidebarLoading = loading;
   },

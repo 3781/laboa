@@ -71,6 +71,7 @@
                 position: 'bottom-right',
                 offset: 40,
               });
+
               this.loading = false;
               this.cooperationForm.beginDate = null;
               this.cooperationForm.endDate = null;
