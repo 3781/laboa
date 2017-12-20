@@ -5,9 +5,11 @@ export default function validate(beginDate, endDate) {
   const arrEnd = endDate.split('-');
 
   for (let i = 0; i < 3; i += 1) {
-    if (arrStart[i] > arrEnd[i]) {
+    const start = parseInt(arrStart[i], 10);
+    const end = parseInt(arrEnd[i], 10);
+    if (start > end) {
       return false;
-    } else if (arrStart[i] < arrEnd[i]) {
+    } else if (start < end) {
       break;
     }
   }
