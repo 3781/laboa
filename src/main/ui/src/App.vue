@@ -15,6 +15,7 @@ export default {
     margin 0
     padding 0
     height 100vh
+    min-height 100vh
     #app
       min-height 100%
 </style>
