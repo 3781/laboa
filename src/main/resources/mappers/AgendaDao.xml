@@ -135,10 +135,12 @@
         agenda.unit AS unit,
         agenda.remark AS remark,
         agenda.open AS open,
-        agenda.update_time AS update_time,
-        agenda.create_time AS create_time,
+        <if test="filterQuery.cooperationId!=null">
         cooperation_agenda.cooperation_id AS cooperation_id,
-        cooperation_agenda.cooperation_agenda_id AS cooperation_agenda_id
+        cooperation_agenda.cooperation_agenda_id AS cooperation_agenda_id,
+        </if>
+        agenda.update_time AS update_time,
+        agenda.create_time AS create_time
         FROM <include refid="tableName"/> JOIN user ON user.user_id = agenda.owner_id
         <if test="filterQuery.ownerId!=null">AND user.user_id = #{filterQuery.ownerId}</if>
         <if test="filterQuery.summarizerId!=null or filterQuery.status!=null">
@@ -148,8 +150,8 @@
         <if test="filterQuery.summarizerId!=null">
         AND agenda_summary.summarizer_id = #{filterQuery.summarizerId}
         </if>
-        JOIN cooperation_agenda ON cooperation_agenda.agenda_id = <include refid="tableName"/>.agenda_id
         <if test="filterQuery.cooperationId!=null">
+            JOIN cooperation_agenda ON cooperation_agenda.agenda_id = <include refid="tableName"/>.agenda_id
             AND cooperation_agenda.cooperation_id = #{filterQuery.cooperationId}
         </if>
         <include refid="conditions"/>
