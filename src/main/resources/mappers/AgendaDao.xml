@@ -141,8 +141,10 @@
         cooperation_agenda.cooperation_agenda_id AS cooperation_agenda_id
         FROM <include refid="tableName"/> JOIN user ON user.user_id = agenda.owner_id
         <if test="filterQuery.ownerId!=null">AND user.user_id = #{filterQuery.ownerId}</if>
+        <if test="filterQuery.summarizerId!=null or filterQuery.status!=null">
         JOIN agenda_item ON agenda.agenda_id = agenda_item.agenda_id
         JOIN agenda_summary ON agenda_item.item_id = agenda_summary.item_id
+        </if>
         <if test="filterQuery.summarizerId!=null">
         AND agenda_summary.summarizer_id = #{filterQuery.summarizerId}
         </if>
@@ -160,8 +162,10 @@
         SELECT COUNT(DISTINCT(agenda.agenda_id))
         FROM <include refid="tableName"/>  JOIN user ON user.user_id = agenda.owner_id
         <if test="filterQuery.ownerId!=null">AND user.user_id = #{filterQuery.ownerId}</if>
+        <if test="filterQuery.summarizerId!=null or filterQuery.status!=null">
             JOIN agenda_item ON agenda.agenda_id = agenda_item.agenda_id
             JOIN agenda_summary ON agenda_item.item_id = agenda_summary.item_id
+        </if>
         <if test="filterQuery.summarizerId!=null">
         AND agenda_summary.summarizer_id = #{filterQuery.summarizerId}
         </if>
