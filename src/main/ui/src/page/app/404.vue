@@ -17,7 +17,6 @@
 </script>
 
 
-
 <style lang="stylus">
     .e404
       background-color #fff
@@ -37,6 +36,5 @@
       font-family "Bitstream Charter"
       vertical-align middle
       color: #AAA
-      /*font-weight bolder*/
 
 </style>
