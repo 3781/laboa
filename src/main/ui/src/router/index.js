@@ -43,6 +43,10 @@ const vueRouter = new VueRouter({
         { path: '/user/info', component: () => import('../page/user/info') },
       ],
     },
+    {
+      path: '/**',
+      component: () => import('../page/app/404'),
+    },
   ],
 });
 
