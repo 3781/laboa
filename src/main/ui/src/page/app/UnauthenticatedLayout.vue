@@ -39,7 +39,7 @@
 <style lang="stylus" scoped>
   .main-container
     background-color #2d3a4b
-    height 100%
+    height 100vh
     .cardbox
       position absolute
       left 0
