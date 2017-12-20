@@ -70,7 +70,7 @@
                       :rules="[{ type:'string', required: true, message: '协作名不能为空'}]">
           <el-input v-model.trim="cooperationForm.name" placeholder="请输入协作名" style="width:220px"></el-input>
         </el-form-item>
-        <el-form-item label="时间" >
+        <el-form-item label="时间" prop="beginDate" :rules="[{validator:validateDate, required:true}]">
           <el-date-picker type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="cooperationForm.beginDate"></el-date-picker>
           至
           <el-date-picker type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="cooperationForm.endDate"></el-date-picker>
@@ -103,6 +103,7 @@
   import cooperationMember from './member';
   import cooperationApply from './apply';
   import cooperationAgenda from './agenda';
+  import validate from '../../util/validateDate';
 
   export default {
     name: 'cooperationDetail',
@@ -247,6 +248,14 @@
             this.updateLoading = false;
           });
         });
+      },
+      validateDate(rule, value, callback) {
+        const valid = validate(this.cooperationForm.beginDate, this.cooperationForm.endDate);
+        if (valid) {
+          callback();
+        } else {
+          callback(new Error('开始时间必须早于结束时间'));
+        }
       },
     },
   };
