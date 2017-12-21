@@ -94,6 +94,7 @@ public class CooperationController {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping
     public ApiDto updateCooperation(@RequestBody CooperationVo cooperationVo) {
+        SecurityUtils.getSubject().checkPermission("cooperation:owner:"+cooperationVo.getCooperationId());
         return cooperationService.updateCooperation(cooperationVo);
     }
 
@@ -101,6 +102,7 @@ public class CooperationController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{cooperationId:[1-9][0-9]*}")
     public ApiDto deleteCooperation(@PathVariable Integer cooperationId) {
+        SecurityUtils.getSubject().checkPermission("cooperation:owner:"+cooperationId);
         return cooperationService.deleteCooperation(cooperationId);
     }
 
