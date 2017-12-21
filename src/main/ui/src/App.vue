@@ -17,5 +17,6 @@ export default {
     height 100vh
     min-height 100vh
     #app
+      height 100%
       min-height 100%
 </style>
