@@ -71,10 +71,19 @@
       <el-table-column align="center" label="创建时间" column-key="createTime" prop="createTime"
                        sortable="custom" :resizable="true">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="140px">
+      <el-table-column align="center" label="操作" width="200px">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" type="warning" @click="handleUpdateFile(scope.row)">修改备注</el-button>
+            <el-upload
+              ref="upload"
+              :action="`/api/file/${scope.row.fileId}`"
+              :with-credentials="true"
+              :on-success="handleSuccessUpload"
+              :on-error="handleErrorUpload"
+            :show-file-list="false">
+              <el-button slot="trigger" size="mini" type="primary">更新文件</el-button>
+              <el-button size="mini" type="warning" @click="handleUpdateRemark(scope.row)">更新备注</el-button>
+            </el-upload>
           </el-button-group>
         </template>
       </el-table-column>
@@ -100,7 +109,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="showUpdateFileForm = false" >取 消</el-button>
-        <el-button type="primary" @click="doUpdateFile">提 交</el-button>
+        <el-button type="primary" @click="doUpdateRemark">提 交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -221,12 +230,12 @@
           this.loading = false;
         });
       },
-      handleUpdateFile(fileInfo) {
+      handleUpdateRemark(fileInfo) {
         this.updateForm.fileId = fileInfo.fileId;
         this.updateForm.remark = fileInfo.remark === null ? '' : fileInfo.remark;
         this.showUpdateFileForm = true;
       },
-      doUpdateFile() {
+      doUpdateRemark() {
         this.updateFile(this.updateForm).then(() => {
           this.$notify({
             message: '更新成功',
@@ -242,7 +251,6 @@
       },
       handleSuccessUpload(response) {
         if (response.success) {
-          this.showUpdateFileForm = false;
           this.$notify({
             message: '更新成功',
             type: 'info',
