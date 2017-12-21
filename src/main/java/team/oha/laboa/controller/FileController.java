@@ -39,8 +39,9 @@ public class FileController {
 
     @RequiresUser
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping
-    public ApiDto update(@RequestBody FileVo fileVo) {
+    @PostMapping("/{fileId:[1-9][0-9]*}")
+    public ApiDto update(@RequestBody FileVo fileVo, @PathVariable Integer fileId) {
+        fileVo.setFileId(fileId);
         return fileService.update(fileVo);
     }
 

@@ -1,7 +1,7 @@
 import httpUtil from '../util/http';
 
 export function update(formData) {
-  return httpUtil.patch('/file', formData);
+  return httpUtil.post(`/file/${formData.fileId}`, formData);
 }
 
 export function list(formData) {

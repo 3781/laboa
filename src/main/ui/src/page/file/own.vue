@@ -71,6 +71,13 @@
       <el-table-column align="center" label="创建时间" column-key="createTime" prop="createTime"
                        sortable="custom" :resizable="true">
       </el-table-column>
+      <el-table-column align="center" label="操作" width="140px">
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button size="mini" type="warning" @click="handleUpdateFile(scope.row)">修改备注</el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination background style="float:right;margin-top:20px"
                    @size-change="handleSizeChange"
@@ -81,6 +88,21 @@
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="totalSize">
     </el-pagination>
+    <el-dialog title="备注更新" :visible.sync="showUpdateFileForm" v-loading="loading">
+      <div style="text-align: center">
+        <el-form ref="form" :model="updateForm" label-width="80px">
+
+        <el-form-item label="备注" prop="remark">
+          <el-input type="textarea" v-model="updateForm.remark" style="min-height:100px"></el-input>
+        </el-form-item>
+        </el-form>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showUpdateFileForm = false" >取 消</el-button>
+        <el-button type="primary" @click="doUpdateFile">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -91,6 +113,11 @@
     name: 'fileOwn',
     data() {
       return {
+        showUpdateFileForm: false,
+        updateForm: {
+          fileId: null,
+          remark: '',
+        },
         selectRows: [],
         files: [],
         loading: false,
@@ -125,7 +152,7 @@
       },
     },
     methods: {
-      ...mapActions(['listFiles', 'delFile']),
+      ...mapActions(['listFiles', 'delFile', 'updateFile']),
       getFilesData() {
         this.loading = true;
         this.listFiles(this.fileSelectQuery).then((response) => {
@@ -192,6 +219,52 @@
         }).catch((errorMessage) => {
           this.$message.error(errorMessage);
           this.loading = false;
+        });
+      },
+      handleUpdateFile(fileInfo) {
+        this.updateForm.fileId = fileInfo.fileId;
+        this.updateForm.remark = fileInfo.remark === null ? '' : fileInfo.remark;
+        this.showUpdateFileForm = true;
+      },
+      doUpdateFile() {
+        this.updateFile(this.updateForm).then(() => {
+          this.$notify({
+            message: '更新成功',
+            type: 'info',
+            position: 'bottom-right',
+            offset: 40,
+          });
+          this.showUpdateFileForm = false;
+          this.getFilesData();
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+        });
+      },
+      handleSuccessUpload(response) {
+        if (response.success) {
+          this.showUpdateFileForm = false;
+          this.$notify({
+            message: '更新成功',
+            type: 'info',
+            position: 'bottom-right',
+            offset: 40,
+          });
+          this.getFilesData();
+        } else {
+          this.$notify({
+            message: response.info,
+            type: 'error',
+            position: 'bottom-right',
+            offset: 40,
+          });
+        }
+      },
+      handleErrorUpload() {
+        this.$notify({
+          message: '更新失败，请稍后再试',
+          type: 'error',
+          position: 'bottom-right',
+          offset: 40,
         });
       },
     },
