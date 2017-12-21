@@ -35,7 +35,7 @@ import team.oha.laboa.vo.MemberRoleChangeVo;
  * @modified
  */
 @RestController
-@RequestMapping("/api/cooperation")
+@RequestMapping("/cooperation")
 public class CooperationController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired

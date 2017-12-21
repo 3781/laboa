@@ -26,7 +26,7 @@ import team.oha.laboa.vo.*;
  * @modified
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

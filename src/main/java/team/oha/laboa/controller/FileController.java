@@ -21,7 +21,7 @@ import team.oha.laboa.vo.FileVo;
 import java.io.File;
 
 @RestController
-@RequestMapping("/api/file")
+@RequestMapping("/file")
 public class FileController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

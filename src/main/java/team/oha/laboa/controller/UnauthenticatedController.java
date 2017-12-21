@@ -24,13 +24,21 @@ import team.oha.laboa.vo.RegisterVo;
  * @modified
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping
 public class UnauthenticatedController {
 
     @Autowired
     private UserService userService;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @RequestMapping("/**")
+    public ApiDto noFindApi(){
+        ApiDto apiDto = new ApiDto();
+        apiDto.setSuccess(false);
+        apiDto.setInfo("访问出错");
+        return apiDto;
+    }
 
     /**
      * <p>注册</p>

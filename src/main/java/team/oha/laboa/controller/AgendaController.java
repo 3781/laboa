@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
  * @modified
  */
 @RestController
-@RequestMapping("/api/agenda")
+@RequestMapping("/agenda")
 public class AgendaController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

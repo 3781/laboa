@@ -6,7 +6,9 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 /**
  * <p>web配置</p>
@@ -63,6 +65,6 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     @Nullable
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/"};
+        return new String[]{"/api/*"};
     }
 }
