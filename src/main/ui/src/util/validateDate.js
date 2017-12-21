@@ -1,10 +1,10 @@
 export default function validate(beginDate, endDate) {
   if (beginDate == null || endDate == null) return true;
 
-  const arrStart = beginDate.split('-');
-  const arrEnd = endDate.split('-');
+  const arrStart = beginDate.split(/[-: ]/);
+  const arrEnd = endDate.split(/[-: ]/);
 
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < arrStart.length; i += 1) {
     const start = parseInt(arrStart[i], 10);
     const end = parseInt(arrEnd[i], 10);
     if (start > end) {

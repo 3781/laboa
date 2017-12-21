@@ -5,7 +5,7 @@
       <el-input v-model.trim="agendaForm.title" placeholder="请输入标题" style="width:220px"></el-input>
     </el-form-item>
     <el-form-item label="首次执行时间" prop="nextTime"
-      :rules="[{ type:'string', required: true, message: '首次执行时间不能为空', trigger: 'change'}]">
+      :rules="[{validator:validateNextTime, required:true}]">
       <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="agendaForm.nextTime"></el-date-picker>
     </el-form-item>
     <el-form-item label="重复" prop="quantity"
@@ -46,6 +46,8 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import validate from '../../util/validateDate';
+  import formatDate from '../../util/formatDate';
 
   export default {
     name: 'agendaCreate',
@@ -154,6 +156,19 @@
           this.members = [];
           this.searching = false;
         });
+      },
+      validateNextTime(rule, value, callback) {
+        if (this.agendaFormData.nextTime == null) {
+          callback(new Error('首次执行时间不能为空'));
+        } else {
+          const currentDate = new Date();
+          const valid = validate(formatDate(currentDate, 'yyyy-MM-dd hh:mm:ss'), this.agendaFormData.nextTime);
+          if (!valid) {
+            callback(new Error('首次执行时间不能早于当前时间'));
+          } else {
+            callback();
+          }
+        }
       },
     },
   };
