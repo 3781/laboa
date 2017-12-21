@@ -38,8 +38,8 @@
           },
         },
         loginForm: {
-          username: 'username',
-          password: 'password',
+          username: '',
+          password: '',
         },
         loading: false,
       };
