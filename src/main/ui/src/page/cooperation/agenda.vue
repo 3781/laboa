@@ -285,10 +285,10 @@
         return this.selectRows.map(item => item.agendaId);
       },
       checkOwn() {
-        return this.getPermissions.includes(`cooperation:owner${this.cooperationId}`);
+        return this.getPermissions.includes(`cooperation:owner:${this.cooperationId}`);
       },
       checkManage() {
-        return this.getPermissions.includes(`cooperation:manager${this.cooperationId}`);
+        return this.getPermissions.includes(`cooperation:manager:${this.cooperationId}`);
       },
       agendaFormLabel() {
         return this.agendaForm.agendaId == null ? '创建' : '更新';

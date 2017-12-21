@@ -55,7 +55,7 @@ const actions = {
         if (response) {
           const res = response.data;
           if (res.success) {
-            commit('ADD_PERMISSION', `cooperation:owner${res.info}`);
+            commit('ADD_PERMISSION', `cooperation:owner:${res.info}`);
             resolve(res.info);
           } else {
             reject(res.info);

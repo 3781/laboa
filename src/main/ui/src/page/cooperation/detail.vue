@@ -144,10 +144,10 @@
     computed: {
       ...mapGetters(['getPermissions']),
       checkOwn() {
-        return this.getPermissions.includes(`cooperation:owner${this.currentCooperationId}`);
+        return this.getPermissions.includes(`cooperation:owner:${this.currentCooperationId}`);
       },
       checkManage() {
-        return this.getPermissions.includes(`cooperation:manager${this.currentCooperationId}`);
+        return this.getPermissions.includes(`cooperation:manager:${this.currentCooperationId}`);
       },
     },
     methods: {
