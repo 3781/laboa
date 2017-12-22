@@ -230,6 +230,7 @@
         JOIN agenda_item ON agenda_item.agenda_id = agenda.agenda_id
         JOIN agenda_summary ON agenda_summary.item_id = agenda_item.item_id
         JOIN user as summarizer ON summarizer.user_id = agenda_summary.summarizer_id
+        WHERE <include refid="tableName"/>.agenda_id = #{agendaId}
         ORDER BY preset_time ASC, summarizer_username ASC
     </select>
 </mapper>
