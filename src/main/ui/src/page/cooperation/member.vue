@@ -124,9 +124,9 @@
       </el-table-column>
       <el-table-column align="center" label="操作" :resizable="true" v-if="checkOwn || checkManage">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" v-show="scope.row.role!='owner' && checkOwn"
+          <el-button type="warning" size="mini" v-show=" scope.row.role!='owner' && checkOwn"
                      @click="doChangeRole({memberId:scope.row.memberId, role: scope.row.role==='member'?'manager':'member'})">修改角色</el-button>
-          <el-button type="danger" size="mini" v-show="scope.row.role!='owner'" @click="doRemove(scope.row.memberId)">移出协作</el-button>
+          <el-button type="danger" size="mini" v-show="getUsername!=scope.row.username && scope.row.role!='owner'" @click="doRemove(scope.row.memberId)">移出协作</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -226,7 +226,7 @@
       };
     },
     computed: {
-      ...mapGetters(['getPermissions']),
+      ...mapGetters(['getPermissions', 'getUsername']),
       currentPage() {
         return this.memberSelectQuery.pageQuery.offset
           / this.memberSelectQuery.pageQuery.rows;
