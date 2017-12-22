@@ -6,9 +6,9 @@ import vueRouter from '../../router/index';
  * version: 2017/11/28
  */
 const state = {
-  username: sessionStorage.username || '',
-  role: sessionStorage.role || '',
-  permissions: sessionStorage.permissions || '',
+  username: localStorage.username || '',
+  role: localStorage.role || '',
+  permissions: localStorage.permissions || '',
   sidebarLoading: false,
   mainLoading: false,
 };
@@ -34,7 +34,7 @@ const getters = {
 const mutations = {
   ADD_PERMISSION(thisState, permission) {
     state.permissions.push(permission);
-    sessionStorage.permissions = state.permissions;
+    localStorage.permissions = state.permissions;
   },
   SET_SIDEBAR_LOADING(thisState, loading) {
     state.sidebarLoading = loading;
@@ -46,18 +46,18 @@ const mutations = {
     state.username = username;
     state.role = role;
     state.permissions = permissions;
-    sessionStorage.username = username;
-    sessionStorage.role = role;
-    sessionStorage.permissions = permissions;
+    localStorage.username = username;
+    localStorage.role = role;
+    localStorage.permissions = permissions;
   },
   SET_LOGOUT() {
     state.username = '';
     state.role = '';
     state.permissions = [];
 
-    delete sessionStorage.username;
-    delete sessionStorage.role;
-    delete sessionStorage.permissions;
+    delete localStorage.username;
+    delete localStorage.role;
+    delete localStorage.permissions;
     vueRouter.push('/login');
   },
 };
