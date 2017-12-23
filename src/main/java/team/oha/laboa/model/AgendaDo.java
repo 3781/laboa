@@ -1,5 +1,7 @@
 package team.oha.laboa.model;
 
+import team.oha.laboa.strategy.agenda.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -26,7 +28,21 @@ public class AgendaDo implements Serializable{
     private LocalDateTime createTime;
 
     public static enum AgendaUnit{
-        once,month,week,day
+        once(new NoRepeatStrategy()),
+        month(new MonthRepeatStrategy()),
+        week(new WeekRepeatStrategy()),
+        day(new DayRepeatStrategy());
+
+
+        private RepeatStrategy strategy;
+
+        AgendaUnit(RepeatStrategy strategy) {
+            this.strategy = strategy;
+        }
+
+        public RepeatStrategy getStrategy() {
+            return strategy;
+        }
     }
 
     public static enum  AgendaType{

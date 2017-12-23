@@ -251,20 +251,9 @@ public class AgendaServiceImpl implements AgendaService {
         if(agendaDoList!=null){
             for(AgendaDo agendaDo: agendaDoList){
                 agenda.setAgendaId(agendaDo.getAgendaId());
-                switch (agendaDo.getUnit()){
-                    case day:
-                        agenda.setNextTime(agendaDo.getNextTime().plusDays(agendaDo.getQuantity()));
-                        break;
-                    case week:
-                        agenda.setNextTime(agendaDo.getNextTime().plusWeeks(agendaDo.getQuantity()));
-                        break;
-                    case month:
-                        agenda.setNextTime(agendaDo.getNextTime().plusMonths(agendaDo.getQuantity()));
-                        break;
-                    default:
-                }
+                agenda.setNextTime(agenda.getUnit().getStrategy().computeNextTime(agenda.getNextTime(), agenda.getQuantity()));
 
-                if(!agendaDo.getUnit().equals(AgendaDo.AgendaUnit.once)){
+                if(agenda.getNextTime()!=null){
                     agendaDao.update(agenda);
                     AgendaItemDo agendaItemDo = new AgendaItemDo();
                     agendaItemDo.setAgendaId(agendaDo.getAgendaId());
