@@ -4,10 +4,10 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.oha.laboa.exception.WrongPasswordException;
-import team.oha.laboa.model.HashInfo;
+import team.oha.laboa.util.password.HashInfo;
 import team.oha.laboa.service.PasswordService;
-import team.oha.laboa.util.HashEncryptor;
-import team.oha.laboa.util.SaltGenerator;
+import team.oha.laboa.util.password.HashEncryptor;
+import team.oha.laboa.util.password.SaltGenerator;
 
 @Service
 public class HashPasswordServiceImpl implements PasswordService {

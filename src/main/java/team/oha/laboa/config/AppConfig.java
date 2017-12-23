@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import team.oha.laboa.util.HashEncryptor;
-import team.oha.laboa.util.Md5Encryptor;
-import team.oha.laboa.util.RandomSaltGenerator;
-import team.oha.laboa.util.SaltGenerator;
+import team.oha.laboa.util.password.HashEncryptor;
+import team.oha.laboa.util.password.Md5Encryptor;
+import team.oha.laboa.util.password.RandomSaltGenerator;
+import team.oha.laboa.util.password.SaltGenerator;
 
 /**
  * <p></p>

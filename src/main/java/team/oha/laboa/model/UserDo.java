@@ -1,5 +1,7 @@
 package team.oha.laboa.model;
 
+import team.oha.laboa.util.password.HashInfo;
+
 import java.time.LocalDateTime;
 
 /**
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
  * @data 2017/11/27
  * @modified
  */
-public class UserDo implements HashInfo{
+public class UserDo implements HashInfo {
     private Integer userId;
     private String username;
     private String password;

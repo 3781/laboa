@@ -17,6 +17,8 @@ import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.vo.*;
 
+import java.util.ArrayList;
+
 /**
  * <p></p>
  *
@@ -160,9 +162,9 @@ public class UserController {
     @PatchMapping(value = "/passwordReset")
     public ApiDto passwordReset(@RequestBody ResetPasswordVo resetPasswordVo){
         if(SecurityUtils.getSubject().hasRole("superAdmin")){
-            resetPasswordVo.setAllowRoles(new UserDo.Role[]{UserDo.Role.enduser, UserDo.Role.admin});
+            resetPasswordVo.setAllowRoles(new ArrayList<UserDo.Role>(){{ add(UserDo.Role.enduser);add(UserDo.Role.admin);}});
         }else {
-            resetPasswordVo.setAllowRoles(new UserDo.Role[]{UserDo.Role.enduser});
+            resetPasswordVo.setAllowRoles(new ArrayList<UserDo.Role>(){{ add(UserDo.Role.enduser);}});
         }
         return userService.resetPassword(resetPasswordVo);
     }

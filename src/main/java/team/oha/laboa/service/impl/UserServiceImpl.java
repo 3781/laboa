@@ -19,6 +19,8 @@ import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.PasswordService;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.shiro.model.UserAuthenticationInfo;
+import team.oha.laboa.util.password.HashInfo;
+import team.oha.laboa.util.password.HashPrincipalInfo;
 import team.oha.laboa.vo.*;
 
 import java.time.LocalDateTime;
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
         userDo.setRegisterTime(LocalDateTime.now());
         userDo.setRole(UserDo.Role.enduser);
         userDo.setStatus(UserDo.Status.locked);
-        passwordService.encryptPassword(userDo);
+        passwordService.encryptPassword(new HashPrincipalInfo(userDo, userDo.getUsername()));
         userDao.save(userDo);
 
         UserinfoDo userinfoDo = new UserinfoDo();
@@ -110,10 +112,10 @@ public class UserServiceImpl implements UserService {
         if(userDo==null){
             throw new UnknownUserException(passwordChangeVo.getUsername());
         }
-
-        passwordService.checkPassword(userDo, passwordChangeVo.getOldPassword());
+        HashInfo hashInfo = new HashPrincipalInfo(userDo, userDo.getUsername());
+        passwordService.checkPassword(hashInfo, passwordChangeVo.getOldPassword());
         userDo.setPassword(passwordChangeVo.getNewPassword());
-        passwordService.encryptPassword(userDo);
+        passwordService.encryptPassword(hashInfo);
 
         ApiDto apiDto = new ApiDto();
         if( userDao.updatePassword(userDo) == 1){
@@ -188,8 +190,9 @@ public class UserServiceImpl implements UserService {
 
         UserAuthenticationInfo info = new UserAuthenticationInfo();
         info.setPrincipal(userDo.getUsername());
-        info.setCredentials(userDo.getPassword());
-        info.setCredentialsSalt(userDo.getSalt());
+        HashPrincipalInfo hashPrincipalInfo = new HashPrincipalInfo(userDo, userDo.getUsername());
+        info.setCredentials(hashPrincipalInfo.getPassword());
+        info.setCredentialsSalt(hashPrincipalInfo.getSalt());
         info.setLocked(UserDo.Status.locked.equals(userDo.getStatus()));
         info.setDisable(UserDo.Status.disable.equals(userDo.getStatus()));
         return info;
@@ -233,9 +236,22 @@ public class UserServiceImpl implements UserService {
     public ApiDto resetPassword(ResetPasswordVo resetPasswordVo) {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
-        resetPasswordVo.setPassword(DEFAULT_PASSWORD);
-        passwordService.encryptPassword(resetPasswordVo);
-        apiDto.setInfo(userDao.resetPassword(resetPasswordVo));
+        Integer updateSize = 0;
+        UserDo userDo = new UserDo();
+        HashPrincipalInfo hashPrincipalInfo = new HashPrincipalInfo(userDo);
+
+        for(Integer id : resetPasswordVo.getIds()){
+            UserDo user = userDao.getById(id);
+            if(user!=null && resetPasswordVo.getAllowRoles().contains(user.getRole())){
+                userDo.setUsername(user.getUsername());
+                userDo.setPassword(DEFAULT_PASSWORD);
+                hashPrincipalInfo.setUsername(userDo.getUsername());
+                passwordService.encryptPassword(hashPrincipalInfo);
+                updateSize += userDao.updatePassword(userDo);
+            }
+        }
+
+        apiDto.setInfo(updateSize);
         return apiDto;
     }
 }

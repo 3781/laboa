@@ -1,4 +1,4 @@
-package team.oha.laboa.util;
+package team.oha.laboa.util.password;
 
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 

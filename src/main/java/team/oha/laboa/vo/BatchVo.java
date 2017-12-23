@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @modified
  */
 public class BatchVo {
-    ArrayList<Integer> ids;
+    private ArrayList<Integer> ids;
 
     public ArrayList<Integer> getIds() {
         return ids;

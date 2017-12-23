@@ -45,6 +45,9 @@
     <select id="getByUsername" parameterType="java.lang.String" resultType="team.oha.laboa.model.UserDo">
         SELECT * FROM <include refid="tableName"/> WHERE username = #{username}
     </select>
+    <select id="getById" parameterType="java.lang.Integer" resultType="team.oha.laboa.model.UserDo">
+        SELECT * FROM <include refid="tableName"/> WHERE user_id = #{id}
+    </select>
 
     <sql id="conditions">
         <if test="filterQuery!=null">
@@ -121,12 +124,6 @@
 
     <update id="configureStatus" parameterType="team.oha.laboa.vo.ConfigureStatusVo">
         UPDATE <include refid="tableName"/> SET status = #{status}
-        WHERE user_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
-        <include refid="allowFilter"></include>
-    </update>
-
-    <update id="resetPassword" parameterType="team.oha.laboa.vo.ConfigureStatusVo">
-        UPDATE <include refid="tableName"/> SET salt = #{salt}, password = #{password}
         WHERE user_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
         <include refid="allowFilter"></include>
     </update>

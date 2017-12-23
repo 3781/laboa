@@ -1,4 +1,4 @@
-package team.oha.laboa.model;
+package team.oha.laboa.util.password;
 
 public interface HashInfo{
 
