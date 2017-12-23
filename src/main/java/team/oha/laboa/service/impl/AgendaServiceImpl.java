@@ -249,6 +249,7 @@ public class AgendaServiceImpl implements AgendaService {
         AgendaDo agenda = new AgendaDo();
         List<AgendaDo> agendaDoList = agendaDao.listNeedReGenerateItemAgenda(LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
         if(agendaDoList!=null){
+            logger.info("reSize[{}]", agendaDoList.size());
             for(AgendaDo agendaDo: agendaDoList){
                 agenda.setAgendaId(agendaDo.getAgendaId());
                 agenda.setNextTime(agendaDo.getUnit().getStrategy().computeNextTime(agendaDo.getNextTime(), agendaDo.getQuantity()));
@@ -256,8 +257,8 @@ public class AgendaServiceImpl implements AgendaService {
                 if(agenda.getNextTime()!=null){
                     agendaDao.update(agenda);
                     AgendaItemDo agendaItemDo = new AgendaItemDo();
-                    agendaItemDo.setAgendaId(agendaDo.getAgendaId());
-                    agendaItemDo.setSummaryTime(agendaDo.getNextTime());
+                    agendaItemDo.setAgendaId(agenda.getAgendaId());
+                    agendaItemDo.setSummaryTime(agenda.getNextTime());
                     agendaItemDao.save(agendaItemDo);
 
                     if(agendaDo.getType().equals(AgendaDo.AgendaType.cooperation)){
