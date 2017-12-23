@@ -80,7 +80,7 @@
     computed: {
       ...mapGetters(['getUsername']),
       isPersonal() {
-        return agendaDetail.type === 'personal';
+        return this.agendaDetail.type === 'personal';
       },
       typeLabel() {
         return {
