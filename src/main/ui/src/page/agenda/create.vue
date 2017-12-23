@@ -10,8 +10,8 @@
     </el-form-item>
     <el-form-item label="重复" prop="quantity"
                   :rules="[{ type:'integer', required: true, message: '数量为大于1的整数', min: 1}]">
-      <el-input v-model.number="agendaForm.quantity" style="width:220px"></el-input>
-      <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:100px">
+      <el-input v-model.number="agendaForm.quantity" style="width:220px" v-bind:disabled="disabledQuantity"></el-input>
+      <el-select v-model="agendaForm.unit" placeholder="请选择"  style="width:100px" @change="isOnceSelected">
         <el-option
           v-for="item in unitOption"
           :key="item.value"
@@ -22,7 +22,7 @@
     </el-form-item>
     <el-form-item v-if="agendaForm.cooperationId!=null" label="参与成员" prop="memberIds">
       <el-select v-model="agendaForm.memberIds" placeholder="请选择" :loading="searching" style="width: 100%"
-                 :multiple="true" :filterable="true" :remote="true" :remote-method="searchParticipant">
+                @focus="searchParticipant('')" :multiple="true" :filterable="true" :remote="true" :remote-method="searchParticipant">
         <el-option
           v-for="item in members"
           :key="item.memberId"
@@ -88,6 +88,7 @@
         members: this.memberList,
         searching: false,
         loading: false,
+        disabledQuantity: false,
       };
     },
     methods: {
@@ -168,6 +169,14 @@
           } else {
             callback();
           }
+        }
+      },
+      isOnceSelected(value) {
+        if (value === 'once') {
+          this.agendaForm.quantity = 1;
+          this.disabledQuantity = true;
+        } else {
+          this.disabledQuantity = false;
         }
       },
     },

@@ -227,9 +227,9 @@
         agenda_summary.summary_time AS actual_time
         FROM <include refid="tableName"/>
         JOIN user AS owner ON owner.user_id = <include refid="tableName"/>.owner_id
-        JOIN agenda_item ON agenda_item.agenda_id = agenda.agenda_id
-        JOIN agenda_summary ON agenda_summary.item_id = agenda_item.item_id
-        JOIN user as summarizer ON summarizer.user_id = agenda_summary.summarizer_id
+        LEFT JOIN agenda_item ON agenda_item.agenda_id = agenda.agenda_id
+        LEFT JOIN agenda_summary ON agenda_summary.item_id = agenda_item.item_id
+        LEFT JOIN user as summarizer ON summarizer.user_id = agenda_summary.summarizer_id
         WHERE <include refid="tableName"/>.agenda_id = #{agendaId}
         ORDER BY preset_time ASC, summarizer_username ASC
     </select>
