@@ -356,6 +356,7 @@
       unitFormatter(unit) {
         let formatterRole;
         switch (unit) {
+          case 'once': formatterRole = '单次'; break;
           case 'day': formatterRole = '天'; break;
           case 'week': formatterRole = '周'; break;
           case 'month': formatterRole = '月'; break;
