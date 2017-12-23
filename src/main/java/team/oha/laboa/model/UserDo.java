@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * @data 2017/11/27
  * @modified
  */
-public class UserDo {
+public class UserDo implements HashInfo{
     private Integer userId;
     private String username;
     private String password;

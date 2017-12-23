@@ -65,7 +65,7 @@ public class ControllerExceptionHandler {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(false);
         apiDto.setInfo("出现未知错误，请联系管理员");
-        logger.warn("未知异常", e);
+        logger.error("未知异常", e);
         return apiDto;
     }
 }

@@ -134,8 +134,7 @@ public class AgendaController {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void refreshAgendaJob(){
-        logger.info("生成日程开始于[{}]", LocalDateTime.now());
         agendaService.refreshAgenda();
-        logger.info("生成日程结束于[{}]", LocalDateTime.now());
+        logger.info("[{}]生成日程成功", LocalDateTime.now());
     }
 }

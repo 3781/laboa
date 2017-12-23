@@ -251,7 +251,7 @@ public class AgendaServiceImpl implements AgendaService {
         if(agendaDoList!=null){
             for(AgendaDo agendaDo: agendaDoList){
                 agenda.setAgendaId(agendaDo.getAgendaId());
-                agenda.setNextTime(agenda.getUnit().getStrategy().computeNextTime(agenda.getNextTime(), agenda.getQuantity()));
+                agenda.setNextTime(agendaDo.getUnit().getStrategy().computeNextTime(agendaDo.getNextTime(), agendaDo.getQuantity()));
 
                 if(agenda.getNextTime()!=null){
                     agendaDao.update(agenda);

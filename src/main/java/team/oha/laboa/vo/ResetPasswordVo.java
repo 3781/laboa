@@ -1,5 +1,6 @@
 package team.oha.laboa.vo;
 
+import team.oha.laboa.model.HashInfo;
 import team.oha.laboa.model.UserDo;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.util.Arrays;
  * @data 2017/12/4
  * @modified
  */
-public class ResetPasswordVo implements Serializable {
+public class ResetPasswordVo implements Serializable, HashInfo {
     private Integer[] ids;
     private String salt;
     private String password;

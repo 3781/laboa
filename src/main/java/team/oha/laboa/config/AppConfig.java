@@ -1,8 +1,13 @@
 package team.oha.laboa.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import team.oha.laboa.util.HashEncryptor;
+import team.oha.laboa.util.Md5Encryptor;
+import team.oha.laboa.util.RandomSaltGenerator;
+import team.oha.laboa.util.SaltGenerator;
 
 /**
  * <p></p>
@@ -27,5 +32,15 @@ public class AppConfig {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public SaltGenerator saltGenerator(){
+        return RandomSaltGenerator.getInstance();
+    }
+
+    @Bean
+    public HashEncryptor hashEncryptor(@Value("${hashIterations}") int hashIterations){
+        return new Md5Encryptor(hashIterations);
     }
 }

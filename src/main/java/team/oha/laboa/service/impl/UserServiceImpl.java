@@ -13,13 +13,12 @@ import team.oha.laboa.dao.UserDao;
 import team.oha.laboa.dao.UserinfoDao;
 import team.oha.laboa.dto.*;
 import team.oha.laboa.exception.UnknownUserException;
-import team.oha.laboa.exception.WrongPasswordException;
 import team.oha.laboa.model.UserDo;
 import team.oha.laboa.model.UserinfoDo;
 import team.oha.laboa.query.user.UserSelectQuery;
+import team.oha.laboa.service.PasswordService;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.shiro.model.UserAuthenticationInfo;
-import team.oha.laboa.util.MD5Util;
 import team.oha.laboa.vo.*;
 
 import java.time.LocalDateTime;
@@ -41,16 +40,18 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private UserinfoDao userinfoDao;
+    @Autowired
+    private PasswordService passwordService;
 
     @Override
     public ApiDto register(RegisterVo registerVo) {
         UserDo userDo = new UserDo();
         userDo.setUsername(registerVo.getUsername());
-        userDo.setSalt(MD5Util.generateSalt().toHex());
-        userDo.setPassword(MD5Util.encryptPassword(registerVo.getPassword(), userDo.getSalt()));
+        userDo.setPassword(registerVo.getPassword());
         userDo.setRegisterTime(LocalDateTime.now());
         userDo.setRole(UserDo.Role.enduser);
         userDo.setStatus(UserDo.Status.locked);
+        passwordService.encryptPassword(userDo);
         userDao.save(userDo);
 
         UserinfoDo userinfoDo = new UserinfoDo();
@@ -110,13 +111,9 @@ public class UserServiceImpl implements UserService {
             throw new UnknownUserException(passwordChangeVo.getUsername());
         }
 
-        if(!userDo.getPassword().equals(
-                MD5Util.encryptPassword(passwordChangeVo.getOldPassword(), userDo.getSalt()))){
-            throw new WrongPasswordException(userDo.getUsername(), passwordChangeVo.getOldPassword());
-        }
-
-        userDo.setSalt(MD5Util.generateSalt().toHex());
-        userDo.setPassword(MD5Util.encryptPassword(passwordChangeVo.getNewPassword(), userDo.getSalt()));
+        passwordService.checkPassword(userDo, passwordChangeVo.getOldPassword());
+        userDo.setPassword(passwordChangeVo.getNewPassword());
+        passwordService.encryptPassword(userDo);
 
         ApiDto apiDto = new ApiDto();
         if( userDao.updatePassword(userDo) == 1){
@@ -236,8 +233,8 @@ public class UserServiceImpl implements UserService {
     public ApiDto resetPassword(ResetPasswordVo resetPasswordVo) {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
-        resetPasswordVo.setSalt(MD5Util.generateSalt().toHex());
-        resetPasswordVo.setPassword(MD5Util.encryptPassword(DEFAULT_PASSWORD, resetPasswordVo.getSalt()));
+        resetPasswordVo.setPassword(DEFAULT_PASSWORD);
+        passwordService.encryptPassword(resetPasswordVo);
         apiDto.setInfo(userDao.resetPassword(resetPasswordVo));
         return apiDto;
     }
