@@ -143,7 +143,7 @@
       <el-form :model="addForm" ref="addForm" :statusIcon="true" label-width="80px" size="mini" inline
                style="margin-bottom: 20px">
         <el-form-item label="用户" prop="userId" :rules="[{ type: 'number', required: true, message: '用户不能为空'}]">
-          <el-select :filterable="true" :remote="true" :remote-method="searchUsers" :loading="searching"
+          <el-select :filterable="true" :remote="true" @focus="searchUsers('')" :remote-method="searchUsers" :loading="searching"
                      v-model.number="addForm.userId">
             <el-option v-for="item in searchUserData" :key="item.userId" :label="item.username" :value="item.userId">
               <span>{{ item.username }}</span>

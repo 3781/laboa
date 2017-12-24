@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
-    <el-row >
-      <el-col :span="6" >
+    <el-row>
+      <el-col :span="6">
         <el-tree :data="cooperationTreeData" :props="treeProps" :indent="8" :accordion="true" :highlight-current="true"
                  v-loading.lock="treeLoading" node-key="cooperationId" @current-change="currentChange"
                  :default-expanded-keys="this.currentCooperationId!=null?[this.currentCooperationId]:[]">
