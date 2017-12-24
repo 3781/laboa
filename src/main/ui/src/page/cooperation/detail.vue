@@ -31,7 +31,7 @@
                 <span>{{ cooperationInfo!=null?cooperationInfo.ownerName:'' }}</span>
               </el-form-item>
               <el-form-item label="邀请链接" v-show="cooperationInfo!=null && cooperationInfo.invite">
-                <span>http://139.196.173.191:44004/cooperation/apply/{{cooperationInfo!=null?cooperationInfo.cooperationId:''}}</span>
+                <span>http://laboa.bugloser.top/cooperation/apply/{{cooperationInfo!=null?cooperationInfo.cooperationId:''}}</span>
               </el-form-item>
               <el-form-item label="更新时间" v-show="cooperationInfo!=null && cooperationInfo.updateTime != null">
                 <span>{{ cooperationInfo!=null?cooperationInfo.updateTime:'' }}</span>
