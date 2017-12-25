@@ -54,6 +54,7 @@ const actions = {
       cooperationApi.saveCooperation(formData).then((response) => {
         if (response) {
           const res = response.data;
+
           if (res.success) {
             commit('ADD_PERMISSION', `cooperation:owner:${res.info}`);
             resolve(res.info);
