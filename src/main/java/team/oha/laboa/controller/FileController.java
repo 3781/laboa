@@ -60,7 +60,7 @@ public class FileController {
         File file = fileService.download(fileId);
         HttpHeaders headers = new HttpHeaders();
         //下载显示的文件名，解决中文名称乱码问题
-        String downloadFilename= new String(file.getName().getBytes("UTF-8"),"iso-8859-1");
+        String downloadFilename= new String(file.getName().substring(13).getBytes("UTF-8"),"iso-8859-1");
         //通知浏览器以attachment（下载方式）打开图片
         headers.setContentDispositionFormData("attachment", downloadFilename);
         return new HttpEntity<>(FileUtils.readFileToByteArray(file), headers);

@@ -34,7 +34,8 @@
                 <span>{{ cooperationInfo!=null?cooperationInfo.ownerName:'' }}</span>
               </el-form-item>
               <el-form-item label="邀请链接" v-show="cooperationInfo!=null && cooperationInfo.invite">
-                <span>http://laboa.bugloser.top/cooperation/apply/{{cooperationInfo!=null?cooperationInfo.cooperationId:''}}</span>
+                <span>{{urlPrefix}}/cooperation/apply/{{cooperationInfo!=null?cooperationInfo.cooperationId:''}}</span>
+                <el-button size="mini" type="success" v-clipboard:copy="`${urlPrefix}/cooperation/apply/${cooperationInfo!=null?cooperationInfo.cooperationId:''}`" v-clipboard:success="copySuccess">复制链接</el-button>
               </el-form-item>
               <el-form-item label="更新时间" v-show="cooperationInfo!=null && cooperationInfo.updateTime != null">
                 <span>{{ cooperationInfo!=null?cooperationInfo.updateTime:'' }}</span>
@@ -146,6 +147,9 @@
     },
     computed: {
       ...mapGetters(['getPermissions']),
+      urlPrefix() {
+        return `http://${window.location.host}`;
+      },
       checkOwn() {
         return this.getPermissions.includes(`cooperation:owner:${this.currentCooperationId}`);
       },
@@ -270,10 +274,18 @@
             position: 'bottom-right',
             offset: 40,
           });
-          this.$refs.mdEditor.$img2Url(pos, `http://laboa.bugloser.top/api/file/${info}`);
+          this.$refs.mdEditor.$img2Url(pos, `http://${window.location.host}/api/file/${info}`);
           this.$refs.mdEditor.$refs.toolbar_left.$imgDelByFilename(pos);
         }).catch((errorMessage) => {
           this.$message.error(errorMessage);
+        });
+      },
+      copySuccess() {
+        this.$notify({
+          message: '复制链接成功',
+          type: 'info',
+          position: 'bottom-right',
+          offset: 40,
         });
       },
     },

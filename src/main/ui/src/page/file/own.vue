@@ -59,7 +59,7 @@
       <el-table-column align="center" label="文件名" column-key="name" prop="name"
                        sortable="custom" :resizable="true">
         <template slot-scope="scope">
-          <a :href="'/api/file/'+scope.row.fileId">{{ scope.row.name }}</a>
+          <a :href="`${urlPrefix}/api/file/${scope.row.fileId}`">{{ scope.row.name }}</a>
         </template>
       </el-table-column>
       <el-table-column align="center" label="备注" column-key="remark" prop="remark"
@@ -68,7 +68,7 @@
       <el-table-column align="center" label="链接" column-key="link" prop="link"
                        sortable="custom" :resizable="true">
         <template slot-scope="scope">
-          <span style="text-overflow: ellipsis;white-space:nowrap;overflow:hidden;">http://laboa.bugloser.top/api/file/{{scope.row.fileId}}</span>
+          <span style="text-overflow: ellipsis;white-space:nowrap;overflow:hidden;">{{urlPrefix}}/api/file/{{scope.row.fileId}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="更新时间" column-key="updateTime" prop="updateTime"
@@ -89,7 +89,7 @@
             :show-file-list="false">
               <el-button slot="trigger" size="mini" type="primary">更新文件</el-button>
               <el-button size="mini" type="warning" @click="handleUpdateRemark(scope.row)">更新备注</el-button>
-              <el-button size="mini" type="success" v-clipboard:copy="`http://laboa.bugloser.top/api/file/${scope.row.fileId}`" v-clipboard:success="copySuccess">复制链接</el-button>
+              <el-button size="mini" type="success" v-clipboard:copy="`${urlPrefix}/api/file/${scope.row.fileId}`" v-clipboard:success="copySuccess">复制链接</el-button>
             </el-upload>
           </el-button-group>
         </template>
@@ -165,6 +165,9 @@
       },
       selectIds() {
         return this.selectRows.map(item => item.fileId);
+      },
+      urlPrefix() {
+        return `http://${window.location.host}`;
       },
     },
     methods: {

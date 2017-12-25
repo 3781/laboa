@@ -76,7 +76,7 @@
             position: 'bottom-right',
             offset: 40,
           });
-          this.$refs.mdEditor.$img2Url(pos, `http://laboa.bugloser.top/api/file/${info}`);
+          this.$refs.mdEditor.$img2Url(pos, `http://${window.location.host}/api/file/${info}`);
           this.$refs.mdEditor.$refs.toolbar_left.$imgDelByFilename(pos);
         }).catch((errorMessage) => {
           this.$message.error(errorMessage);
