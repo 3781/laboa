@@ -11,7 +11,7 @@
         <router-view v-loading.lock="getMainLoading"></router-view>
       </el-main>
       <el-footer height="40px" style="line-height:40px; background-color: #304156; color:white;text-align: center">
-        Copyright © 2017-2018 oh!a team. All rights reserved.
+        Copyright © 2017-2018 Oh!A team. All rights reserved.
       </el-footer>
     </el-container>
   </el-container>

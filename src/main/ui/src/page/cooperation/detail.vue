@@ -1,11 +1,14 @@
 <template>
-  <div class="main-container">
-    <el-row>
-      <el-col :span="6">
-        <el-tree :data="cooperationTreeData" :props="treeProps" :indent="8" :accordion="true" :highlight-current="true"
+  <div class="main-container" style="min-height: 100%;display: flex;">
+    <el-row style="flex:1;">
+      <el-col :span="5" style="height: 100%">
+        <el-tree style="height: 100%; background: #f5f5f5" :data="cooperationTreeData" :props="treeProps" :indent="8" :accordion="true" :highlight-current="true"
                  v-loading.lock="treeLoading" node-key="cooperationId" @current-change="currentChange"
                  :default-expanded-keys="this.currentCooperationId!=null?[this.currentCooperationId]:[]">
         </el-tree>
+      </el-col>
+      <el-col :span="1" style="height: 100%;">
+        <div style="height: 100%; width:1px; background: #000000;overflow: hidden; margin: auto">.</div>
       </el-col>
       <el-col :span="18">
         <el-tabs v-model="activeTab" @tab-click="handleClick" v-show="currentCooperationId!=null">
@@ -277,6 +280,9 @@
   };
 </script>
 
-<style lang="stylus" scoped>
-
+<style lang="stylus" >
+  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content
+       background-color #1f9cff
+       color #ffffff
 </style>
+
