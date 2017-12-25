@@ -36,7 +36,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     public void registerCharacterEncodingFilter(ServletContext servletContext){
         Filter characterEncodingFilter = new CharacterEncodingFilter(Charsets.UTF_8.toString(), true);
         FilterRegistration filterRegistration = servletContext.addFilter(characterEncodingFilter.getClass().getSimpleName(), characterEncodingFilter);
-        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
+        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), false, "/*");
     }
 
     @Override

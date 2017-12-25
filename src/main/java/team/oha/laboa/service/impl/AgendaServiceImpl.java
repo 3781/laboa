@@ -200,7 +200,6 @@ public class AgendaServiceImpl implements AgendaService {
         ApiDto apiDto = new ApiDto();
         apiDto.setSuccess(true);
         apiDto.setInfo(agendaSummaryDao.listToDo(agendaToDoQuery));
-        logger.info("{}", apiDto.getInfo());
         return apiDto;
     }
 

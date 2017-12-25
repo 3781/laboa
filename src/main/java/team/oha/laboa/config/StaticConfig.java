@@ -1,14 +1,16 @@
 package team.oha.laboa.config;
 
-import org.springframework.lang.Nullable;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.support.ServletContextResource;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * <p>web配置</p>
@@ -18,50 +20,40 @@ import java.io.IOException;
  * @data 2017/11/7
  * @modified
  */
-public class StaticConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class StaticConfig implements WebApplicationInitializer {
 
-    public static final String DEFAULT_SERVLET_NAME = "static";
-
-    @Override
-    protected String getServletName() {
-        return DEFAULT_SERVLET_NAME;
-    }
+    private static final String INDEX_LOCATION = "/index.html";
+    private static final String DEFAULT_SERVLET_NAME = "default";
+    private byte[] indexHtml;
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        registerStaticServlet(servletContext);
-        super.onStartup(servletContext);
+        initIndexHtml(servletContext);
+        registerPageServlet(servletContext);
+        registerStaticResourceServlet(servletContext);
     }
 
-    @Nullable
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return null;
+    protected void initIndexHtml(ServletContext servletContext){
+        ServletContextResource resource = new ServletContextResource(servletContext, INDEX_LOCATION);
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), "UTF-8"));
+            indexHtml = reader.readLine().getBytes("UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Nullable
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{ResourceConfig.class};
-    }
-
-    @Nullable
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/static/*"};
-    }
-
-
-    private static final String DEFAULT_JSP_SERVLET_NAME = "jsp";
-    private static final String INDEX_LOCATION = "/WEB-INF/index.html";
-
-    public void registerStaticServlet(ServletContext servletContext){
+    protected void registerPageServlet(ServletContext servletContext){
         servletContext.addServlet("pageServlet", new HttpServlet() {
             @Override
             protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                req.getRequestDispatcher(INDEX_LOCATION).forward(req, resp);
+                resp.getOutputStream().write(indexHtml);
             }
         }).addMapping("/");
-        servletContext.getServletRegistrations().get(DEFAULT_JSP_SERVLET_NAME).addMapping(INDEX_LOCATION);
+    }
+
+    protected void registerStaticResourceServlet(ServletContext servletContext){
+        servletContext.getServletRegistrations().get(DEFAULT_SERVLET_NAME).addMapping("/static/*");
     }
 }

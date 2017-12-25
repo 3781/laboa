@@ -50,8 +50,6 @@ version "$projectVersion"
 apply plugin : "java"
 apply plugin : "war"
 apply plugin : "com.moowork.node"
-apply plugin : "com.bmuschko.tomcat"
-apply plugin : "com.bmuschko.tomcat-base"
 
 compileJava{
     sourceCompatibility = "$projectJdk"
@@ -104,22 +102,11 @@ node {
     download = true
 }
 
-tomcat {
-    httpPort = 8080
-    daemon = true
-    contextPath = "/"
-    httpProtocol = "org.apache.coyote.http11.Http11Nio2Protocol"
-    ajpProtocol  = "org.apache.coyote.ajp.AjpNio2Protocol"
-}
-
 buildscript {
     repositories {
         maven {
             url "$mavenMirror"
         }
-    }
-    dependencies {
-        classpath "com.bmuschko:gradle-tomcat-plugin:$tomcatPluginVersion"
     }
 }
 
