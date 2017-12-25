@@ -83,7 +83,7 @@
           </el-switch>
         </el-form-item>
         <el-form-item label="协作介绍">
-          <mavon-editor v-model="cooperationForm.remark" style="min-height:290px"></mavon-editor>
+          <mavon-editor ref="mdEditor" @imgAdd="imgAdd" v-model="cooperationForm.remark" style="min-height:290px"></mavon-editor>
         </el-form-item>
       </el-form>
         <span slot="footer" class="dialog-footer">
@@ -151,7 +151,7 @@
       },
     },
     methods: {
-      ...mapActions(['listCooperationTree', 'getCooperation', 'updateCooperation', 'deleteCooperation']),
+      ...mapActions(['listCooperationTree', 'getCooperation', 'updateCooperation', 'deleteCooperation', 'addFile']),
       loadTreeData() {
         this.treeLoading = true;
         this.listCooperationTree(this.$route.params.cooperationId).then((info) => {
@@ -256,6 +256,22 @@
         } else {
           callback(new Error('开始时间必须早于结束时间'));
         }
+      },
+      imgAdd(pos, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        this.addFile(formData).then((info) => {
+          this.$notify({
+            message: `文件${file.name}上传成功`,
+            type: 'info',
+            position: 'bottom-right',
+            offset: 40,
+          });
+          this.$refs.mdEditor.$img2Url(pos, `/api/file/${info}`);
+          this.$refs.mdEditor.$refs.toolbar_left.$imgDelByFilename(pos);
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+        });
       },
     },
   };

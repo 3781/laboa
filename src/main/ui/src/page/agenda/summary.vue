@@ -9,7 +9,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="总结" prop="content">
-      <mavon-editor v-model="summaryForm.content"></mavon-editor>
+      <mavon-editor ref="mdEditor" @imgAdd="imgAdd" v-model="summaryForm.content"></mavon-editor>
     </el-form-item>
   </el-form>
 </template>
@@ -44,7 +44,7 @@
       },
     },
     methods: {
-      ...mapActions(['summaryAgenda']),
+      ...mapActions(['summaryAgenda', 'addFile']),
       initForm() {
         this.summaryForm.summaryId = this.summary.summaryId;
         this.summaryForm.content = this.summary.content || '';
@@ -64,6 +64,22 @@
         }).catch((errorMessage) => {
           this.$message.error(errorMessage);
           this.loading = false;
+        });
+      },
+      imgAdd(pos, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        this.addFile(formData).then((info) => {
+          this.$notify({
+            message: `文件${file.name}上传成功`,
+            type: 'info',
+            position: 'bottom-right',
+            offset: 40,
+          });
+          this.$refs.mdEditor.$img2Url(pos, `/api/file/${info}`);
+          this.$refs.mdEditor.$refs.toolbar_left.$imgDelByFilename(pos);
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
         });
       },
     },

@@ -1,5 +1,9 @@
 import httpUtil from '../util/http';
 
+export function upload(formData) {
+  return httpUtil.post('/file', formData);
+}
+
 export function update(formData) {
   return httpUtil.post(`/file/${formData.fileId}`, formData);
 }

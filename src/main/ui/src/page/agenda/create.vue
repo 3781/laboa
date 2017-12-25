@@ -36,7 +36,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="说明" prop="remark">
-      <mavon-editor v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
+      <mavon-editor ref="mdEditor" @imgAdd="imgAdd" v-model="agendaForm.remark" style="min-height:290px"></mavon-editor>
     </el-form-item>
     <el-form-item v-if="showSubmitButton">
       <el-button type="primary" size="default" @click="doSummit">提交</el-button>
@@ -92,7 +92,7 @@
       };
     },
     methods: {
-      ...mapActions(['saveAgenda', 'updateAgenda', 'getAvailableParticipants']),
+      ...mapActions(['saveAgenda', 'updateAgenda', 'getAvailableParticipants', 'addFile']),
       doSummit() {
         if (this.agendaForm.agendaId == null) {
           this.doCreate();
@@ -178,6 +178,22 @@
         } else {
           this.disabledQuantity = false;
         }
+      },
+      imgAdd(pos, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        this.addFile(formData).then((info) => {
+          this.$notify({
+            message: `文件${file.name}上传成功`,
+            type: 'info',
+            position: 'bottom-right',
+            offset: 40,
+          });
+          this.$refs.mdEditor.$img2Url(pos, `/api/file/${info}`);
+          this.$refs.mdEditor.$refs.toolbar_left.$imgDelByFilename(pos);
+        }).catch((errorMessage) => {
+          this.$message.error(errorMessage);
+        });
       },
     },
   };

@@ -49,6 +49,22 @@ const actions = {
       });
     });
   },
+  addFile({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      fileApi.upload(formData).then((response) => {
+        if (response) {
+          const res = response.data;
+          if (res.success) {
+            resolve(res.info);
+          } else {
+            reject(res.info);
+          }
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
   updateFile({ commit }, formData) {
     return new Promise((resolve, reject) => {
       fileApi.update(formData).then((response) => {
