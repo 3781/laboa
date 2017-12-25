@@ -1,14 +1,14 @@
 package team.oha.laboa.config;
 
+import com.google.common.base.Charsets;
 import org.springframework.lang.Nullable;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
+import java.util.EnumSet;
 
 /**
  * <p>web配置</p>
@@ -20,13 +20,6 @@ import javax.servlet.ServletException;
  */
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    private Filter characterEncodingFilter(){
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return characterEncodingFilter;
-    }
-
     private Filter delegatingFilterProxy(){
         DelegatingFilterProxy filter = new DelegatingFilterProxy();
         filter.setTargetFilterLifecycle(true);
@@ -37,12 +30,19 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     @Nullable
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] {characterEncodingFilter(), delegatingFilterProxy()};
+        return new Filter[] {delegatingFilterProxy()};
+    }
+
+    public void registerCharacterEncodingFilter(ServletContext servletContext){
+        Filter characterEncodingFilter = new CharacterEncodingFilter(Charsets.UTF_8.toString(), true);
+        FilterRegistration filterRegistration = servletContext.addFilter(characterEncodingFilter.getClass().getSimpleName(), characterEncodingFilter);
+        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
     }
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         registerIntrospectorCleanupListener(servletContext);
+        registerCharacterEncodingFilter(servletContext);
         super.onStartup(servletContext);
     }
 
