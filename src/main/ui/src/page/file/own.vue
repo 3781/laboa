@@ -65,13 +65,19 @@
       <el-table-column align="center" label="备注" column-key="remark" prop="remark"
                        sortable="custom" :resizable="true">
       </el-table-column>
+      <el-table-column align="center" label="链接" column-key="link" prop="link"
+                       sortable="custom" :resizable="true">
+        <template slot-scope="scope">
+          <span style="text-overflow: ellipsis;white-space:nowrap;overflow:hidden;">http://laboa.bugloser.top/api/file/{{scope.row.fileId}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="更新时间" column-key="updateTime" prop="updateTime"
                        sortable="custom" :resizable="true">
       </el-table-column>
       <el-table-column align="center" label="创建时间" column-key="createTime" prop="createTime"
                        sortable="custom" :resizable="true">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="200px">
+      <el-table-column align="center" label="操作" width="270px">
         <template slot-scope="scope">
           <el-button-group>
             <el-upload
@@ -83,6 +89,7 @@
             :show-file-list="false">
               <el-button slot="trigger" size="mini" type="primary">更新文件</el-button>
               <el-button size="mini" type="warning" @click="handleUpdateRemark(scope.row)">更新备注</el-button>
+              <el-button size="mini" type="success" v-clipboard:copy="`http://laboa.bugloser.top/api/file/${scope.row.fileId}`" v-clipboard:success="copySuccess">复制链接</el-button>
             </el-upload>
           </el-button-group>
         </template>
@@ -271,6 +278,14 @@
         this.$notify({
           message: '更新失败，请稍后再试',
           type: 'error',
+          position: 'bottom-right',
+          offset: 40,
+        });
+      },
+      copySuccess() {
+        this.$notify({
+          message: '复制链接成功',
+          type: 'info',
           position: 'bottom-right',
           offset: 40,
         });
