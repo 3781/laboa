@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class ApplyFilterQuery implements Serializable{
     private Integer applyId;
+    private Integer cooperationId;
     private String username;
     private String name;
     private String employeeNumber;
@@ -20,6 +21,14 @@ public class ApplyFilterQuery implements Serializable{
     private LocalDateTime updateTimeEnd;
     private LocalDateTime applyTimeBegin;
     private LocalDateTime applyTimeEnd;
+
+    public Integer getCooperationId() {
+        return cooperationId;
+    }
+
+    public void setCooperationId(Integer cooperationId) {
+        this.cooperationId = cooperationId;
+    }
 
     public Integer getApplyId() {
         return applyId;

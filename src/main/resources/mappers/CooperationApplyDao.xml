@@ -35,6 +35,7 @@
         <if test="filterQuery!=null">
             <where>
                 <if test="filterQuery.applyId">AND <include refid="tableName"/>.apply_id = #{filterQuery.applyId}</if>
+                <if test="filterQuery.cooperationId">AND <include refid="tableName"/>.cooperation_id = #{filterQuery.cooperationId}</if>
                 <if test="filterQuery.username">AND user.username LIKE concat('%', #{filterQuery.username}, '%')</if>
                 <if test="filterQuery.name">AND userinfo.name LIKE concat('%', #{filterQuery.name}, '%')</if>
                 <if test="filterQuery.employeeNumber">AND userinfo.employee_number LIKE concat('%', #{filterQuery.employeeNumber}, '%')</if>
