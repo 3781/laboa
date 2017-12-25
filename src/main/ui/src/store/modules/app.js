@@ -8,7 +8,7 @@ import vueRouter from '../../router/index';
 const state = {
   username: localStorage.username || '',
   role: localStorage.role || '',
-  permissions: localStorage.permissions === null ? [] : localStorage.permissions.split(','),
+  permissions: localStorage.permissions === undefined ? [] : localStorage.permissions.split(','),
   sidebarLoading: false,
   mainLoading: false,
 };
