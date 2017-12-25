@@ -20,19 +20,7 @@
         WHERE summary_id = #{summaryId} and summarizer_id = #{summarizerId}
     </update>
 
-    <resultMap id="agendaToDoMap" type="team.oha.laboa.dto.AgendaToDoDto">
-        <id column="agenda_id" property="agendaId"/>
-        <result column="title" property="title"/>
-        <result column="date" property="date"/>
-        <result column="summary_time" property="summaryTime"/>
-        <association property="agendaSummary" column="summary_id" javaType="team.oha.laboa.dto.AgendaSummaryDto">
-            <id column="summary_id" property="summaryId"/>
-            <result column="content" property="content"/>
-            <result column="status" property="status"/>
-        </association>
-    </resultMap>
-
-    <select id="listToDo" parameterType="team.oha.laboa.query.agenda.AgendaToDoQuery" resultMap="agendaToDoMap">
+    <select id="listToDo" parameterType="team.oha.laboa.query.agenda.AgendaToDoQuery" resultType="team.oha.laboa.dto.AgendaToDoDto">
         SELECT
         agenda.agenda_id AS agenda_id,
         agenda.title as title,

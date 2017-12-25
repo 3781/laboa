@@ -26,7 +26,9 @@
       },
     },
     created() {
-      this.initForm();
+      this.summaryForm.summaryId = this.summary.summaryId;
+      this.summaryForm.content = this.summary.content || '';
+      this.summaryForm.status = this.summary.status;
     },
     data() {
       return {
@@ -45,11 +47,6 @@
     },
     methods: {
       ...mapActions(['summaryAgenda', 'addFile']),
-      initForm() {
-        this.summaryForm.summaryId = this.summary.summaryId;
-        this.summaryForm.content = this.summary.content || '';
-        this.summaryForm.status = this.summary.status;
-      },
       doSummary() {
         this.loading = true;
         this.summaryAgenda(this.summaryForm).then(() => {

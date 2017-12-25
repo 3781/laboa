@@ -48,7 +48,7 @@
       </div>
     </template>
     <el-dialog title="结项" :visible.sync="summaryVisible" :fullscreen="true">
-      <agenda-summary ref="agendaSummaryForm" :summary="currentSummary" @onSuccess="summarySuccessCallback"></agenda-summary>
+      <agenda-summary ref="agendaSummaryForm" v-if="summaryVisible" :summary="currentSummary" @onSuccess="summarySuccessCallback"></agenda-summary>
       <span slot="footer" class="dialog-footer">
         <el-button @click="summaryVisible = false">取 消</el-button>
         <el-button type="primary" @click="doSummary">确 定</el-button>

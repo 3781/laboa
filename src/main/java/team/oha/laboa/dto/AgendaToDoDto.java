@@ -1,6 +1,7 @@
 package team.oha.laboa.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import team.oha.laboa.model.AgendaSummaryDo;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,9 @@ public class AgendaToDoDto {
     @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime date;
     private LocalDateTime summaryTime;
-    private AgendaSummaryDto agendaSummary;
+    private Integer summaryId;
+    private AgendaSummaryDo.SummaryStatus status;
+    private String content;
 
     public Integer getAgendaId() {
         return agendaId;
@@ -44,22 +47,27 @@ public class AgendaToDoDto {
         this.summaryTime = summaryTime;
     }
 
-    public AgendaSummaryDto getAgendaSummary() {
-        return agendaSummary;
+    public Integer getSummaryId() {
+        return summaryId;
     }
 
-    public void setAgendaSummary(AgendaSummaryDto agendaSummary) {
-        this.agendaSummary = agendaSummary;
+    public void setSummaryId(Integer summaryId) {
+        this.summaryId = summaryId;
     }
 
-    @Override
-    public String toString() {
-        return "AgendaToDoDto{" +
-                "agendaId=" + agendaId +
-                ", title='" + title + '\'' +
-                ", date=" + date +
-                ", summaryTime=" + summaryTime +
-                ", agendaSummary=" + agendaSummary +
-                '}';
+    public AgendaSummaryDo.SummaryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AgendaSummaryDo.SummaryStatus status) {
+        this.status = status;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

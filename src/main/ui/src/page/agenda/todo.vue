@@ -16,14 +16,14 @@
           <div class="wrapper">
             <h3 class="title">{{index+1}}.
               <router-link tag="a" :to="`/agenda/${event.agendaId}`">{{event.title}}</router-link>
-              <el-button type="success" size="mini" :round="true" plain @click="handleSummary(event.agendaSummary)">结项</el-button></h3>
+              <el-button type="success" size="mini" :round="true" plain @click="handleSummary(event)">结项</el-button></h3>
             <p class="time">{{ event.summaryTime}}</p>
           </div>
         </div>
       </template>
     </vue-event-calendar>
     <el-dialog title="结项" :visible.sync="summaryVisible" :fullscreen="true">
-      <agenda-summary ref="agendaSummaryForm" :summary="currentSummary" @onSuccess="summarySuccessCallback"></agenda-summary>
+      <agenda-summary ref="agendaSummaryForm" v-if="summaryVisible" :summary="currentSummary" @onSuccess="summarySuccessCallback"></agenda-summary>
       <span slot="footer" class="dialog-footer">
         <el-button @click="summaryVisible = false">取 消</el-button>
         <el-button type="primary" @click="doSummary">确 定</el-button>
