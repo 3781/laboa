@@ -1,22 +1,31 @@
 <template>
-  <div class="main-container" v-loading.fullscreen.lock="getMainLoading">
-    <el-card class="cardbox" :style="{marginTop:marginTop}">
-      <div v-if="this.title" slot="header">
-        <span>{{ this.title }}</span>
-        <small v-if="this.hyperlink" style="float: right">
-          <span>{{ this.hyperlink.tip }}</span>
-          <router-link :to="this.hyperlink.path">{{ this.hyperlink.name }}</router-link>
-        </small>
-      </div>
-      <slot></slot>
-    </el-card>
-  </div>
+  <el-container class="main-container" style="min-height:100%" v-loading.fullscreen.lock="getMainLoading">
+    <el-main>
+      <el-card class="cardbox" :style="{marginTop:marginTop}">
+        <div v-if="this.title" slot="header">
+          <span>{{ this.title }}</span>
+          <small v-if="this.hyperlink" style="float: right">
+            <span>{{ this.hyperlink.tip }}</span>
+            <router-link :to="this.hyperlink.path">{{ this.hyperlink.name }}</router-link>
+          </small>
+        </div>
+        <slot></slot>
+      </el-card>
+    </el-main>
+    <el-footer height="40px" style="line-height:40px; background-color: #304156; color:white;text-align: center">
+      <web-footer></web-footer>
+    </el-footer>
+  </el-container>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
+  import WebFooter from './WebFooter';
 
   export default {
+    components: {
+      WebFooter,
+    },
     name: 'unAuthenticatedLayout',
     props: {
       title: {

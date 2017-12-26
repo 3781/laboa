@@ -11,8 +11,7 @@
         <router-view v-loading.lock="getMainLoading"></router-view>
       </el-main>
       <el-footer height="40px" style="line-height:40px; background-color: #304156; color:white;text-align: center">
-        Copyright © 2017-2018 Oh!A team. All rig
-        hts reserved.
+        <web-footer></web-footer>
       </el-footer>
     </el-container>
   </el-container>
@@ -22,6 +21,7 @@
   import { mapGetters } from 'vuex';
   import NavBar from './NavBar';
   import Sidebar from './Sidebar';
+  import WebFooter from './WebFooter';
 
   export default {
     name: 'authenticatedLayout',
@@ -33,6 +33,7 @@
     components: {
       NavBar,
       Sidebar,
+      WebFooter,
     },
     methods: {
       toggleSidebar() {
