@@ -1,9 +1,6 @@
 package team.oha.laboa.util.password;
 
-public interface HashInfo{
-
-    String getPassword();
-    void setPassword(String password) ;
+public interface SaltPasswordInfo extends PasswordInfo{
     String getSalt();
     void setSalt(String salt) ;
 }

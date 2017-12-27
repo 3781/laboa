@@ -1,14 +1,14 @@
 package team.oha.laboa.util.password;
 
-public class HashPrincipalInfo extends HashInfoDecrator{
+public class PrincipalSaltPasswordInfo extends SaltPasswordInfoDecrator {
     private String username;
 
-    public HashPrincipalInfo(HashInfo hashInfo) {
-        super(hashInfo);
+    public PrincipalSaltPasswordInfo(SaltPasswordInfo saltPasswordInfo) {
+        super(saltPasswordInfo);
     }
 
-    public HashPrincipalInfo(HashInfo hashInfo, String username) {
-        super(hashInfo);
+    public PrincipalSaltPasswordInfo(SaltPasswordInfo saltPasswordInfo, String username) {
+        super(saltPasswordInfo);
         this.username = username;
     }
 

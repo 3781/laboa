@@ -1,11 +1,8 @@
 package team.oha.laboa.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import team.oha.laboa.util.password.HashEncryptor;
-import team.oha.laboa.util.password.Md5Encryptor;
 import team.oha.laboa.util.password.RandomSaltGenerator;
 import team.oha.laboa.util.password.SaltGenerator;
 
@@ -37,10 +34,5 @@ public class AppConfig {
     @Bean
     public SaltGenerator saltGenerator(){
         return RandomSaltGenerator.getInstance();
-    }
-
-    @Bean
-    public HashEncryptor hashEncryptor(@Value("${hashIterations}") int hashIterations){
-        return new Md5Encryptor(hashIterations);
     }
 }

@@ -19,8 +19,8 @@ import team.oha.laboa.query.user.UserSelectQuery;
 import team.oha.laboa.service.PasswordService;
 import team.oha.laboa.service.UserService;
 import team.oha.laboa.shiro.model.UserAuthenticationInfo;
-import team.oha.laboa.util.password.HashInfo;
-import team.oha.laboa.util.password.HashPrincipalInfo;
+import team.oha.laboa.util.password.SaltPasswordInfo;
+import team.oha.laboa.util.password.PrincipalSaltPasswordInfo;
 import team.oha.laboa.vo.*;
 
 import java.time.LocalDateTime;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         userDo.setRegisterTime(LocalDateTime.now());
         userDo.setRole(UserDo.Role.enduser);
         userDo.setStatus(UserDo.Status.locked);
-        passwordService.encryptPassword(new HashPrincipalInfo(userDo, userDo.getUsername()));
+        passwordService.encryptPassword(new PrincipalSaltPasswordInfo(userDo, userDo.getUsername()));
         userDao.save(userDo);
 
         UserinfoDo userinfoDo = new UserinfoDo();
@@ -112,10 +112,10 @@ public class UserServiceImpl implements UserService {
         if(userDo==null){
             throw new UnknownUserException(passwordChangeVo.getUsername());
         }
-        HashInfo hashInfo = new HashPrincipalInfo(userDo, userDo.getUsername());
-        passwordService.checkPassword(hashInfo, passwordChangeVo.getOldPassword());
+        SaltPasswordInfo saltPasswordInfo = new PrincipalSaltPasswordInfo(userDo, userDo.getUsername());
+        passwordService.checkPassword(saltPasswordInfo, passwordChangeVo.getOldPassword());
         userDo.setPassword(passwordChangeVo.getNewPassword());
-        passwordService.encryptPassword(hashInfo);
+        passwordService.encryptPassword(saltPasswordInfo);
 
         ApiDto apiDto = new ApiDto();
         if( userDao.updatePassword(userDo) == 1){
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
 
         UserAuthenticationInfo info = new UserAuthenticationInfo();
         info.setPrincipal(userDo.getUsername());
-        HashPrincipalInfo hashPrincipalInfo = new HashPrincipalInfo(userDo, userDo.getUsername());
+        PrincipalSaltPasswordInfo hashPrincipalInfo = new PrincipalSaltPasswordInfo(userDo, userDo.getUsername());
         info.setCredentials(hashPrincipalInfo.getPassword());
         info.setCredentialsSalt(hashPrincipalInfo.getSalt());
         info.setLocked(UserDo.Status.locked.equals(userDo.getStatus()));
@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService {
         apiDto.setSuccess(true);
         Integer updateSize = 0;
         UserDo userDo = new UserDo();
-        HashPrincipalInfo hashPrincipalInfo = new HashPrincipalInfo(userDo);
+        PrincipalSaltPasswordInfo hashPrincipalInfo = new PrincipalSaltPasswordInfo(userDo);
 
         for(Integer id : resetPasswordVo.getIds()){
             UserDo user = userDao.getById(id);

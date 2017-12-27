@@ -1,8 +1,8 @@
 package team.oha.laboa.service;
 
-import team.oha.laboa.util.password.HashInfo;
+import team.oha.laboa.util.password.PasswordInfo;
 
 public interface PasswordService {
-    void encryptPassword(HashInfo hashInfo);
-    void checkPassword(HashInfo hashInfo, String toCheck);
+    void encryptPassword(PasswordInfo passwordInfo);
+    void checkPassword(PasswordInfo passwordInfo, String toCheck);
 }
