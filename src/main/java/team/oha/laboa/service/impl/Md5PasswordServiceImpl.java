@@ -13,11 +13,13 @@ import team.oha.laboa.util.password.SaltPasswordInfo;
 @Service
 public class Md5PasswordServiceImpl extends AbstractHashPasswordService {
     @Override
-    public void setSaltGenerator(@Autowired SaltGenerator saltGenerator) {
+    @Autowired
+    public void setSaltGenerator(SaltGenerator saltGenerator) {
         super.setSaltGenerator(saltGenerator);
     }
     @Override
-    public void setHashIterations(@Value("${hashIterations}") int hashIterations) {
+    @Value("${hashIterations}")
+    public void setHashIterations(int hashIterations) {
         super.setHashIterations(hashIterations);
     }
     @Override
